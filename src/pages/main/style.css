@@ -57,12 +57,14 @@
     margin-right: 24px;
     display: flex;
     gap: 0px;
+    flex-wrap: wrap
 }
 
 #app {
     width: 88px;
     height: 97px;
     background-color: #f2f2f2;
+    position: relative;
 }
 
 #app:hover {
@@ -77,6 +79,10 @@
 }
 
 #apptext {
-    position: relative;
-    margin-top: 77px;
+    position: absolute;
+    margin-top: 2px;
+    font-size: 13px;
+    font-family: sans-serif;
+    left: 50%;             /* Move the left edge to the center */
+    transform: translateX(-50%); /* Adjust to center the element */
 }
