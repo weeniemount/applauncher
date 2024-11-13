@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Menu } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, shell  } = require('electron');
 const path = require('path');
 
 const createWindow = () => {
@@ -25,5 +25,18 @@ const createWindow = () => {
     });
   });
 };
+
+ipcMain.on('open-link', (event, url) => {
+  shell.openExternal(url).then(() => {
+      console.log(`Opened external link: ${url}`);
+  }).catch(err => {
+      console.error('Failed to open link:', err);
+  });
+});
+
+ipcMain.on('quit-app', () => {
+  app.quit();
+});
+
 
 app.whenReady().then(createWindow);

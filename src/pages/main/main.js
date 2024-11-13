@@ -29,15 +29,12 @@ function refreshapps() {
         appDiv.appendChild(appText);
 
         if (app[2] == "link") {
-            const link = document.createElement("a");
-            link.href = app[3]
-            
-            link.append(appDiv)
-            appsContent.appendChild(link)
-
-        } else {
-            appsContent.appendChild(appDiv);
+            appDiv.onclick = function() {
+                window.electron.openLink(app[3]);
+                window.electron.quitApp()
+            }
         }
+        appsContent.appendChild(appDiv);
 
     });
 }
