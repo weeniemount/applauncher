@@ -1,0 +1,82 @@
+#applauncherbody {
+    margin: 0;
+    padding: 0;
+    width: 402px;
+    height: 502px;
+    background-color: #f2f2f2;
+    overflow: hidden;
+}
+
+#searchbar {
+    border-bottom: 1px solid #c0c0c0;
+    width: 402px;
+    height: 50px;
+    background-color: #ffffff;
+}
+
+#searchbarfield {
+    color: black;
+}
+
+#searchbarurl {
+    position: absolute;
+    background: none;
+    border: none;
+    color: #393939;
+    left: 59px;
+    top: 15px;
+    width: 270px;
+    outline: none;
+}
+
+#searchbarurl::placeholder {
+    color: #b6b6b6;
+}
+
+#searchicon {
+    position: absolute;
+    left: 19px;
+    top: 17px;
+}
+
+#hamburgermenu {
+    position: absolute;
+    left: 363px;
+    top: 17px;
+    background-image: url("images/hamburger.png");
+    width: 13px;
+    height: 13px;
+}
+
+#hamburgermenu:hover {
+    background-image: url("images/hamburgerhover.png");
+}
+
+#apps-content {
+    margin-left: 24px;
+    margin-right: 24px;
+    display: flex;
+    gap: 0px;
+}
+
+#app {
+    width: 88px;
+    height: 97px;
+    background-color: #f2f2f2;
+}
+
+#app:hover {
+    background-color: #eaeaea;
+}
+
+#appicon {
+    position: relative;
+    width: 48px;
+    margin-top: 18px;
+    margin-left: 20px
+}
+
+#apptext {
+    position: relative;
+    margin-top: 77px;
+}
