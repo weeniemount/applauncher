@@ -5,6 +5,7 @@ const createWindow = () => {
   const win = new BrowserWindow({
     width: 402,
     height: 502,
+    frame: false,
     webPreferences: {
       preload: path.join(__dirname, 'pages', 'main', 'preload.js'), // Set up preload to enable secure communication
     },
