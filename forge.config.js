@@ -42,6 +42,9 @@ module.exports = {
       [FuseV1Options.EnableNodeCliInspectArguments]: false,
       [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true,
       [FuseV1Options.OnlyLoadAppFromAsar]: true,
+      [FuseV1Options.DisableDevTools]: true,
+      [FuseV1Options.EnableRemoteModule]: false,
+      [FuseV1Options.EnableChromiumRemoteDebugging]: false, // Disable remote debugging
     }),
   ],
 };

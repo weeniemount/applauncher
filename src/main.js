@@ -9,6 +9,10 @@ const createWindow = () => {
     icon: path.join(__dirname, 'icons/windows.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'pages', 'main', 'preload.js'), // Set up preload to enable secure communication
+      nodeIntegration: false,
+      experimentalFeatures: false,
+      serviceWorkers: false,
+      spellcheck: false,
     },
   });
 
