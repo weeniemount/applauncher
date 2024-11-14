@@ -9,6 +9,10 @@ module.exports = {
     asar: true,
     icon: 'src/icons/windows',
   },
+  build: {
+    appId: "com.electron.example",
+    compression: "maximum",
+  },
   prune: true,
   ignore: [
     /locales/,       // Ignore the locales folder
