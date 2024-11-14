@@ -6,6 +6,7 @@ const createWindow = () => {
     width: 402,
     height: 502,
     frame: false,
+    icon: path.join(__dirname, 'icons/windows.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'pages', 'main', 'preload.js'), // Set up preload to enable secure communication
     },
