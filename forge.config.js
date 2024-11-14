@@ -9,6 +9,7 @@ module.exports = {
     asar: true,
     icon: 'src/icons/windows',
   },
+  prune: true,
   ignore: [
     /locales/,       // Ignore the locales folder
     /.*\.map$/,      // Optionally ignore map files
