@@ -1,10 +1,21 @@
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
+  mode: 'production',
+  devtool: process.env.NODE_ENV === 'production' ? false : 'source-map',
   packagerConfig: {
     asar: true,
     icon: 'src/icons/windows',
+  },
+  ignore: [
+    /locales/,       // Ignore the locales folder
+    /.*\.map$/,      // Optionally ignore map files
+  ],
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
   },
   rebuildConfig: {},
   makers: [
