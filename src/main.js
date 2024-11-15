@@ -16,7 +16,7 @@ const createWindow = () => {
     frame: config["titlebar"],
     icon: path.join(__dirname, 'icons/applauncher.ico'),
     webPreferences: {
-      preload: path.join(__dirname, 'pages', 'main', 'preload.js'), // Set up preload to enable secure communication
+      preload: path.join(__dirname, 'preload.js'), // Set up preload to enable secure communication
       nodeIntegration: false,
       experimentalFeatures: false,
       serviceWorkers: false,
@@ -28,6 +28,8 @@ const createWindow = () => {
 
   ipcMain.on('hamburger-options', (event) => {
     const hamburgeroptions = Menu.buildFromTemplate([
+      { label: 'Add an app...', click: () => event.sender.send('hamburger-options-command', 'addapp') },
+      { type: 'separator'},
       { label: 'Settings', click: () => event.sender.send('hamburger-options-command', 'opensettings') },
       { label: 'Help', click: () => event.sender.send('hamburger-options-command', 'action2') },
       { label: 'Send feedback', click: () => event.sender.send('hamburger-options-command', 'action2') },
@@ -73,7 +75,7 @@ ipcMain.on('open-settings', () => {
     name: "Settings",
     icon: path.join(__dirname, 'icons/settings.ico'),
     webPreferences: {
-      preload: path.join(__dirname, 'pages', 'settings', 'preload.js'), // Set up preload to enable secure communication
+      preload: path.join(__dirname, 'preload.js'), // Set up preload to enable secure communication
       nodeIntegration: false,
       experimentalFeatures: false,
       serviceWorkers: false,
@@ -96,6 +98,17 @@ ipcMain.handle('get-image', async (event, filePath) => {
     console.error('Error reading image:', error);
     return "fileerror";
   }
+});
+
+ipcMain.handle('choose-app-icon', async () => {
+  const result = await dialog.showOpenDialog({
+    properties: ['openFile'], // This opens a file dialog (use 'openDirectory' for folders)
+    filters: [
+      { name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] }
+    ],
+  });
+
+  return [result.filePaths, fs.readFileSync(filePath).toString('base64')]; // Return the file paths selected by the user
 });
 
 app.whenReady().then(createWindow);

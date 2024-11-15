@@ -64,7 +64,7 @@ window.electron.onHamburgerMenuCommand((command) => {
 
     if (command === 'opensettings') {
         window.electron.openSettings();
-    } else if (command === 'action2') {
-        alert('Custom Action 2 triggered!');
+    } else if (command === 'addapp') {
+        alert('heyo');
     }
 });

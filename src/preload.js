@@ -14,5 +14,9 @@ contextBridge.exposeInMainWorld('electron', {
   getImage: async (filePath) => {
     return await ipcRenderer.invoke('get-image', filePath);
   },
+  chooseAppIcon: async () => {
+    return await ipcRenderer.invoke('choose-app-icon');
+  },
   openProgram: (program) => ipcRenderer.send('open-program', program),
+  openSettings: () => ipcRenderer.send('open-settings'),
 });
