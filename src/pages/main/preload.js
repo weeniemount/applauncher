@@ -15,4 +15,5 @@ contextBridge.exposeInMainWorld('electron', {
     return await ipcRenderer.invoke('get-image', filePath);
   },
   openProgram: (program) => ipcRenderer.send('open-program', program),
+  openSettings: () => ipcRenderer.send('open-settings'),
 });

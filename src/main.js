@@ -28,7 +28,7 @@ const createWindow = () => {
 
   ipcMain.on('hamburger-options', (event) => {
     const hamburgeroptions = Menu.buildFromTemplate([
-      { label: 'Settings', click: () => event.sender.send('hamburger-options-command', 'action1') },
+      { label: 'Settings', click: () => event.sender.send('hamburger-options-command', 'opensettings') },
       { label: 'Help', click: () => event.sender.send('hamburger-options-command', 'action2') },
       { label: 'Send feedback', click: () => event.sender.send('hamburger-options-command', 'action2') },
     ]);
@@ -63,6 +63,24 @@ ipcMain.on('open-program', (event, program) => {
     detached: true,
     stdio: 'ignore'  // Ignore stdout and stderr
   });
+});
+
+ipcMain.on('open-settings', () => {
+  const win = new BrowserWindow({
+    width: 750,
+    height: 550,
+    frame: true,
+    icon: path.join(__dirname, 'icons/windows.ico'),
+    webPreferences: {
+      preload: path.join(__dirname, 'pages', 'settings', 'preload.js'), // Set up preload to enable secure communication
+      nodeIntegration: false,
+      experimentalFeatures: false,
+      serviceWorkers: false,
+      spellcheck: false,
+    },
+  });
+
+  win.loadFile('src/pages/settings/index.html');
 });
 
 ipcMain.handle('get-image', async (event, filePath) => {
