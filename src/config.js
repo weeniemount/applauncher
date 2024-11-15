@@ -9,12 +9,12 @@ const configFilePath = path.join(userDataPath, 'config.json');
 const defaultConfig = {
   titlebar: false,
   apps: [
-    ["Web Store", "../../defaultapps/webstore/48.png", "link", "https://chromewebstore.google.com/"],
-    ["Docs", "../../defaultapps/docs/icon_128.png", "link", "https://docs.google.com/"],
-    ["Google Drive", "../../defaultapps/drive/128.png", "link", "https://drive.google.com"],
-    ["Gmail", "../../defaultapps/gmail/128.png", "link", "https://mail.google.com"],
-    ["Google Search", "../../defaultapps/search/48.png", "link", "https://google.com/?source=search_app"],
-    ["YouTube", "../../defaultapps/youtube/128.png", "link", "https://youtube.com"]
+    ["Web Store", "builtinimage", "../../defaultapps/webstore/48.png", "link", "https://chromewebstore.google.com/"],
+    ["Docs", "builtinimage", "../../defaultapps/docs/icon_128.png", "link", "https://docs.google.com/"],
+    ["Google Drive", "builtinimage", "../../defaultapps/drive/128.png", "link", "https://drive.google.com"],
+    ["Gmail", "builtinimage", "../../defaultapps/gmail/128.png", "link", "https://mail.google.com"],
+    ["Google Search", "builtinimage", "../../defaultapps/search/48.png", "link", "https://google.com/?source=search_app"],
+    ["YouTube", "builtinimage", "../../defaultapps/youtube/128.png", "link", "https://youtube.com"]
   ]
 };
 

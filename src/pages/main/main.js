@@ -6,13 +6,19 @@ async function refreshapps() {
 
         appsContent.innerHTML = '';
 
-        config.apps.forEach((app, index) => {
+        for (const app of config.apps) {
             const appDiv = document.createElement("div");
             appDiv.id = "app";
 
             const appIcon = document.createElement("img");
             appIcon.id = "appicon";
-            appIcon.src = app[1];
+            if (app[1] == "builtinimage") {
+                appIcon.src = app[2];
+            } else if (app[1] == "localimage") {
+                const image = await window.electron.getImage(app[2])
+
+                appIcon.src = `data:image/png;base64,${image}`;
+            }
             appIcon.alt = app[0];
 
             const appText = document.createElement("p");
@@ -22,15 +28,15 @@ async function refreshapps() {
             appDiv.appendChild(appIcon)
             appDiv.appendChild(appText);
 
-            if (app[2] == "link") {
+            if (app[3] == "link") {
                 appDiv.onclick = function() {
-                    window.electron.openLink(app[3]);
+                    window.electron.openLink(app[4]);
                     window.electron.quitApp()
                 }
             }
             appsContent.appendChild(appDiv);
 
-        });
+        };
     }
 }
 

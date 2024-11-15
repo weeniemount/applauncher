@@ -10,5 +10,8 @@ contextBridge.exposeInMainWorld('electron', {
   quitApp: () => ipcRenderer.send('quit-app'),
   getConfig: async () => {
     return await ipcRenderer.invoke('get-config');
+  },
+  getImage: async (filePath) => {
+    return await ipcRenderer.invoke('get-image', filePath);
   }
 });

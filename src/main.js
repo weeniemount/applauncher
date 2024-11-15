@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, Menu, shell  } = require('electron');
 const path = require('path');
 const { createConfigIfNeeded, readConfig } = require('./config.js');
 const { title } = require('process');
+const fs = require('fs')
 
 createConfigIfNeeded();
 
@@ -56,5 +57,18 @@ ipcMain.on('quit-app', () => {
   app.quit();
 });
 
+ipcMain.handle('get-image', async (event, filePath) => {
+  try {
+    if (fs.existsSync(filePath)) {
+      const fileData = fs.readFileSync(filePath);
+      return fileData.toString('base64');
+    } else {
+      return "filenotfound";
+    }
+  } catch (error) {
+    console.error('Error reading image:', error);
+    return "fileerror";
+  }
+});
 
 app.whenReady().then(createWindow);
