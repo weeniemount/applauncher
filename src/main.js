@@ -37,6 +37,13 @@ const createWindow = () => {
   });
 };
 
+// html to main communication
+
+ipcMain.handle('get-config', () => {
+  const config = readConfig()
+  return config;
+});
+
 ipcMain.on('open-link', (event, url) => {
   shell.openExternal(url).then(() => {
       console.log(`Opened external link: ${url}`);

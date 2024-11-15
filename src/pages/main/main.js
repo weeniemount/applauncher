@@ -1,42 +1,37 @@
-var appslist = [
-    ["Web Store", "../../defaultapps/webstore/48.png", "link", "https://chromewebstore.google.com/"],
-    ["Docs", "../../defaultapps/docs/icon_128.png", "link", "https://docs.google.com/"],
-    ["Drive", "../../defaultapps/drive/128.png", "link", "https://drive.google.com"],
-    ["Gmail", "../../defaultapps/gmail/128.png", "link", "https://mail.google.com"],
-    ["Google Search", "../../defaultapps/search/48.png", "link", "https://google.com/?source=search_app"],
-    ["YouTube", "../../defaultapps/youtube/128.png", "link", "https://youtube.com"]
-]
+async function refreshapps() {
+    const config = await window.electron.getConfig();
 
-function refreshapps() {
-    const appsContent = document.getElementById("apps-content");
+    if (config && config.apps) {
+        const appsContent = document.getElementById("apps-content");
 
-    appsContent.innerHTML = '';
+        appsContent.innerHTML = '';
 
-    appslist.forEach((app, index) => {
-        const appDiv = document.createElement("div");
-        appDiv.id = "app";
+        config.apps.forEach((app, index) => {
+            const appDiv = document.createElement("div");
+            appDiv.id = "app";
 
-        const appIcon = document.createElement("img");
-        appIcon.id = "appicon";
-        appIcon.src = app[1];
-        appIcon.alt = app[0];
+            const appIcon = document.createElement("img");
+            appIcon.id = "appicon";
+            appIcon.src = app[1];
+            appIcon.alt = app[0];
 
-        const appText = document.createElement("p");
-        appText.id = "apptext";
-        appText.textContent = app[0];
+            const appText = document.createElement("p");
+            appText.id = "apptext";
+            appText.textContent = app[0];
 
-        appDiv.appendChild(appIcon)
-        appDiv.appendChild(appText);
+            appDiv.appendChild(appIcon)
+            appDiv.appendChild(appText);
 
-        if (app[2] == "link") {
-            appDiv.onclick = function() {
-                window.electron.openLink(app[3]);
-                window.electron.quitApp()
+            if (app[2] == "link") {
+                appDiv.onclick = function() {
+                    window.electron.openLink(app[3]);
+                    window.electron.quitApp()
+                }
             }
-        }
-        appsContent.appendChild(appDiv);
+            appsContent.appendChild(appDiv);
 
-    });
+        });
+    }
 }
 
 refreshapps();

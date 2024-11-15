@@ -8,4 +8,7 @@ contextBridge.exposeInMainWorld('electron', {
   onHamburgerMenuCommand: (callback) => ipcRenderer.on('hamburger-options-command', (event, command) => callback(command)),
   openLink: (url) => ipcRenderer.send('open-link', url),
   quitApp: () => ipcRenderer.send('quit-app'),
+  getConfig: async () => {
+    return await ipcRenderer.invoke('get-config');
+  }
 });
