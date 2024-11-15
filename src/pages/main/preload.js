@@ -13,5 +13,6 @@ contextBridge.exposeInMainWorld('electron', {
   },
   getImage: async (filePath) => {
     return await ipcRenderer.invoke('get-image', filePath);
-  }
+  },
+  openProgram: (program) => ipcRenderer.send('open-program', program),
 });

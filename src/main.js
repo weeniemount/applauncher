@@ -3,6 +3,7 @@ const path = require('path');
 const { createConfigIfNeeded, readConfig } = require('./config.js');
 const { title } = require('process');
 const fs = require('fs')
+const { spawn } = require('child_process');
 
 createConfigIfNeeded();
 
@@ -55,6 +56,13 @@ ipcMain.on('open-link', (event, url) => {
 
 ipcMain.on('quit-app', () => {
   app.quit();
+});
+
+ipcMain.on('open-program', (event, program) => {
+  const programtoopen = spawn(program, [], {
+    detached: true,
+    stdio: 'ignore'  // Ignore stdout and stderr
+  });
 });
 
 ipcMain.handle('get-image', async (event, filePath) => {

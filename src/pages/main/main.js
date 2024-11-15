@@ -15,7 +15,8 @@ async function refreshapps() {
             if (app[1] == "builtinimage") {
                 appIcon.src = app[2];
             } else if (app[1] == "localimage") {
-                const image = await window.electron.getImage(app[2])
+                var editedstring = app[2].replace(/\\/g, '/');
+                const image = await window.electron.getImage(editedstring)
 
                 appIcon.src = `data:image/png;base64,${image}`;
             }
@@ -31,6 +32,11 @@ async function refreshapps() {
             if (app[3] == "link") {
                 appDiv.onclick = function() {
                     window.electron.openLink(app[4]);
+                    window.electron.quitApp()
+                }
+            } else if (app[3] == "program") {
+                appDiv.onclick = function() {
+                    window.electron.openProgram(app[4]);
                     window.electron.quitApp()
                 }
             }
