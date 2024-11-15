@@ -49,7 +49,8 @@ ipcMain.handle('get-config', () => {
   return config;
 });
 
-ipcMain.handle('update-config', (newconfig) => {
+ipcMain.on('update-config', (event, newconfig) => {
+  console.log("hello")
   updateConfig(newconfig)
 });
 

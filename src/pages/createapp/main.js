@@ -1,7 +1,5 @@
-const { app } = require("electron");
-
 var iconfilepath
-var apptype
+var apptype = "link"
 var apppath
 
 async function chooseappicon() {
@@ -31,18 +29,20 @@ function selectLink() {
     apptype = "link"
 };
 
-async function makeapp() {
+document.getElementById('makebutton').addEventListener('click', async function() {
     console.log('hrello')
     var config = await window.electron.getConfig();
     var appname = document.getElementById("appname").value
 
-    var newapp = [appname, "localimage", iconfilepath, apptype]
+    var newapp = [appname, "localimage", iconfilepath[0], apptype]
     if (apptype == "program") {
-        newapp.push(apppath)
+        newapp.push(apppath[0])
     } else if (apptype == "link") {
         newapp.push(document.getElementById("applink").value)
     }
     console.log(newapp)
     config.apps.push(newapp)
+
+    console.log(config)
     window.electron.updateConfig(config)
-}
+});
