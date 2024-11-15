@@ -1,6 +1,6 @@
-const { app, BrowserWindow, ipcMain, Menu, shell  } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, shell, dialog } = require('electron');
 const path = require('path');
-const { createConfigIfNeeded, readConfig } = require('./config.js');
+const { createConfigIfNeeded, readConfig, updateConfig } = require('./config.js');
 const { title } = require('process');
 const fs = require('fs')
 const { spawn } = require('child_process');
@@ -33,6 +33,7 @@ const createWindow = () => {
       { label: 'Settings', click: () => event.sender.send('hamburger-options-command', 'opensettings') },
       { label: 'Help', click: () => event.sender.send('hamburger-options-command', 'action2') },
       { label: 'Send feedback', click: () => event.sender.send('hamburger-options-command', 'action2') },
+      { type: 'separator'},
     ]);
 
     hamburgeroptions.popup({
@@ -46,6 +47,10 @@ const createWindow = () => {
 ipcMain.handle('get-config', () => {
   const config = readConfig()
   return config;
+});
+
+ipcMain.handle('update-config', (newconfig) => {
+  updateConfig(newconfig)
 });
 
 ipcMain.on('open-link', (event, url) => {
@@ -86,6 +91,25 @@ ipcMain.on('open-settings', () => {
   win.loadFile('src/pages/settings/index.html');
 });
 
+ipcMain.on('open-createanapp', () => {
+  const win = new BrowserWindow({
+    width: 750,
+    height: 550,
+    frame: false,
+    name: "create-an-app",
+    icon: path.join(__dirname, 'icons/settings.ico'),
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'), // Set up preload to enable secure communication
+      nodeIntegration: false,
+      experimentalFeatures: false,
+      serviceWorkers: false,
+      spellcheck: false,
+    },
+  });
+
+  win.loadFile('src/pages/createapp/index.html');
+});
+
 ipcMain.handle('get-image', async (event, filePath) => {
   try {
     if (fs.existsSync(filePath)) {
@@ -108,7 +132,18 @@ ipcMain.handle('choose-app-icon', async () => {
     ],
   });
 
-  return [result.filePaths, fs.readFileSync(filePath).toString('base64')]; // Return the file paths selected by the user
+  return [result.filePaths, fs.readFileSync(result.filePaths[0]).toString('base64')]; // Return the file paths selected by the user
+});
+
+ipcMain.handle('choose-program', async () => {
+  const result = await dialog.showOpenDialog({
+    properties: ['openFile'], // This opens a file dialog (use 'openDirectory' for folders)
+    filters: [
+      { name: 'Programs', extensions: ['exe', 'bat', 'cmd'] }
+    ],
+  });
+
+  return result.filePaths; // Return the file paths selected by the user
 });
 
 app.whenReady().then(createWindow);

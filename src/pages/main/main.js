@@ -65,6 +65,6 @@ window.electron.onHamburgerMenuCommand((command) => {
     if (command === 'opensettings') {
         window.electron.openSettings();
     } else if (command === 'addapp') {
-        alert('heyo');
+        window.electron.openCreateAnApp();
     }
 });

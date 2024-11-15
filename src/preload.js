@@ -17,6 +17,11 @@ contextBridge.exposeInMainWorld('electron', {
   chooseAppIcon: async () => {
     return await ipcRenderer.invoke('choose-app-icon');
   },
+  chooseProgram: async () => {
+    return await ipcRenderer.invoke('choose-program');
+  },
+  updateConfig: (config) => ipcRenderer.send('update-config'),
   openProgram: (program) => ipcRenderer.send('open-program', program),
   openSettings: () => ipcRenderer.send('open-settings'),
+  openCreateAnApp: () => ipcRenderer.send('open-createanapp'),
 });

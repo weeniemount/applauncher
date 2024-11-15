@@ -5,11 +5,20 @@
         <title>Create an App</title>
         <link rel="stylesheet" href="style.css" />
         <script src="../../preload.js" defer></script>
+        <script src="main.js" defer></script>
     </head>
     <body>
         <p>create an app</p>
-        <input type="text" id="name" placeholder="app name">
-        <button id="chooseappicon">choose app icon</button>
+        <input type="text" id="appname" placeholder="app name"><br>
+        <button id="chooseappicon" onclick="chooseappicon()">choose app icon</button>
         <img id="appicon">
+        <p>app type:</p>
+        <input type="radio" name="selection" id="linkRadio" onchange="selectLink()" checked> Link<br>
+        <input type="radio" name="selection" id="programRadio" onchange="selectProgram()"> Program<br>
+        
+        <input type="text" id="applink" placeholder="app link">
+        <button id="chooseapp" onclick="chooseapp()" style="display: none;">choose program path</button>
+        <br>
+        <button id="hello" onclick="makeapp()">maek</button><br><button>cancel</button>
     </body>
 </html>
