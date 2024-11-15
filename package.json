@@ -89,13 +89,13 @@
     "productName": "App Launcher",
     "compression": "maximum",
     "asar": true,
-    "icon": "src/icons/windows.ico",
+    "icon": "src/icons/applauncher.ico",
     "files": [
       "**/*",
       "!**/*.map"
     ],
     "win": {
-      "icon": "src/icons/windows.ico"
+      "icon": "src/icons/applauncher.ico"
     },
     "mac": {
       "icon": "src/icons/mac.icns"

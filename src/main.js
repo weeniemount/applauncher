@@ -14,7 +14,7 @@ const createWindow = () => {
     width: 402,
     height: 502,
     frame: config["titlebar"],
-    icon: path.join(__dirname, 'icons/windows.ico'),
+    icon: path.join(__dirname, 'icons/applauncher.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'pages', 'main', 'preload.js'), // Set up preload to enable secure communication
       nodeIntegration: false,
@@ -70,7 +70,8 @@ ipcMain.on('open-settings', () => {
     width: 750,
     height: 550,
     frame: true,
-    icon: path.join(__dirname, 'icons/windows.ico'),
+    name: "Settings",
+    icon: path.join(__dirname, 'icons/settings.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'pages', 'settings', 'preload.js'), // Set up preload to enable secure communication
       nodeIntegration: false,
