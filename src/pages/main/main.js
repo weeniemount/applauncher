@@ -30,6 +30,11 @@ async function refreshapps() {
             appDiv.appendChild(appText);
 
             if (app[3] == "link") {
+                const linkIcon = document.createElement("img");
+                linkIcon.id = "linkicon";
+                linkIcon.src = "images/link.png"
+                appDiv.appendChild(linkIcon)
+
                 appDiv.onclick = function() {
                     window.electron.openLink(app[4]);
                     window.electron.quitApp()

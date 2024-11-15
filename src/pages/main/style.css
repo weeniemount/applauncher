@@ -99,3 +99,9 @@ a {
     color: black;
     cursor: default;
 }
+
+#linkicon {
+    position: relative;
+    margin-left: 21px;
+    bottom: 20px;
+}
