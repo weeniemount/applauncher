@@ -1,25 +1,10 @@
 {
-  "build": {
-    "appId": "com.electron.example",
-    "compression": "maximum"
-  },
-  "devDependencies": {
-    "@electron-forge/cli": "^7.5.0",
-    "@electron-forge/maker-deb": "^7.5.0",
-    "@electron-forge/maker-rpm": "^7.5.0",
-    "@electron-forge/maker-squirrel": "^7.5.0",
-    "@electron-forge/maker-zip": "^7.5.0",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.5.0",
-    "@electron-forge/plugin-fuses": "^7.5.0",
-    "@electron-forge/publisher-github": "^7.5.0",
-    "@electron/fuses": "^1.8.0",
-    "electron": "^33.2.0",
-    "terser-webpack-plugin": "^5.3.10"
-  },
   "name": "app-launcher",
   "version": "1.0.0",
   "description": "chrome app launcher recreation",
   "main": "src/main.js",
+  "author": "weenie",
+  "license": "ISC",
   "dependencies": {
     "boolean": "^3.2.0",
     "buffer-crc32": "^0.2.13",
@@ -88,13 +73,33 @@
     "ws": "^8.18.0",
     "yauzl": "^2.10.0"
   },
-  "scripts": {
-    "start2": "electron-forge start",
-    "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
+    "terser-webpack-plugin": "^5.3.10"
   },
-  "author": "weenie",
-  "license": "ISC"
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "dist": "electron-builder --win --x64"
+  },
+  "build": {
+    "appId": "com.electron.example",
+    "compression": "maximum",
+    "asar": true,
+    "icon": "src/icons/windows.ico",
+    "files": [
+      "**/*",
+      "!**/*.map"
+    ],
+    "win": {
+      "icon": "src/icons/windows.ico"
+    },
+    "mac": {
+      "icon": "src/icons/mac.icns"
+    },
+    "linux": {
+      "icon": "src/icons/linux.png"
+    }
+  }
 }
