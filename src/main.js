@@ -1,11 +1,17 @@
 const { app, BrowserWindow, ipcMain, Menu, shell  } = require('electron');
 const path = require('path');
+const { createConfigIfNeeded, readConfig } = require('./config.js');
+const { title } = require('process');
+
+createConfigIfNeeded();
 
 const createWindow = () => {
+  const config = readConfig()
+  
   const win = new BrowserWindow({
     width: 402,
     height: 502,
-    frame: false,
+    frame: config["titlebar"],
     icon: path.join(__dirname, 'icons/windows.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'pages', 'main', 'preload.js'), // Set up preload to enable secure communication

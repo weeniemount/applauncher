@@ -84,7 +84,8 @@
     "dist": "electron-builder --win --x64"
   },
   "build": {
-    "appId": "com.electron.example",
+    "appId": "com.weenie.applauncher",
+    "productName": "App Launcher",
     "compression": "maximum",
     "asar": true,
     "icon": "src/icons/windows.ico",
