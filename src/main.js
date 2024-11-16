@@ -92,23 +92,40 @@ ipcMain.on('open-settings', () => {
   win.loadFile('src/pages/settings/index.html');
 });
 
-ipcMain.on('open-createanapp', () => {
-  const win = new BrowserWindow({
-    width: 750,
-    height: 550,
-    frame: false,
-    name: "create-an-app",
-    icon: path.join(__dirname, 'icons/settings.ico'),
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'), // Set up preload to enable secure communication
-      nodeIntegration: false,
-      experimentalFeatures: false,
-      serviceWorkers: false,
-      spellcheck: false,
-    },
-  });
+let createanapp;
 
-  win.loadFile('src/pages/createapp/index.html');
+ipcMain.on('open-createanapp', () => {
+  if (createanapp && !createanapp.isDestroyed()) {
+    createanapp.focus();
+  } else {
+    createanapp = new BrowserWindow({
+      width: 260,
+      height: 490,
+      frame: false,
+      name: "create-an-app",
+      icon: path.join(__dirname, 'icons/settings.ico'),
+      skipTaskbar: true,
+      webPreferences: {
+        preload: path.join(__dirname, 'preload.js'),
+        nodeIntegration: false,
+        experimentalFeatures: false,
+        serviceWorkers: false,
+        spellcheck: false,
+      },
+    });
+
+    createanapp.loadFile('src/pages/createapp/index.html');
+
+    ipcMain.on('close-createanapp', () => {
+      if (createanapp && !createanapp.isDestroyed()) {
+        createanapp.close(); 
+      }
+    });
+
+    createanapp.on('closed', () => {
+      createanapp = null;
+    });
+  }
 });
 
 ipcMain.handle('get-image', async (event, filePath) => {

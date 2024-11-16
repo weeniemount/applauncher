@@ -47,3 +47,7 @@ document.getElementById('makebutton').addEventListener('click', async function()
     window.electron.updateConfig(config)
     window.electron.refreshAppsList()
 });
+
+document.getElementById('cancelbutton').addEventListener('click', function()  {
+    window.electron.closeCreateAnApp();
+})
