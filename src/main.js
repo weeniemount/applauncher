@@ -78,6 +78,7 @@ ipcMain.on('open-settings', () => {
     width: 750,
     height: 550,
     frame: true,
+    autoHideMenuBar: true,
     name: "Settings",
     icon: path.join(__dirname, 'icons/settings.ico'),
     webPreferences: {
@@ -100,7 +101,7 @@ ipcMain.on('open-createanapp', () => {
   } else {
     createanapp = new BrowserWindow({
       width: 260,
-      height: 490,
+      height: 500,
       frame: false,
       name: "create-an-app",
       icon: path.join(__dirname, 'icons/settings.ico'),

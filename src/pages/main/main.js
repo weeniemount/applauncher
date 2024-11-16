@@ -53,6 +53,17 @@ async function refreshapps() {
 
 refreshapps();
 
+document.getElementById("searchbarurl").addEventListener(onchange, function() {
+    const searchbarText = document.getElementById("searchbar").value
+
+    if (searchbarText == "") {
+        document.getElementById("apps-content").hidden = true;
+        document.getElementById("searchpage").hidden = false;
+    } else {
+        document.getElementById("apps-content").hidden = false;
+        document.getElementById("searchpage").hidden = true;
+    }
+});
 // electron stuff
 
 document.getElementById("hamburgermenu").onclick = function() {

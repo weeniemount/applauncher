@@ -67,9 +67,65 @@
     border-image: url('buttons/button/button_inactive.png') 5 5 fill;
 }
 
+/* checkboxes */
+
+.chromecheckbox {
+    appearance: none;
+    border: none;
+    background-image: url("checkbox/checkbox.png");
+}
+
+.chromecheckbox:hover {
+    background-image: url("checkbox/checkbox_hover.png");
+}
+
+.chromecheckbox:active {
+    background-image: url("checkbox/checkbox_pressed.png");
+}
+
+.chromecheckbox:focus {
+    background-image: url("checkbox/checkbox_hover.png");
+}
+
+.chromecheckbox:disabled {
+    background-image: url("checkbox/checkbox_inactive.png");
+}
+
+.chromecheckbox:hover:checked {
+    background-image: url("checkbox/checkbox_checked_hover.png");
+}
+
+.chromecheckbox:active:checked {
+    background-image: url("checkbox/checkbox_checked_pressed.png");
+}
+
+.chromecheckbox:focus:checked {
+    background-image: url("checkbox/checkbox_focused_checked.png");
+}
+
+.chromecheckbox:disabled:checked {
+    background-image: url("checkbox/checkbox_checked_inactive.png");
+}
+
+.chromecheckbox:focus:checked:hover {
+    background-image: url("checkbox/checkbox_focused_checked_hover.png");
+}
+
+.chromecheckbox:focus:checked:active {
+    background-image: url("checkbox/checkbox_focused_checked_pressed.png");
+}
+
+.chromecheckbox:focus:hover {
+    background-image: url("checkbox/checkbox_focused_hover.png");
+}
+
+.chromecheckbox:focus:active {
+    background-image: url("checkbox/checkbox_focused_pressed.png");
+}
+
 /* IMAGE PRELOAD */
 
-#imagepreload {
+#imagepreload-bluebutton {
     position: absolute;
     width: 0;
     height: 0;
@@ -82,8 +138,15 @@
         url('buttons/bluebutton/blue_button_focused_hover.png'),
         url('buttons/bluebutton/blue_button_pressed.png'),
         url('buttons/bluebutton/blue_button_focused_pressed.png'),
-        url('buttons/bluebutton/blue_button_inactive.png'),
-
+        url('buttons/bluebutton/blue_button_inactive.png');
+}
+#imagepreload-genericbutton {
+    position: absolute;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+    overflow: hidden;
+    background-image: 
         url('buttons/button/button.png'),
         url('buttons/button/button_hover.png'),
         url('buttons/button/button_focused.png'),
@@ -91,4 +154,27 @@
         url('buttons/button/button_pressed.png'),
         url('buttons/button/button_focused_pressed.png'),
         url('buttons/button/button_inactive.png');
+}
+
+#imagepreload-bluebutton {
+    position: absolute;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+    overflow: hidden;
+    background-image: 
+        url("checkbox/checkbox.png"),
+        url("checkbox/checkbox_checked.png")
+        url("checkbox/checkbox_checked_hover.png"),
+        url("checkbox/checkbox_checked_inactive.png"),
+        url("checkbox/checkbox_checked_pressed.png"),
+        url("checkbox/checkbox_focused.png"),
+        url("checkbox/checkbox_focused_checked.png"),
+        url("checkbox/checkbox_focused_checked_hover.png"),
+        url("checkbox/checkbox_focused_checked_pressed.png"),
+        url("checkbox/checkbox_focused_hover.png"),
+        url("checkbox/checkbox_focused_pressed.png"),
+        url("checkbox/checkbox_hover.png"),
+        url("checkbox/checkbox_inactive.png"),
+        url("checkbox/checkbox_pressed.png"),
 }

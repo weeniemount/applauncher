@@ -63,6 +63,11 @@
     flex-wrap: wrap
 }
 
+#searchpage {
+    margin-left: 24px;
+    margin-right: 24px;
+}
+
 #app {
     width: 88px;
     height: 97px;
