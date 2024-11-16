@@ -66,3 +66,29 @@
 .genericbutton:disabled {
     border-image: url('buttons/button/button_inactive.png') 5 5 fill;
 }
+
+/* IMAGE PRELOAD */
+
+#imagepreload {
+    position: absolute;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+    overflow: hidden;
+    background-image: 
+        url('buttons/bluebutton/blue_button.png'),
+        url('buttons/bluebutton/blue_button_hover.png'),
+        url('buttons/bluebutton/blue_button_focused.png'),
+        url('buttons/bluebutton/blue_button_focused_hover.png'),
+        url('buttons/bluebutton/blue_button_pressed.png'),
+        url('buttons/bluebutton/blue_button_focused_pressed.png'),
+        url('buttons/bluebutton/blue_button_inactive.png'),
+
+        url('buttons/button/button.png'),
+        url('buttons/button/button_hover.png'),
+        url('buttons/button/button_focused.png'),
+        url('buttons/button/button_focused_hover.png'),
+        url('buttons/button/button_pressed.png'),
+        url('buttons/button/button_focused_pressed.png'),
+        url('buttons/button/button_inactive.png');
+}
