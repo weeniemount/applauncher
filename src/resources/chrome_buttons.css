@@ -1,0 +1,32 @@
+.bluebutton {
+    color: white;
+    border: 5px solid transparent;
+    border-image: url('buttons/bluebutton/blue_button.png') 5 5 fill;
+    background-color: transparent;
+    padding: 0;
+    outline: none;
+}
+
+.bluebutton:hover {
+    border-image: url('buttons/bluebutton/blue_button_hover.png') 5 5 fill;
+}
+
+.bluebutton:focus {
+    border-image: url('buttons/bluebutton/blue_button_focused.png') 5 5 fill;
+}
+
+.bluebutton:focus:hover {
+    border-image: url('buttons/bluebutton/blue_button_focused_hover.png') 5 5 fill;
+}
+
+.bluebutton:active {
+    border-image: url('buttons/bluebutton/blue_button_pressed.png') 5 5 fill;
+}
+
+.bluebutton:active:focus {
+    border-image: url('buttons/bluebutton/blue_button_focused_pressed.png') 5 5 fill;
+}
+
+.bluebutton:disabled {
+    border-image: url('buttons/bluebutton/blue_button_inactive.png') 5 5 fill;
+}

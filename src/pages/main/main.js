@@ -1,7 +1,7 @@
 async function refreshapps() {
     const config = await window.electron.getConfig();
 
-    if (config && config.apps) {
+    if (config && config.apps && config.apps.length > 0) {
         const appsContent = document.getElementById("apps-content");
 
         appsContent.innerHTML = '';
@@ -58,6 +58,11 @@ refreshapps();
 document.getElementById("hamburgermenu").onclick = function() {
     window.electron.showHamburgerMenu();
 }
+
+window.electron.refreshAppsList(() => {
+    console.log("refreshing apps list")
+    refreshapps();
+})
 
 window.electron.onHamburgerMenuCommand((command) => {
     console.log(`Context menu command received: ${command}`);

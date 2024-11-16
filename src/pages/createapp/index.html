@@ -4,22 +4,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Create an App</title>
         <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="../../resources/chrome_buttons.css">
         <script src="../../preload.js" defer></script>
         <script src="main.js" defer></script>
     </head>
     <body>
         <p>create an app</p>
         <input type="text" id="appname" placeholder="app name"><br>
-        <button id="chooseappicon" onclick="chooseappicon()">choose app icon</button>
+        <button id="chooseappicon" class="bluebutton" onclick="chooseappicon()">choose app icon</button>
         <img id="appicon">
         <p>app type:</p>
         <input type="radio" name="selection" id="linkRadio" onchange="selectLink()" checked> Link<br>
         <input type="radio" name="selection" id="programRadio" onchange="selectProgram()"> Program<br>
         
-        <input type="text" id="applink" placeholder="app link">
-        <button id="chooseapp" onclick="chooseapp()" style="display: none;">choose program path</button>
+        <input type="text" id="applink"placeholder="app link">
+        <button id="chooseapp" onclick="chooseapp()" class="bluebutton" style="display: none;">choose program path</button>
         <br>
-        <button id="makebutton">maek</button>
-        <br><button>cancel</button>
+        <button id="makebutton" class="bluebutton">maek</button>
+        <br><button class="bluebutton">cancel</button>
     </body>
 </html>
