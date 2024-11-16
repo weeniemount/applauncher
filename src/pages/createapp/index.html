@@ -13,6 +13,7 @@
         <hr id="seperator">
         <div id="imagepreload-bluebutton"></div>
         <div id="imagepreload-genericbutton"></div>
+        <div id="imagepreload-radio"></div>
         <div style="height: 50px;"></div>
         <div style="margin-left: 23px;">    
             <p>App Name:</p><input type="text" id="appname" placeholder="App Name"><br>
@@ -25,8 +26,8 @@
             </div>
             <hr>
             <p>App Type:</p>
-            <input type="radio" name="selection" id="linkRadio" onchange="selectLink()" checked> Link<br>
-            <input type="radio" name="selection" id="programRadio" onchange="selectProgram()"> Program<br>
+            <input type="radio" class="chromeradio" name="selection" id="linkRadio" onchange="selectLink()" checked> Link<br>
+            <input type="radio" class="chromeradio" name="selection" id="programRadio" onchange="selectProgram()"> Program<br>
             <br>
             <input type="text" id="applink"placeholder="App Link">
             <button id="chooseapp" onclick="chooseapp()" class="bluebutton" style="display: none; width: 140px; height: 25;">Choose Program...</button>
