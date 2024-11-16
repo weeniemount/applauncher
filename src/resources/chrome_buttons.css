@@ -1,3 +1,4 @@
+/* blue button */
 .bluebutton {
     color: white;
     border: 5px solid transparent;
@@ -29,4 +30,39 @@
 
 .bluebutton:disabled {
     border-image: url('buttons/bluebutton/blue_button_inactive.png') 5 5 fill;
+}
+
+/* generic button */
+
+.genericbutton {
+    color: black;
+    border: 5px solid transparent;
+    border-image: url('buttons/button/button.png') 5 5 fill;
+    background-color: transparent;
+    padding: 0;
+    outline: none;
+}
+
+.genericbutton:hover {
+    border-image: url('buttons/button/button_hover.png') 5 5 fill;
+}
+
+.genericbutton:focus {
+    border-image: url('buttons/button/button_focused.png') 5 5 fill;
+}
+
+.genericbutton:focus:hover {
+    border-image: url('buttons/button/button_focused_hover.png') 5 5 fill;
+}
+
+.genericbutton:active {
+    border-image: url('buttons/button/button_pressed.png') 5 5 fill;
+}
+
+.genericbutton:active:focus {
+    border-image: url('buttons/button/button_focused_pressed.png') 5 5 fill;
+}
+
+.genericbutton:disabled {
+    border-image: url('buttons/button/button_inactive.png') 5 5 fill;
 }
