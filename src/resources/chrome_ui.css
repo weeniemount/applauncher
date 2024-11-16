@@ -72,7 +72,11 @@
 .chromecheckbox {
     appearance: none;
     border: none;
+    width: 16; /* Set a fixed size for the checkbox */
+    height: 18px;
     background-image: url("checkbox/checkbox.png");
+    background-size: cover;
+    cursor: pointer;
 }
 
 .chromecheckbox:hover {
@@ -84,7 +88,11 @@
 }
 
 .chromecheckbox:focus {
-    background-image: url("checkbox/checkbox_hover.png");
+    background-image: url("checkbox/checkbox_focused.png");
+}
+
+.chromecheckbox:checked {
+    background-image: url("checkbox/checkbox_checked.png");
 }
 
 .chromecheckbox:disabled {
@@ -123,6 +131,70 @@
     background-image: url("checkbox/checkbox_focused_pressed.png");
 }
 
+/* radio */
+
+.chromeradio {
+    appearance: none;
+    border: none;
+    width: 16; /* Set a fixed size for the checkbox */
+    height: 18px;
+    background-image: url("radio/radio.png");
+    background-size: cover;
+    cursor: pointer;
+}
+
+.chromeradio:hover {
+    background-image: url("radio/radio_hover.png");
+}
+
+.chromeradio:active {
+    background-image: url("radio/radio_pressed.png");
+}
+
+.chromeradio:focus {
+    background-image: url("radio/radio_focused.png");
+}
+
+.chromeradio:checked {
+    background-image: url("radio/radio_checked.png");
+}
+
+.chromeradio:disabled {
+    background-image: url("radio/radio_inactive.png");
+}
+
+.chromeradio:hover:checked {
+    background-image: url("radio/radio_checked_hover.png");
+}
+
+.chromeradio:active:checked {
+    background-image: url("radio/radio_checked_pressed.png");
+}
+
+.chromeradio:focus:checked {
+    background-image: url("radio/radio_focused_checked.png");
+}
+
+.chromeradio:disabled:checked {
+    background-image: url("radio/radio_checked_inactive.png");
+}
+
+.chromeradio:focus:checked:hover {
+    background-image: url("radio/radio_focused_checked_hover.png");
+}
+
+.chromeradio:focus:checked:active {
+    background-image: url("radio/radio_focused_checked_pressed.png");
+}
+
+.chromeradio:focus:hover {
+    background-image: url("radio/radio_focused_hover.png");
+}
+
+.chromeradio:focus:active {
+    background-image: url("radio/radio_focused_pressed.png");
+}
+
 /* IMAGE PRELOAD */
 
 #imagepreload-bluebutton {
@@ -156,7 +228,7 @@
         url('buttons/button/button_inactive.png');
 }
 
-#imagepreload-bluebutton {
+#imagepreload-checkbox {
     position: absolute;
     width: 0;
     height: 0;
@@ -164,7 +236,7 @@
     overflow: hidden;
     background-image: 
         url("checkbox/checkbox.png"),
-        url("checkbox/checkbox_checked.png")
+        url("checkbox/checkbox_checked.png"),
         url("checkbox/checkbox_checked_hover.png"),
         url("checkbox/checkbox_checked_inactive.png"),
         url("checkbox/checkbox_checked_pressed.png"),
@@ -176,5 +248,28 @@
         url("checkbox/checkbox_focused_pressed.png"),
         url("checkbox/checkbox_hover.png"),
         url("checkbox/checkbox_inactive.png"),
-        url("checkbox/checkbox_pressed.png"),
+        url("checkbox/checkbox_pressed.png");
+}
+
+#imagepreload-radio {
+    position: absolute;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+    overflow: hidden;
+    background-image: 
+        url("radio/radio.png"),
+        url("radio/radio_checked.png"),
+        url("radio/radio_checked_hover.png"),
+        url("radio/radio_checked_inactive.png"),
+        url("radio/radio_checked_pressed.png"),
+        url("radio/radio_focused.png"),
+        url("radio/radio_focused_checked.png"),
+        url("radio/radio_focused_checked_hover.png"),
+        url("radio/radio_focused_checked_pressed.png"),
+        url("radio/radio_focused_hover.png"),
+        url("radio/radio_focused_pressed.png"),
+        url("radio/radio_hover.png"),
+        url("radio/radio_inactive.png"),
+        url("radio/radio_pressed.png");
 }
