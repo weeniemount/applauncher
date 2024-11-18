@@ -8,6 +8,7 @@ body {
     margin-top: 24px;
     left: 23px;
     font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
 }
 
 #seperator {
@@ -31,4 +32,19 @@ hr {
     background-color: #C9C9C9;
     border: none;
     height: 1px;
+}
+
+p {
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+    display: inline-block;
+}
+
+input {
+    vertical-align: middle;
+    display: inline-block;
+}
+
+#settingheading {
+    font-size: 16px;
 }

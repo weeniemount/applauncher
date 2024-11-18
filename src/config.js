@@ -8,6 +8,8 @@ const configFilePath = path.join(userDataPath, 'config.json');
 
 const defaultConfig = {
   titlebar: false,
+  closeonapp: true,
+  darkmode: false,
   apps: [
     ["Web Store", "builtinimage", "../../defaultapps/webstore/48.png", "link", "https://chromewebstore.google.com/"],
     ["Docs", "builtinimage", "../../defaultapps/docs/icon_128.png", "link", "https://docs.google.com/"],

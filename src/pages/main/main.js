@@ -51,6 +51,14 @@ async function refreshapps() {
     }
 }
 
+function darkmode(variable) {
+    if (variable) {
+        document.body.classList.add('dark');
+    } else {
+        document.body.classList.remove('dark')
+    }
+}
+
 refreshapps();
 
 document.getElementById("searchbarurl").addEventListener(onchange, function() {

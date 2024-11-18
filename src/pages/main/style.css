@@ -9,12 +9,22 @@
     font-family: Helvetica, Arial, sans-serif;
 }
 
+.dark #applauncherbody {
+    background-color: #333333;
+    color: #333333;
+}
+
 #searchbar {
     font-weight: bold;
     border-bottom: 1px solid #c0c0c0;
     width: 402px;
     height: 50px;
     background-color: #ffffff;
+}
+
+.dark #searchbar {
+    background-color: #444444;
+    border-bottom: 1px solid #555555;
 }
 
 #searchbarfield {
@@ -47,8 +57,8 @@
     left: 363px;
     top: 17px;
     background-image: url("images/hamburger.png");
-    width: 13px;
-    height: 13px;
+    width: 15px;
+    height: 15px;
 }
 
 #hamburgermenu:hover {
@@ -63,6 +73,10 @@
     flex-wrap: wrap
 }
 
+.dark #apps-content {
+    background-color: #333333;
+}
+
 #searchpage {
     margin-left: 24px;
     margin-right: 24px;
@@ -75,8 +89,16 @@
     position: relative;
 }
 
+.dark #app {
+    background-color: #333333;
+}
+
 #app:hover {
     background-color: #eaeaea;
+}
+
+.dark #app:hover {
+    background-color: #3D3D3D;
 }
 
 #appicon {
@@ -99,6 +121,11 @@
     transform: translateX(-50%); /* Adjust to center the element */
     text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.099);
     color: #333333;
+}
+
+.dark #apptext {
+    color: #f2f2f2;
+    text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.099);;
 }
 
 a {
