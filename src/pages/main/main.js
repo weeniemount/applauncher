@@ -1,6 +1,15 @@
-async function refreshapps() {
-    const config = await window.electron.getConfig();
+let closeonapp = true
 
+async function applyconfig() {
+    var config = await window.electron.getConfig()
+
+    darkmode(config.darkmode)
+    closeonapp = config.closeonapp
+
+    refreshapps(config)
+}
+
+async function refreshapps(config) {
     if (config && config.apps && config.apps.length > 0) {
         const appsContent = document.getElementById("apps-content");
 
@@ -37,12 +46,16 @@ async function refreshapps() {
 
                 appDiv.onclick = function() {
                     window.electron.openLink(app[4]);
-                    window.electron.quitApp()
+                    if (closeonapp) {
+                        window.electron.quitApp()
+                    }
                 }
             } else if (app[3] == "program") {
                 appDiv.onclick = function() {
                     window.electron.openProgram(app[4]);
-                    window.electron.quitApp()
+                    if (closeonapp) {
+                        window.electron.quitApp()
+                    }
                 }
             }
             appsContent.appendChild(appDiv);
@@ -59,7 +72,8 @@ function darkmode(variable) {
     }
 }
 
-refreshapps();
+
+applyconfig();
 
 document.getElementById("searchbarurl").addEventListener(onchange, function() {
     const searchbarText = document.getElementById("searchbar").value

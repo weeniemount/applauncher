@@ -7,6 +7,7 @@ async function setvalues() {
 
     titlebar.checked = loadconfig.titlebar
     closelauncher.checked = loadconfig.closeonapp
+    darkmode.checked = loadconfig.darkmode
 }
 
 titlebar.addEventListener('change', async (event) => {
