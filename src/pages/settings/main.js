@@ -47,6 +47,7 @@ resetapps.addEventListener('click', async () => {
 
     window.electron.updateConfig(config)
     window.electron.launcherRefreshConfig();
+    appstable()
 })
 
 async function appiconradio() {

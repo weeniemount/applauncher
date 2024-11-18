@@ -61,6 +61,8 @@ async function refreshapps(config) {
             appsContent.appendChild(appDiv);
 
         };
+    } else if (config.apps.length == 0) {
+        const appsContent = document.getElementById("apps-content");
     }
 }
 
