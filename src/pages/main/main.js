@@ -105,6 +105,8 @@ window.electron.onHamburgerMenuCommand((command) => {
         window.electron.openSettings();
     } else if (command === 'addapp') {
         window.electron.openCreateAnApp();
+    } else if (command === 'githubissues') {
+        window.electron.openLink("https://github.com/weeniemount/applauncher/issues")
     }
 });
 

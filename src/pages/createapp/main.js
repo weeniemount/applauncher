@@ -45,7 +45,7 @@ document.getElementById('makebutton').addEventListener('click', async function()
 
     console.log(config)
     window.electron.updateConfig(config)
-    window.electron.refreshAppsList()
+    window.electron.launcherRefreshConfig()
     window.electron.closeCreateAnApp();
 });
 

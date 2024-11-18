@@ -52,3 +52,9 @@ input {
 input[type="radio"] + label {
     font-family: 'Helvetica', sans-serif;
 }
+
+#appicon {
+    object-fit: fill;
+    width: 48px;
+    height: 48px;
+}

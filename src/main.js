@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain, Menu, shell, dialog } = require('electron');
 const path = require('path');
-const { createConfigIfNeeded, readConfig, updateConfig } = require('./config.js');
+const { createConfigIfNeeded, readConfig, updateConfig, getdefaultconfig } = require('./config.js');
 const { title } = require('process');
 const fs = require('fs')
 const { spawn } = require('child_process');
@@ -54,8 +54,9 @@ const createWindow = () => {
       { type: 'separator'},
       { label: 'Settings', click: () => event.sender.send('hamburger-options-command', 'opensettings') },
       { label: 'Help', click: () => event.sender.send('hamburger-options-command', 'action2') },
-      { label: 'Send feedback', click: () => event.sender.send('hamburger-options-command', 'action2') },
+      { label: 'Send feedback', click: () => event.sender.send('hamburger-options-command', 'githubissues') },
       { type: 'separator'},
+      { role: 'quit' }
     ]);
 
     hamburgeroptions.popup({
@@ -163,6 +164,11 @@ ipcMain.handle('get-image', async (event, filePath) => {
     console.error('Error reading image:', error);
     return "fileerror";
   }
+});
+
+ipcMain.handle('get-defaultconfig', async (event, filePath) => {
+  let defaultconfig = getdefaultconfig()
+  return defaultconfig
 });
 
 ipcMain.handle('choose-app-icon', async () => {

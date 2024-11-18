@@ -47,4 +47,8 @@ function updateConfig(newConfig) {
   }
 }
 
-module.exports = { createConfigIfNeeded, readConfig, updateConfig };
+function getdefaultconfig() {
+  return defaultConfig
+}
+
+module.exports = { createConfigIfNeeded, readConfig, updateConfig, getdefaultconfig };

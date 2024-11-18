@@ -21,7 +21,20 @@
             <p>Close App Launcher after launching an app: </p><input type="checkbox" id="closelauncher" class="chromecheckbox"><br>
             <hr>
             <p id="settingheading">Apps</p><br>
-            <button class="genericbutton" style="height: 35px; width: 140px;">Reset apps to default</button>
+            <table id="apptable" border="1">
+                <thead>
+                    <tr>
+                        <th>App Name</th>
+                        <th>App Link/Path</th>
+                        <th>App Icon</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- rows will be added here -->
+                </tbody>
+            </table>
+            <button class="genericbutton" id="resetapps" style="height: 35px; width: 140px;">Reset apps to default</button>
             <hr>
             <p id="settingheading">Customization</p><br>
             <p>Dark Mode: </p><input type="checkbox" id="darkmode" class="chromecheckbox"><br>
