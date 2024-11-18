@@ -75,7 +75,7 @@ function darkmode(variable) {
 
 applyconfig();
 
-document.getElementById("searchbarurl").addEventListener(onchange, function() {
+document.getElementById("searchbarurl").addEventListener("change", function() {
     const searchbarText = document.getElementById("searchbar").value
 
     if (searchbarText == "") {
@@ -86,6 +86,7 @@ document.getElementById("searchbarurl").addEventListener(onchange, function() {
         document.getElementById("searchpage").hidden = true;
     }
 });
+
 // electron stuff
 
 document.getElementById("hamburgermenu").onclick = function() {
@@ -105,4 +106,8 @@ window.electron.onHamburgerMenuCommand((command) => {
     } else if (command === 'addapp') {
         window.electron.openCreateAnApp();
     }
+});
+
+window.electron.onMessage('launcher-refreshconfig', (event) => {
+    applyconfig()
 });

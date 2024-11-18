@@ -27,6 +27,11 @@ const createWindow = () => {
 
   win.loadFile('src/pages/main/index.html');
 
+  ipcMain.on('launcher-refreshconfig', () => {
+    // Logic to refresh or fetch updated config
+    win.webContents.send('launcher-refreshconfig');
+  });
+
   ipcMain.on('hamburger-options', (event) => {
     const hamburgeroptions = Menu.buildFromTemplate([
       { label: 'Add an app...', click: () => event.sender.send('hamburger-options-command', 'addapp') },

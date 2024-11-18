@@ -16,6 +16,7 @@ titlebar.addEventListener('change', async (event) => {
     var config = await window.electron.getConfig()
     config.titlebar = isChecked
     window.electron.updateConfig(config)
+    window.electron.launcherRefreshConfig();
 });
 
 closelauncher.addEventListener('change', async (event) => {
@@ -24,6 +25,7 @@ closelauncher.addEventListener('change', async (event) => {
     var config = await window.electron.getConfig()
     config.closeonapp = isChecked
     window.electron.updateConfig(config)
+    window.electron.launcherRefreshConfig();
 });
 
 darkmode.addEventListener('change', async (event) => {
@@ -32,6 +34,7 @@ darkmode.addEventListener('change', async (event) => {
     var config = await window.electron.getConfig()
     config.darkmode = isChecked
     window.electron.updateConfig(config)
+    window.electron.launcherRefreshConfig();
 });
 
 setvalues();
