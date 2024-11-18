@@ -46,6 +46,7 @@ document.getElementById('makebutton').addEventListener('click', async function()
     console.log(config)
     window.electron.updateConfig(config)
     window.electron.refreshAppsList()
+    window.electron.closeCreateAnApp();
 });
 
 document.getElementById('cancelbutton').addEventListener('click', function()  {

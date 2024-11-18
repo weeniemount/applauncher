@@ -15,6 +15,7 @@ const createWindow = () => {
     height: 502,
     frame: config["titlebar"],
     icon: path.join(__dirname, 'icons/applauncher.ico'),
+    autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'), // Set up preload to enable secure communication
       nodeIntegration: false,
@@ -49,7 +50,7 @@ ipcMain.handle('get-config', () => {
   return config;
 });
 
-ipcMain.on('update-config', (event, newconfig) => {
+ipcMain.handle('update-config', (event, newconfig) => {
   console.log("hello")
   updateConfig(newconfig)
 });

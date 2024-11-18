@@ -20,7 +20,7 @@ contextBridge.exposeInMainWorld('electron', {
   chooseProgram: async () => {
     return await ipcRenderer.invoke('choose-program');
   },
-  updateConfig: (config) => ipcRenderer.send('update-config', config),
+  updateConfig: (config) => ipcRenderer.invoke('update-config', config),
   openProgram: (program) => ipcRenderer.send('open-program', program),
   openSettings: () => ipcRenderer.send('open-settings'),
   openCreateAnApp: () => ipcRenderer.send('open-createanapp'),
