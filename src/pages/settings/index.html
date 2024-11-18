@@ -12,16 +12,23 @@
         <input type="text" id="search" placeholder="Search settings">
         <div id="imagepreload-checkbox"></div>
         <div id="imagepreload-genericbutton"></div>
+        <div id="imagepreload-radio"></div>
         <hr id="seperator">
         <div style="height: 75px;"></div>
         <div style="margin-left: 23px;">
             <p id="settingheading">General</p><br>
             <p>Enable title bar for App Launcher: </p><input type="checkbox" id="titlebarbox" class="chromecheckbox"><br>
             <p>Close App Launcher after launching an app: </p><input type="checkbox" id="closelauncher" class="chromecheckbox"><br>
-            <p>Dark Mode: </p><input type="checkbox" id="darkmode" class="chromecheckbox">
             <hr>
             <p id="settingheading">Apps</p><br>
             <button class="genericbutton" style="height: 35px; width: 140px;">Reset apps to default</button>
+            <hr>
+            <p id="settingheading">Customization</p><br>
+            <p>Dark Mode: </p><input type="checkbox" id="darkmode" class="chromecheckbox"><br>
+            <p>App Launcher taskbar icon:</p><br>
+            <input type="radio" class="chromeradio" name="appicon" id="default" onchange="appiconradio()" checked>Default<br>
+            <input type="radio" class="chromeradio" name="appicon" id="canary" onchange="appiconradio()">Canary<br>
+            <input type="radio" class="chromeradio" name="appicon" id="chromium" onchange="appiconradio()">Chromium<br>
         </div>
         <script src="main.js"></script>
     </body>

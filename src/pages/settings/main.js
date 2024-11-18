@@ -37,4 +37,14 @@ darkmode.addEventListener('change', async (event) => {
     window.electron.launcherRefreshConfig();
 });
 
+
+async function appiconradio() {
+    const selectedRadio = document.querySelector('input[name="appicon"]:checked');
+    
+    var config = await window.electron.getConfig()
+    config.appicon = selectedRadio.id
+    window.electron.updateConfig(config)
+    window.electron.launcherRefreshConfig();
+}
+
 setvalues();
