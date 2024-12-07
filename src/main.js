@@ -21,6 +21,7 @@ const createWindow = () => {
     height: 502,
     frame: config["titlebar"],
     autoHideMenuBar: true,
+    resizable: false,
     icon: path.join(__dirname, "icons/applauncher.ico"),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'), // Set up preload to enable secure communication

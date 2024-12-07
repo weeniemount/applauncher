@@ -1,6 +1,6 @@
 {
   "name": "app-launcher",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "chrome app launcher recreation",
   "main": "src/main.js",
   "author": "weenie",
