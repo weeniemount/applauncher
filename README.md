@@ -13,7 +13,7 @@ Download the latest release from [Github Releases](https://github.com/weeniemoun
 
 # Installation from source
 
-1. Clone the repo using ``git clone ttps://github.com/weeniemount/applauncher``.
+1. Clone the repo using ``git clone https://github.com/weeniemount/applauncher``.
 2. Navigate to the source ``cd applauncher``.
 3. Run ``npm install`` and wait for the packages to install.
 4. Run ``npm run dist`` and then run the newly made installer.
