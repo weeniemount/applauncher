@@ -1,6 +1,8 @@
 body {
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 #settings {
@@ -60,7 +62,7 @@ input[type="radio"] + label {
 }
 
 table {
-    width: 100%;
+    width: 600px;
     border-collapse: collapse;
     margin-top: 10px;
 }
