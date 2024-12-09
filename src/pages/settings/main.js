@@ -106,5 +106,21 @@ async function deleteApp(appname) {
     window.electron.launcherRefreshConfig();
 }
 
+async function addoptionalapp(app) {
+    var config = await window.electron.getConfig();
+
+    var newapp
+    if (app == "slides") {
+        newapp = ["Slides", "builtinimage", "../../defaultapps/slides/icon_128.png", "link", "https://docs.google.com/presentation/", "true"]
+    } else if (app == "sheets") {
+        newapp = ["Sheets", "builtinimage", "../../defaultapps/sheets/icon_128.png", "link", "https://docs.google.com/spreadsheets/", "true"]
+    }
+    
+    config.apps.push(newapp)
+
+    window.electron.updateConfig(config)
+    window.electron.launcherRefreshConfig()
+}
+
 setvalues();
 appstable();
