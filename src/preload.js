@@ -30,4 +30,6 @@ contextBridge.exposeInMainWorld('electron', {
   refreshAppsList: (callback) => ipcRenderer.on('refresh-appslist', callback),
   closeCreateAnApp: () => ipcRenderer.send('close-createanapp'),
   launcherRefreshConfig: () => ipcRenderer.send('launcher-refreshconfig'),
+  openAbout: () => ipcRenderer.send('open-about'),
+  closeAbout: () => ipcRenderer.send('close-about'),
 });

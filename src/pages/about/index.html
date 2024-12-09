@@ -1,0 +1,27 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>About</title>
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="../../resources/chrome_ui.css" />
+        <script src="../../preload.js" defer></script>
+    </head>
+    <body>
+        <p id="about">About</p>
+        <div id="imagepreload-bluebutton"></div>
+        <hr id="seperator">
+        <div style="height: 75px;"></div>
+        <div style="margin-left: 23px;">
+            <p>A recreation based off of Chrome 48's App Launcher</p><br>
+            <p>Created by weeniemount using assets from Chromium and Chrome</p><br>
+            <p>This recreation is licensed under the MIT license and open source on GitHub.</p>
+            <hr>
+            <p id="settingheading">Open source projects used</p><br>
+            <p><a href="https://github.com/electron/electron">Electron</a> - MIT License</p>
+            <hr>
+            <p>© weeniemount 2024</p>
+            <button class="bluebutton" onclick="window.electron.closeAbout()" style="width: 100px; height: 30px; right: 10px; position: absolute;">Close</button>
+        </div>
+    </body>
+</html>

@@ -57,6 +57,7 @@ const createWindow = () => {
       { label: 'Help', click: () => event.sender.send('hamburger-options-command', 'action2') },
       { label: 'Send feedback', click: () => event.sender.send('hamburger-options-command', 'githubissues') },
       { type: 'separator'},
+      { label: 'About', click: () => event.sender.send('hamburger-options-command', 'about') },
       { role: 'quit' }
     ]);
 
@@ -149,6 +150,41 @@ ipcMain.on('open-createanapp', () => {
 
     createanapp.on('closed', () => {
       createanapp = null;
+    });
+  }
+});
+
+let about;
+
+ipcMain.on('open-about', () => {
+  if (about && !about.isDestroyed()) {
+    about.focus();
+  } else {
+    about = new BrowserWindow({
+      width: 570,
+      height: 385,
+      frame: false,
+      name: "about",
+      skipTaskbar: true,
+      webPreferences: {
+        preload: path.join(__dirname, 'preload.js'),
+        nodeIntegration: false,
+        experimentalFeatures: false,
+        serviceWorkers: false,
+        spellcheck: false,
+      },
+    });
+
+    about.loadFile('src/pages/about/index.html');
+
+    ipcMain.on('close-about', () => {
+      if (about && !about.isDestroyed()) {
+        about.close(); 
+      }
+    });
+
+    about.on('closed', () => {
+      about = null;
     });
   }
 });
