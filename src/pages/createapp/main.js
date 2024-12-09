@@ -3,7 +3,6 @@ var apptype = "link"
 var apppath
 
 async function chooseappicon() {
-    console.log("askjfhajksdfh")
     const file = await window.electron.chooseAppIcon();
     console.log(file[0]);
     document.getElementById("appicon").src = `data:image/png;base64,${file[1]}`;
@@ -23,7 +22,6 @@ function selectProgram() {
 };
 
 function selectLink() {
-    console.log("nhdifhgjdfgfvdf")
     document.getElementById("applink").style.display = "block";
     document.getElementById("chooseapp").style.display = "none";
     apptype = "link"

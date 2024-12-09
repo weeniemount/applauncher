@@ -75,13 +75,13 @@ ipcMain.handle('get-config', () => {
 });
 
 ipcMain.handle('update-config', (event, newconfig) => {
-  console.log("hello")
+  //console.log("hello")
   updateConfig(newconfig)
 });
 
 ipcMain.on('open-link', (event, url) => {
   shell.openExternal(url).then(() => {
-      console.log(`Opened external link: ${url}`);
+      //console.log(`Opened external link: ${url}`);
   }).catch(err => {
       console.error('Failed to open link:', err);
   });
