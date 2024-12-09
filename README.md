@@ -27,3 +27,4 @@ Features:
 - Adding custom apps
 - Dark mode
 - Opening local programs
+- Chromium, Canary and default app icons (only works when launching from exe, not shortcut)

@@ -10,11 +10,11 @@ createConfigIfNeeded();
 const createWindow = () => {
   const config = readConfig()
 
-  /*const iconMap = {
+  const iconMap = {
     default: 'icons/applauncher.ico',
     canary: 'icons/applauncher-canary.ico',
     chromium: 'icons/applauncher-chromium.ico',
-  };*/
+  };
   
   const win = new BrowserWindow({
     width: 402,
@@ -22,7 +22,7 @@ const createWindow = () => {
     frame: config["titlebar"],
     autoHideMenuBar: true,
     resizable: false,
-    icon: path.join(__dirname, "icons/applauncher.ico"),
+    icon: path.join(__dirname, iconMap[config.appicon] || iconMap.default),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'), // Set up preload to enable secure communication
       nodeIntegration: false,
@@ -31,8 +31,6 @@ const createWindow = () => {
       spellcheck: false,
     },
   });
-
-  //win.setIcon(path.join(__dirname, iconMap[config.appicon] || iconMap.default));
 
   if (config.appicon == "default") {
     win.icon = path.join(__dirname, 'icons/applauncher.ico')
