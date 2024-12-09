@@ -119,6 +119,7 @@ async function addoptionalapp(app) {
     config.apps.push(newapp)
 
     window.electron.updateConfig(config)
+    appstable()
     window.electron.launcherRefreshConfig()
 }
 
