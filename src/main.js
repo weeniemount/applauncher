@@ -81,7 +81,7 @@ ipcMain.handle('update-config', (event, newconfig) => {
 
 ipcMain.on('open-link', (event, url) => {
   shell.openExternal(url).then(() => {
-      //console.log(`Opened external link: ${url}`);
+      console.log(`Opened external link: ${url}`);
   }).catch(err => {
       console.error('Failed to open link:', err);
   });
@@ -126,7 +126,7 @@ ipcMain.on('open-createanapp', () => {
   } else {
     createanapp = new BrowserWindow({
       width: 260,
-      height: 500,
+      height: 540,
       frame: false,
       name: "create-an-app",
       icon: path.join(__dirname, 'icons/settings.ico'),

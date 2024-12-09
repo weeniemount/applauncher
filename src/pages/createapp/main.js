@@ -17,18 +17,22 @@ async function chooseapp() {
 
 function selectProgram() {
     document.getElementById("applink").style.display = "none";
+    document.getElementById("linkicon").style.display = "none";
+    document.getElementById("linkbreak").style.display = "none";
     document.getElementById("chooseapp").style.display = "block";
     apptype = "program";
 };
 
 function selectLink() {
     document.getElementById("applink").style.display = "block";
+    document.getElementById("linkicon").style.display = "block";
+    document.getElementById("linkbreak").style.display = "block";
     document.getElementById("chooseapp").style.display = "none";
     apptype = "link"
 };
 
 document.getElementById('makebutton').addEventListener('click', async function() {
-    console.log('hrello')
+    //console.log('hrello')
     var config = await window.electron.getConfig();
     var appname = document.getElementById("appname").value
 
@@ -37,6 +41,7 @@ document.getElementById('makebutton').addEventListener('click', async function()
         newapp.push(apppath[0])
     } else if (apptype == "link") {
         newapp.push(document.getElementById("applink").value)
+        newapp.push(document.getElementById("linkicon").checked.toString());
     }
     console.log(newapp)
     config.apps.push(newapp)

@@ -39,17 +39,20 @@ async function refreshapps(config) {
             appDiv.appendChild(appText);
 
             if (app[3] == "link") {
-                const linkIcon = document.createElement("img");
-                linkIcon.id = "linkicon";
-                linkIcon.src = "images/link.png"
-                appDiv.appendChild(linkIcon)
-
                 appDiv.onclick = function() {
                     window.electron.openLink(app[4]);
                     if (closeonapp) {
                         window.electron.quitApp()
                     }
                 }
+
+                if (app[5] == "true") {
+                    const linkIcon = document.createElement("img");
+                    linkIcon.id = "linkicon";
+                    linkIcon.src = "images/link.png"
+                    appDiv.appendChild(linkIcon)
+                }
+
             } else if (app[3] == "program") {
                 appDiv.onclick = function() {
                     window.electron.openProgram(app[4]);
