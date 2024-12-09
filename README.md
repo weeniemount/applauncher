@@ -29,3 +29,4 @@ Planned features:
 - Make the window go to the location of your start menu button
 - Linux support
 - Dragging apps to reorder them
+- Make the search bar functional
