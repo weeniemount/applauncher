@@ -165,6 +165,7 @@ ipcMain.on('open-about', () => {
       height: 385,
       frame: false,
       name: "about",
+      resizable: false,
       skipTaskbar: true,
       webPreferences: {
         preload: path.join(__dirname, 'preload.js'),

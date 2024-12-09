@@ -22,3 +22,8 @@ Planned features:
 - Add page support
 - Make the window go to the location of your start menu button
 - Linux support
+
+Features:
+- Adding custom apps
+- Dark mode
+- Opening local programs
