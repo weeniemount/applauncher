@@ -10,10 +10,10 @@ async function applyconfig() {
 }
 
 async function refreshapps(config) {
-    if (config && config.apps && config.apps.length > 0) {
-        const appsContent = document.getElementById("apps-content");
+    const appsContent = document.getElementById("apps-content");
 
-        appsContent.innerHTML = '';
+    appsContent.innerHTML = '';
+    if (config && config.apps && config.apps.length > 0) {
 
         for (const app of config.apps) {
             const appDiv = document.createElement("div");
