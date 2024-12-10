@@ -114,6 +114,8 @@ async function addoptionalapp(app) {
         newapp = ["Slides", "builtinimage", "../../defaultapps/slides/icon_128.png", "link", "https://docs.google.com/presentation/", "true"]
     } else if (app == "sheets") {
         newapp = ["Sheets", "builtinimage", "../../defaultapps/sheets/icon_128.png", "link", "https://docs.google.com/spreadsheets/", "true"]
+    } else if (app == "keep") {
+        newapp = ["Keep", "builtinimage", "../../defaultapps/keep/icon_128.png", "link", "https://keep.google.com/", "true"]
     }
     
     config.apps.push(newapp)
