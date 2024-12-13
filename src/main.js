@@ -4,14 +4,21 @@ const { createConfigIfNeeded, readConfig, updateConfig, getdefaultconfig } = req
 const { title } = require('process');
 const fs = require('fs')
 const { spawn } = require('child_process');
+const os = require('os');
 
 createConfigIfNeeded();
 
 const createWindow = () => {
   const config = readConfig()
 
-  const iconMap = {
+  const iconMapWin = {
     default: 'icons/applauncher.ico',
+    canary: 'icons/applauncher-canary.ico',
+    chromium: 'icons/applauncher-chromium.ico',
+  };
+
+  const iconMapLinux = {
+    default: 'icons/linux/',
     canary: 'icons/applauncher-canary.ico',
     chromium: 'icons/applauncher-chromium.ico',
   };
@@ -22,7 +29,7 @@ const createWindow = () => {
     frame: config["titlebar"],
     autoHideMenuBar: true,
     resizable: false,
-    icon: path.join(__dirname, iconMap[config.appicon] || iconMap.default),
+    icon: path.join(__dirname, iconMapWin[config.appicon] || iconMapWin.default),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'), // Set up preload to enable secure communication
       nodeIntegration: false,
@@ -31,14 +38,6 @@ const createWindow = () => {
       spellcheck: false,
     },
   });
-
-  if (config.appicon == "default") {
-    win.icon = path.join(__dirname, 'icons/applauncher.ico')
-  } else if (config.appicon == "canary") {
-    win.icon = path.join(__dirname, 'icons/applauncher-canary.ico')
-  } else if (config.appicon == "chromium") {
-    win.icon = path.join(__dirname, 'icons/applauncher-chromium.ico')
-  }
 
   win.loadFile('src/pages/main/index.html');
 

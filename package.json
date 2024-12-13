@@ -3,7 +3,10 @@
   "version": "0.0.2",
   "description": "App Launcher",
   "main": "src/main.js",
-  "author": "weenie",
+  "author": {
+    "name": "weenie",
+    "email": "bonkicool@protonmail.com"
+  },
   "license": "ISC",
   "dependencies": {
     "boolean": "^3.2.0",
@@ -101,7 +104,9 @@
       "icon": "src/icons/mac.icns"
     },
     "linux": {
-      "icon": "src/icons/linux.png"
+      "icon": "src/icons/linux",
+      "target": ["deb"],
+      "category": "Utility"
     }
   }
 }
