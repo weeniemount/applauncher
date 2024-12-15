@@ -139,12 +139,14 @@ async function searchbar() {
                 appIcon.src = app[2];
                 appIcon.style.width = "24px"
                 appIcon.style.marginLeft = "16px"
+                appIcon.style.objectFit = "fill"
             } else if (app[1] === "localimage") {
                 const editedstring = app[2].replace(/\\/g, '/');
                 const image = await window.electron.getImage(editedstring);
                 appIcon.src = `data:image/png;base64,${image}`;
                 appIcon.style.width = "24px"
                 appIcon.style.marginLeft = "16px"
+                appIcon.style.objectFit = "fill"
             }
 
             // Click behavior

@@ -102,12 +102,17 @@ body {
     background-color: #f2f2f2;
 }
 
-.searchsugesstion:last-child {
-    border-bottom: none;
+.dark .searchsugesstion {
+    background-color: #333333;
+    color: #b7b7b7;
 }
 
 .searchsugesstion:hover {
     background-color: #e4e4e4;
+}
+
+.dark .searchsugesstion:hover {
+    background-color: #505050;
 }
 
 .suggestion-text {
