@@ -18,15 +18,15 @@ Download the latest release from [Github Releases](https://github.com/weeniemoun
 3. Run ``npm install`` and wait for the packages to install.
 4. Run ``npm run dist`` and then run the newly made installer.
 
-Features:
+# Features
 - Linux support
 - Adding custom apps
 - Dark mode
 - Opening local programs
 - Chromium, Canary and default app icons (only works when launching from exe, not shortcut)
 
-Planned features:
-- Add page support
+# Planned features
+- Add multiple pages
 - Make the window go to the location of your start menu button
 - Dragging apps to reorder them
 - ~~Make the search bar functional~~ ADDED!
