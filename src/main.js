@@ -19,9 +19,9 @@ const createWindow = () => {
   };
 
   const iconMapLinux = {
-    default: 'icons/linux/',
-    canary: 'icons/applauncher-canary.ico',
-    chromium: 'icons/applauncher-chromium.ico',
+    default: 'icons/linux/icon-48x48.png',
+    canary: 'icons/linux/canary.png',
+    chromium: 'icons/linux/chromium.png',
   };
   const win = new BrowserWindow({
     width: 402,
