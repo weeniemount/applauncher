@@ -80,17 +80,64 @@ function darkmode(variable) {
 
 applyconfig();
 
-document.getElementById("searchbarurl").addEventListener("change", function() {
-    const searchbarText = document.getElementById("searchbar").value
-
-    if (searchbarText == "") {
-        document.getElementById("apps-content").hidden = true;
-        document.getElementById("searchpage").hidden = false;
+document.getElementById("searchbarurl").addEventListener("input", async () => {
+	if (document.getElementById("searchbarurl").value.trim() === "") {
+        document.getElementById("apps-content").style.display = "flex"
+        document.getElementById("searchpage").style.display = "none"
     } else {
-        document.getElementById("apps-content").hidden = false;
-        document.getElementById("searchpage").hidden = true;
+        document.getElementById("apps-content").style.display = "none"
+        document.getElementById("searchpage").style.display = "flex"
+        searchbar()
     }
 });
+
+async function searchbar() {
+    const suggestionsContainer = document.getElementById("searchpage");
+    const suggestions = await getSuggestions(document.getElementById("searchbarurl").value.trim());
+        document.getElementById("searchpage").innerHTML = ""
+        suggestions.forEach((suggestion) => {
+            const suggestionElement = document.createElement("div");
+            suggestionElement.className = "searchsugesstion";
+    
+            if (suggestion.startsWith("http://") || suggestion.startsWith("https://")) {
+                suggestionElement.innerHTML += (`
+                    <div onclick='window.electron.openLink("${suggestion}")' class="searchsugesstion">
+                        <div class="page-icon"></div>
+                        <div class="suggestionurl-text">${suggestion}</div>
+                    </div>`)
+            } else {
+                suggestionElement.innerHTML += (`
+                    <div onclick='window.electron.openLink("https://google.com/search/?q=${suggestion}")' class="searchsugesstion">
+                        <div class="search-icon"></div>
+                        <div>
+                            <div class="suggestion-text">${suggestion}</div>
+                            <div class="subtext">Google Search</div>
+                        </div>
+                    </div>`)
+            }
+    
+            suggestionsContainer.appendChild(suggestionElement);
+        });
+}
+
+const getSuggestions = async (query) => {
+	const endpoint = `https://suggestqueries.google.com/complete/search?client=firefox&q=${encodeURIComponent(query)}`;
+
+	try {
+		const response = await fetch(endpoint);
+		if (!response.ok) {
+			throw new Error("Failed to fetch suggestions");
+		}
+
+		const data = await response.json();
+		// `data[1]` contains the list of suggestions
+		return data[1];
+	} catch (error) {
+		console.error("Error fetching suggestions:", error);
+		return [];
+	}
+};
+
 
 // electron stuff
 
