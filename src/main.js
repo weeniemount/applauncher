@@ -222,12 +222,12 @@ ipcMain.handle('choose-app-icon', async () => {
 });
 
 ipcMain.handle('choose-program', async () => {
-  const dialogOptions = {
-    properties: isLinux ? ['openFile', 'openDirectory'] : ['openFile'],
+  const result = await dialog.showOpenDialog({
+    properties: ['openFile'],
     filters: isLinux ? [] : [
       { name: 'Programs', extensions: ['exe', 'bat', 'cmd'] }
     ],
-  };
+  });
 
   return result.filePaths; // Return the file paths selected by the user
 });
