@@ -93,32 +93,85 @@ document.getElementById("searchbarurl").addEventListener("input", async () => {
 
 async function searchbar() {
     const suggestionsContainer = document.getElementById("searchpage");
-    const suggestions = await getSuggestions(document.getElementById("searchbarurl").value.trim());
-        document.getElementById("searchpage").innerHTML = ""
-        suggestions.forEach((suggestion) => {
-            const suggestionElement = document.createElement("div");
-            suggestionElement.className = "searchsugesstion";
+    const searchQuery = document.getElementById("searchbarurl").value.trim().toLowerCase();
     
-            if (suggestion.startsWith("http://") || suggestion.startsWith("https://")) {
-                suggestionElement.innerHTML += (`
-                    <div onclick='window.electron.openLink("${suggestion}")' class="searchsugesstion">
-                        <div class="page-icon"></div>
-                        <div class="suggestionurl-text">${suggestion}</div>
-                    </div>`)
-            } else {
-                suggestionElement.innerHTML += (`
-                    <div onclick='window.electron.openLink("https://google.com/search/?q=${suggestion}")' class="searchsugesstion">
-                        <div class="search-icon"></div>
-                        <div>
-                            <div class="suggestion-text">${suggestion}</div>
-                            <div class="subtext">Google Search</div>
-                        </div>
-                    </div>`)
+    const googleSuggestions = await getSuggestions(searchQuery);
+    const limitedSuggestions = googleSuggestions.slice(0, 4);
+    suggestionsContainer.innerHTML = "";
+    
+    limitedSuggestions.forEach((suggestion) => {
+        const suggestionElement = document.createElement("div");
+        suggestionElement.className = "searchsugesstion";
+
+        if (suggestion.startsWith("http://") || suggestion.startsWith("https://")) {
+            suggestionElement.innerHTML = `
+                <div onclick='window.electron.openLink("${suggestion}")' class="searchsugesstion">
+                    <div class="page-icon"></div>
+                    <div class="suggestionurl-text">${suggestion}</div>
+                </div>`;
+        } else {
+            suggestionElement.innerHTML = `
+                <div onclick='window.electron.openLink("https://google.com/search/?q=${suggestion}")' class="searchsugesstion">
+                    <div class="search-icon"></div>
+                    <div>
+                        <div class="suggestion-text">${suggestion}</div>
+                        <div class="subtext">Google Search</div>
+                    </div>
+                </div>`;
+        }
+
+        suggestionsContainer.appendChild(suggestionElement);
+    });
+
+    const apps = await window.electron.getConfig();
+    if (apps && apps.apps) {
+        const filteredApps = apps.apps.filter(app => app[0].toLowerCase().includes(searchQuery));
+        for (const app of filteredApps) {
+            const appSuggestion = document.createElement("div");
+            appSuggestion.className = "searchsugesstion";
+
+            // Create app icon
+            const appIcon = document.createElement("img");
+            appIcon.className = "suggestion-icon"; // Apply styles for icons
+            appIcon.alt = app[0];
+
+            if (app[1] === "builtinimage") {
+                appIcon.src = app[2];
+                appIcon.style.width = "24px"
+                appIcon.style.marginLeft = "16px"
+            } else if (app[1] === "localimage") {
+                const editedstring = app[2].replace(/\\/g, '/');
+                const image = await window.electron.getImage(editedstring);
+                appIcon.src = `data:image/png;base64,${image}`;
+                appIcon.style.width = "24px"
+                appIcon.style.marginLeft = "16px"
             }
-    
-            suggestionsContainer.appendChild(suggestionElement);
-        });
+
+            // Click behavior
+            appSuggestion.onclick = function () {
+                if (app[3] === "link") {
+                    window.electron.openLink(app[4]);
+                } else if (app[3] === "program") {
+                    window.electron.openProgram(app[4]);
+                }
+                if (closeonapp) {
+                    window.electron.quitApp();
+                }
+            };
+
+            // Set the app suggestion content
+            appSuggestion.innerHTML = `
+                <div class="searchsugesstion">
+                    <div class="suggestion-text">${app[0]}</div>
+                </div>`;
+
+            // Append the icon before the text
+            appSuggestion.prepend(appIcon);
+            suggestionsContainer.appendChild(appSuggestion);
+        }
+    }
 }
+
 
 const getSuggestions = async (query) => {
 	const endpoint = `https://suggestqueries.google.com/complete/search?client=firefox&q=${encodeURIComponent(query)}`;
