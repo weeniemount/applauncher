@@ -71,6 +71,10 @@ ipcMain.handle('get-config', () => {
   return config;
 });
 
+ipcMain.handle('get-app-version', () => {
+  return app.getVersion();
+});
+
 ipcMain.handle('update-config', (event, newconfig) => {
   //console.log("hello")
   updateConfig(newconfig)

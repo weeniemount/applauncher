@@ -23,6 +23,10 @@ contextBridge.exposeInMainWorld('electron', {
   getDefaultConfig: async () => {
     return await ipcRenderer.invoke('get-defaultconfig');
   },
+  getAppVersion: async () => {
+    const version = await ipcRenderer.invoke('get-app-version');
+    return version;
+  },
   updateConfig: (config) => ipcRenderer.invoke('update-config', config),
   openProgram: (program) => ipcRenderer.send('open-program', program),
   openSettings: () => ipcRenderer.send('open-settings'),

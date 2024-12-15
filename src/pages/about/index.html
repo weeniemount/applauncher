@@ -20,8 +20,17 @@
             <p id="settingheading">Open source projects used</p><br>
             <p><a href="https://github.com/electron/electron">Electron</a> - MIT License</p>
             <hr>
-            <p>© weeniemount 2024</p>
+            <p>© weeniemount 2024. ver. <span id="versionNumber"></span></p>
             <button class="bluebutton" onclick="window.electron.closeAbout()" style="width: 100px; height: 30px; right: 10px; position: absolute;">Close</button>
         </div>
+
+        <script>
+            async function displayVersion() {
+                const version = await window.electron.getAppVersion(); // Assume electron has a method to get app version
+                document.getElementById('versionNumber').textContent = version;
+            }
+
+            displayVersion();
+        </script>
     </body>
 </html>
