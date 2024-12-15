@@ -8,6 +8,7 @@ const os = require('os');
 
 createConfigIfNeeded();
 
+const isLinux = process.platform === 'linux';
 const createWindow = () => {
   const config = readConfig()
 
@@ -22,14 +23,13 @@ const createWindow = () => {
     canary: 'icons/applauncher-canary.ico',
     chromium: 'icons/applauncher-chromium.ico',
   };
-  
   const win = new BrowserWindow({
     width: 402,
     height: 502,
     frame: config["titlebar"],
     autoHideMenuBar: true,
     resizable: false,
-    icon: path.join(__dirname, iconMapWin[config.appicon] || iconMapWin.default),
+    icon: path.join(__dirname, isLinux ? (iconMapLinux[config.appicon] || iconMapLinux.default) : (iconMapWin[config.appicon] || iconMapWin.default)),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'), // Set up preload to enable secure communication
       nodeIntegration: false,
@@ -222,12 +222,12 @@ ipcMain.handle('choose-app-icon', async () => {
 });
 
 ipcMain.handle('choose-program', async () => {
-  const result = await dialog.showOpenDialog({
-    properties: ['openFile'], // This opens a file dialog (use 'openDirectory' for folders)
-    filters: [
+  const dialogOptions = {
+    properties: isLinux ? ['openFile', 'openDirectory'] : ['openFile'],
+    filters: isLinux ? [] : [
       { name: 'Programs', extensions: ['exe', 'bat', 'cmd'] }
     ],
-  });
+  };
 
   return result.filePaths; // Return the file paths selected by the user
 });
