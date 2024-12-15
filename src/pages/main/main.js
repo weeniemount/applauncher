@@ -111,7 +111,7 @@ async function searchbar() {
                 </div>`;
         } else {
             suggestionElement.innerHTML = `
-                <div onclick='window.electron.openLink("https://google.com/search/?q=${suggestion}")' class="searchsugesstion">
+                <div onclick='window.electron.openLink("https://google.com/search?q=${suggestion}")' class="searchsugesstion">
                     <div class="search-icon"></div>
                     <div>
                         <div class="suggestion-text">${suggestion}</div>
