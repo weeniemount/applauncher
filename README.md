@@ -19,6 +19,7 @@ Download the latest release from [Github Releases](https://github.com/weeniemoun
 4. Run ``npm run dist`` and then run the newly made installer.
 
 Features:
+- Linux support
 - Adding custom apps
 - Dark mode
 - Opening local programs
@@ -27,6 +28,5 @@ Features:
 Planned features:
 - Add page support
 - Make the window go to the location of your start menu button
-- Linux support
 - Dragging apps to reorder them
-- Make the search bar functional
+- ~~Make the search bar functional~~ ADDED!
