@@ -100,18 +100,20 @@ ipcMain.on('quit-app', () => {
 
 ipcMain.on('open-chrome-app', (event, crxId) => {
   const crxpath = path.join(app.getPath('userData'), `installedcrx`, crxId);
-
   const manifestPath = path.join(crxpath, 'manifest.json');
 
   if (fs.existsSync(manifestPath)) {
     const manifestData = fs.readFileSync(manifestPath, 'utf-8');
     const manifest = JSON.parse(manifestData);
 
+    let mainScriptPath = null;
+
     if (manifest.app && manifest.app.background && manifest.app.background.scripts && manifest.app.background.scripts.length > 0) {
       const backgroundScript = manifest.app.background.scripts[0];
-      const scriptPath = path.join(crxpath, backgroundScript);
+      mainScriptPath = path.join(crxpath, backgroundScript);
+    }
 
-      const mainScriptPath = path.join(crxpath, 'main.js');
+    if (mainScriptPath) {
       const mainJsContent = fs.readFileSync(mainScriptPath, 'utf-8');
       const htmlFiles = mainJsContent.match(/['"](.+?\.html)['"]/g);
 
@@ -124,8 +126,6 @@ ipcMain.on('open-chrome-app', (event, crxId) => {
         width = parseInt(boundsMatch[2], 10);
         height = parseInt(boundsMatch[3], 10);
       }
-
-
 
       if (htmlFiles && htmlFiles.length > 0) {
         const htmlPaths = htmlFiles.map(match => path.join(crxpath, match.replace(/['"]/g, '')));
@@ -165,6 +165,7 @@ ipcMain.on('open-chrome-app', (event, crxId) => {
     console.log('Manifest.json not found');
   }
 });
+
 
 
 ipcMain.on('open-program', (event, program) => {
@@ -393,7 +394,6 @@ ipcMain.handle('choose-crx', async () => {
   } 
 
   updateConfig(config)
-
   console.log("it went okay")
   return "it went okay"
 });
