@@ -28,6 +28,12 @@ async function refreshapps(config) {
                 const image = await window.electron.getImage(editedstring)
 
                 appIcon.src = `data:image/png;base64,${image}`;
+            } else if (app[1] == "crxicon") {
+                const image = await window.electron.getCrxImage(app[2], app[4])
+
+                appIcon.src = `data:image/png;base64,${image}`;
+            } else if (app[1] == "noicon") {
+                appIcon.src = '../../defaultapps/noicon.png'
             }
             appIcon.alt = app[0];
 
@@ -147,8 +153,18 @@ async function searchbar() {
                 appIcon.style.width = "24px"
                 appIcon.style.marginLeft = "16px"
                 appIcon.style.objectFit = "fill"
+            } else if (app[1] === "crxicon") {
+                const image = await window.electron.getCrxImage(app[2], app[4]);
+                appIcon.src = `data:image/png;base64,${image}`;
+                appIcon.style.width = "24px"
+                appIcon.style.marginLeft = "16px"
+                appIcon.style.objectFit = "fill"
+            } else if (app[1] === "noicon") {
+                appIcon.src = '../../defaultapps/noicon.png';
+                appIcon.style.width = "24px"
+                appIcon.style.marginLeft = "16px"
+                appIcon.style.objectFit = "fill"
             }
-
             // Click behavior
             appSuggestion.onclick = function () {
                 if (app[3] === "link") {
@@ -216,6 +232,10 @@ window.electron.onHamburgerMenuCommand((command) => {
         window.electron.openLink("https://github.com/weeniemount/applauncher/issues");
     } else if (command === 'about') {
         window.electron.openAbout();
+    } else if (command === 'help') {
+        window.electron.openLink("https://support.google.com/chrome_webstore/?p=cws_app_launcher")
+    } else if (command === 'choosecrx') {
+        window.electron.installCrx()
     }
 });
 

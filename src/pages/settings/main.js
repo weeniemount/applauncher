@@ -84,8 +84,13 @@ async function appstable() {
                 const image = await window.electron.getImage(editedstring)
 
                 iconCell.innerHTML = `<img src="data:image/png;base64,${image}" id='appicon'>`
-            }
+            } else if (app[1] == "crxicon") {
+                const image = await window.electron.getCrxImage(app[2], app[4])
 
+                iconCell.innerHTML = `<img src="data:image/png;base64,${image}" id='appicon'>`
+            } else if (app[1] == "noicon") {
+                iconCell.innerHTML = `<img src='../../defaultapps/noicon.png' id='appicon'>`
+            }
             const removeCell = newRow.insertCell(3);
             removeCell.innerHTML = `<a onclick='deleteApp("${app[0]}")'><image src='images/removeapp.png'></a>`
         };

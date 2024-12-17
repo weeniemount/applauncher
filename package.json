@@ -49,6 +49,7 @@
     "json-buffer": "^3.0.1",
     "json-stringify-safe": "^5.0.1",
     "jsonfile": "^4.0.0",
+    "jszip": "^3.10.1",
     "keyv": "^4.5.4",
     "lowercase-keys": "^2.0.0",
     "matcher": "^3.0.0",
@@ -108,7 +109,9 @@
     },
     "linux": {
       "icon": "src/icons/linux",
-      "target": ["deb"],
+      "target": [
+        "deb"
+      ],
       "category": "Utility"
     }
   }

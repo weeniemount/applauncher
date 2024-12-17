@@ -14,11 +14,17 @@ contextBridge.exposeInMainWorld('electron', {
   getImage: async (filePath) => {
     return await ipcRenderer.invoke('get-image', filePath);
   },
+  getCrxImage: async (filepath, crxid) => {
+    return await ipcRenderer.invoke('get-crx-image', filepath, crxid);
+  },
   chooseAppIcon: async () => {
     return await ipcRenderer.invoke('choose-app-icon');
   },
   chooseProgram: async () => {
     return await ipcRenderer.invoke('choose-program');
+  },
+  installCrx: async () => {
+    return await ipcRenderer.invoke('choose-crx');
   },
   getDefaultConfig: async () => {
     return await ipcRenderer.invoke('get-defaultconfig');
