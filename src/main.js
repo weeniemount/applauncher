@@ -366,17 +366,19 @@ ipcMain.handle('choose-crx', async () => {
   const manifestData = fs.readFileSync(manifestPath, 'utf8');
   const manifest = JSON.parse(manifestData);
 
-  let iconpath
+  let iconpathvery = "noicon"
   let appname
 
   if (manifest.icons && typeof manifest.icons === 'object') {
-    // Selecting the first available icon
     const iconPaths = Object.values(manifest.icons);
     if (iconPaths.length > 0) {
-      iconpath = iconPaths[0];
+      iconpathvery = iconPaths[0];
+    } else {
+      iconpathvery = "noicon"
     }
   }
-
+  
+  
   if (manifest.name) {
     console.log("App Name: " + manifest.name);
     appname = manifest.name
@@ -387,10 +389,10 @@ ipcMain.handle('choose-crx', async () => {
 
   const config = await readConfig()
 
-  if (!iconpath == "noicon") {
-    config.apps.push([appname, "crxicon", iconpath, "installedcrx", filename])
-  } else {
+  if (iconpathvery == "noicon") {
     config.apps.push([appname, "noicon", "", "installedcrx", filename])
+  } else {
+    config.apps.push([appname, "crxicon", iconpathvery, "installedcrx", filename])
   } 
 
   updateConfig(config)
