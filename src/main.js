@@ -119,11 +119,13 @@ ipcMain.on('open-chrome-app', (event, crxId) => {
       let height = 600; // Default height
 
       // Extract width and height from bounds in main.js
-      const boundsMatch = mainJsContent.match(/bounds\s*:\s*{\s*width:\s*(\d+),\s*height:\s*(\d+)\s*}/);
+      const boundsMatch = mainJsContent.match(/(bounds|innerBounds|outerBounds)\s*:\s*{\s*width:\s*(\d+),\s*height:\s*(\d+)\s*}/);
       if (boundsMatch) {
-        width = parseInt(boundsMatch[1], 10);
-        height = parseInt(boundsMatch[2], 10);
+        width = parseInt(boundsMatch[2], 10);
+        height = parseInt(boundsMatch[3], 10);
       }
+
+
 
       if (htmlFiles && htmlFiles.length > 0) {
         const htmlPaths = htmlFiles.map(match => path.join(crxpath, match.replace(/['"]/g, '')));
