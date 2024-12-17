@@ -47,6 +47,10 @@ const createWindow = () => {
     win.webContents.send('launcher-refreshconfig');
   });
 
+  ipcMain.on('launcher-close', () => {
+    win.close()
+  });
+
   ipcMain.on('hamburger-options', (event) => {
     const hamburgeroptions = Menu.buildFromTemplate([
       { label: 'Add an app...', click: () => event.sender.send('hamburger-options-command', 'addapp') },
@@ -93,6 +97,73 @@ ipcMain.on('open-link', (event, url) => {
 ipcMain.on('quit-app', () => {
   app.quit();
 });
+
+ipcMain.on('open-chrome-app', (event, crxId) => {
+  const crxpath = path.join(app.getPath('userData'), `installedcrx`, crxId);
+
+  const manifestPath = path.join(crxpath, 'manifest.json');
+
+  if (fs.existsSync(manifestPath)) {
+    const manifestData = fs.readFileSync(manifestPath, 'utf-8');
+    const manifest = JSON.parse(manifestData);
+
+    if (manifest.app && manifest.app.background && manifest.app.background.scripts && manifest.app.background.scripts.length > 0) {
+      const backgroundScript = manifest.app.background.scripts[0];
+      const scriptPath = path.join(crxpath, backgroundScript);
+
+      const mainScriptPath = path.join(crxpath, 'main.js');
+      const mainJsContent = fs.readFileSync(mainScriptPath, 'utf-8');
+      const htmlFiles = mainJsContent.match(/['"](.+?\.html)['"]/g);
+
+      let width = 800;  // Default width
+      let height = 600; // Default height
+
+      // Extract width and height from bounds in main.js
+      const boundsMatch = mainJsContent.match(/bounds\s*:\s*{\s*width:\s*(\d+),\s*height:\s*(\d+)\s*}/);
+      if (boundsMatch) {
+        width = parseInt(boundsMatch[1], 10);
+        height = parseInt(boundsMatch[2], 10);
+      }
+
+      if (htmlFiles && htmlFiles.length > 0) {
+        const htmlPaths = htmlFiles.map(match => path.join(crxpath, match.replace(/['"]/g, '')));
+        const scriptName = path.basename(htmlPaths[0], '.html');
+        const scriptFilePath = path.join(crxpath, `${scriptName}.html`);
+
+        let htmlContent = fs.readFileSync(scriptFilePath, 'utf-8');
+
+        const newWin = new BrowserWindow({
+          width: width,
+          height: height,
+          resizable: false,
+          title: '',                  // Ensure no title
+          icon: path.join(__dirname, 'icons/empty.ico'),                // No icon
+          autoHideMenuBar: true,       // No menu bar
+          webPreferences: {
+            nodeIntegration: false,
+            experimentalFeatures: false,
+            serviceWorkers: false,
+            spellcheck: false,
+          },
+        });
+
+        newWin.loadURL(scriptFilePath); // Load the modified HTML content
+
+        newWin.on('closed', () => {
+          console.log('Window closed.');
+        });
+
+      } else {
+        console.log('No HTML files found in the main.js script');
+      }
+    } else {
+      console.log('No background scripts found in the manifest.json');
+    }
+  } else {
+    console.log('Manifest.json not found');
+  }
+});
+
 
 ipcMain.on('open-program', (event, program) => {
   const programtoopen = spawn(program, [], {

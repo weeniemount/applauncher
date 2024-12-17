@@ -7,6 +7,7 @@ contextBridge.exposeInMainWorld('electron', {
   showHamburgerMenu: () => ipcRenderer.send('hamburger-options'),
   onHamburgerMenuCommand: (callback) => ipcRenderer.on('hamburger-options-command', (event, command) => callback(command)),
   openLink: (url) => ipcRenderer.send('open-link', url),
+  openCrxApp: (crxid) => ipcRenderer.send('open-chrome-app', crxid),
   quitApp: () => ipcRenderer.send('quit-app'),
   getConfig: async () => {
     return await ipcRenderer.invoke('get-config');
@@ -36,6 +37,7 @@ contextBridge.exposeInMainWorld('electron', {
   updateConfig: (config) => ipcRenderer.invoke('update-config', config),
   openProgram: (program) => ipcRenderer.send('open-program', program),
   openSettings: () => ipcRenderer.send('open-settings'),
+  closeLauncher: () => ipcRenderer.send('launcher-close'),
   openCreateAnApp: () => ipcRenderer.send('open-createanapp'),
   refreshAppsList: (callback) => ipcRenderer.on('refresh-appslist', callback),
   closeCreateAnApp: () => ipcRenderer.send('close-createanapp'),

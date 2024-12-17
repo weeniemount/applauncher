@@ -1,5 +1,9 @@
 let closeonapp = true
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function applyconfig() {
     var config = await window.electron.getConfig()
 
@@ -64,6 +68,13 @@ async function refreshapps(config) {
                     window.electron.openProgram(app[4]);
                     if (closeonapp) {
                         window.electron.quitApp()
+                    }
+                }
+            } else if (app[3] == "installedcrx") {
+                appDiv.onclick = function() {
+                    window.electron.openCrxApp(app[4]);
+                    if (closeonapp) {
+                        window.electron.closeLauncher()
                     }
                 }
             }
