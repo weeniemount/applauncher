@@ -12,12 +12,12 @@ const defaultConfig = {
   darkmode: false,
   appicon: "default",
   apps: [
-    ["Web Store", "builtinimage", "../../defaultapps/webstore/48.png", "link", "https://chromewebstore.google.com/", "true"],
+    ["Web Store", "builtinimage", "../../defaultapps/webstore/icon_48.png", "link", "https://chromewebstore.google.com/", "true"],
     ["Docs", "builtinimage", "../../defaultapps/docs/icon_128.png", "link", "https://docs.google.com/", "true"],
-    ["Google Drive", "builtinimage", "../../defaultapps/drive/128.png", "link", "https://drive.google.com", "true"],
-    ["Gmail", "builtinimage", "../../defaultapps/gmail/128.png", "link", "https://mail.google.com", "true"],
-    ["Google Search", "builtinimage", "../../defaultapps/search/48.png", "link", "https://google.com/?source=search_app", "true"],
-    ["YouTube", "builtinimage", "../../defaultapps/youtube/128.png", "link", "https://youtube.com", "true"]
+    ["Google Drive", "builtinimage", "../../defaultapps/drive/icon_128.png", "link", "https://drive.google.com", "true"],
+    ["Gmail", "builtinimage", "../../defaultapps/gmail/icon_128.png", "link", "https://mail.google.com", "true"],
+    ["Google Search", "builtinimage", "../../defaultapps/search/icon_48.png", "link", "https://google.com/?source=search_app", "true"],
+    ["YouTube", "builtinimage", "../../defaultapps/youtube/icon_128.png", "link", "https://youtube.com", "true"]
   ]
 };
 
