@@ -59,6 +59,15 @@ async function appiconradio() {
     window.electron.launcherRefreshConfig();
 }
 
+async function defaulticonera() {
+    const selectedRadio = document.querySelector('input[name="defaulticonera"]:checked');
+    
+    var config = await window.electron.getConfig()
+    config.appiconera = selectedRadio.id
+    window.electron.updateConfig(config)
+    window.electron.launcherRefreshConfig();
+}
+
 async function appstable() {
     var config = await window.electron.getConfig()
     const tableBody = document.getElementById('apptable').querySelector('tbody');

@@ -26,7 +26,21 @@ async function refreshapps(config) {
             const appIcon = document.createElement("img");
             appIcon.id = "appicon";
             if (app[1] == "builtinimage") {
-                appIcon.src = app[2];
+                if (app[0] == "Web Store" || app[0] == "Gmail" || app[0] == "Google Search" || app[0] == "YouTube") {
+                    if (config.appiconera == "2011") {
+                        appIcon.src = app[2].replace(".png", "_2011.png");
+                    } else if (config.appiconera == "2013") {
+                        if (app[0] == "Web Store") {
+                            appIcon.src = app[2].replace(".png", "_2013.png");
+                        } else {
+                            appIcon.src = app[2];
+                        }
+                    } else if (config.appiconera == "2016") {
+                        appIcon.src = app[2];
+                    }
+                } else {
+                    appIcon.src = app[2];
+                }
             } else if (app[1] == "localimage") {
                 var editedstring = app[2].replace(/\\/g, '/');
                 const image = await window.electron.getImage(editedstring)

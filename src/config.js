@@ -11,8 +11,9 @@ const defaultConfig = {
   closeonapp: true,
   darkmode: false,
   appicon: "default",
+  appiconera: "2016",
   apps: [
-    ["Web Store", "builtinimage", "../../defaultapps/webstore/icon_48.png", "link", "https://chromewebstore.google.com/", "true"],
+    ["Web Store", "builtinimage", "../../defaultapps/webstore/icon_256.png", "link", "https://chromewebstore.google.com/", "true"],
     ["Docs", "builtinimage", "../../defaultapps/docs/icon_128.png", "link", "https://docs.google.com/", "true"],
     ["Google Drive", "builtinimage", "../../defaultapps/drive/icon_128.png", "link", "https://drive.google.com", "true"],
     ["Gmail", "builtinimage", "../../defaultapps/gmail/icon_128.png", "link", "https://mail.google.com", "true"],
