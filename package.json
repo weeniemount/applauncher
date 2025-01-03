@@ -86,7 +86,7 @@
   "scripts": {
     "start": "electron .",
     "build": "electron-builder",
-    "dist": "electron-builder --win --x64 --linux"
+    "dist": "electron-builder --x64"
   },
   "build": {
     "appId": "com.weenie.applauncher",
@@ -99,10 +99,7 @@
       "!**/*.map"
     ],
     "win": {
-      "icon": "src/icons/applauncher.ico",
-      "target": [
-        "squirrel"
-      ]
+      "icon": "src/icons/applauncher.ico"
     },
     "mac": {
       "icon": "src/icons/mac.icns"
