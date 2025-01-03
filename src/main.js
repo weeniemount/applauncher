@@ -177,7 +177,7 @@ ipcMain.on('open-program', (event, program) => {
 
 ipcMain.on('open-settings', () => {
   const win = new BrowserWindow({
-    width: 750,
+    width: 770,
     height: 550,
     frame: true,
     autoHideMenuBar: true,
