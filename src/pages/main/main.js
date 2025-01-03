@@ -35,7 +35,7 @@ async function refreshapps(config) {
                         } else {
                             appIcon.src = app[2];
                         }
-                    } else if (config.appiconera == "2016") {
+                    } else if (config.appiconera == "2015") {
                         appIcon.src = app[2];
                     }
                 } else {

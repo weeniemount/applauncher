@@ -1,5 +1,6 @@
 let titlebar = document.getElementById("titlebarbox")
 let closelauncher = document.getElementById("closelauncher")
+let chromiumwebstoreicon = document.getElementById("chromiumwebstoreicon")
 let darkmode = document.getElementById("darkmode")
 let resetapps = document.getElementById("resetapps")
 
@@ -9,6 +10,8 @@ async function setvalues() {
     titlebar.checked = loadconfig.titlebar
     closelauncher.checked = loadconfig.closeonapp
     darkmode.checked = loadconfig.darkmode
+    document.getElementById(loadconfig.appicon).checked = true
+    document.getElementById(loadconfig.appiconera).checked = true
 }
 
 titlebar.addEventListener('change', async (event) => {
@@ -25,6 +28,15 @@ closelauncher.addEventListener('change', async (event) => {
 
     var config = await window.electron.getConfig()
     config.closeonapp = isChecked
+    window.electron.updateConfig(config)
+    window.electron.launcherRefreshConfig();
+});
+
+chromiumwebstoreicon.addEventListener('change', async (event) => {
+    const isChecked = event.target.checked;
+
+    var config = await window.electron.getConfig()
+    config.chromiumwebstoreicon = isChecked
     window.electron.updateConfig(config)
     window.electron.launcherRefreshConfig();
 });
@@ -131,17 +143,17 @@ async function addoptionalapp(app) {
     } else if (app == "keep") {
         newapp = ["Keep", "builtinimage", "../../defaultapps/keep/icon_128.png", "link", "https://keep.google.com/", "true"]
     } else if (app == "webstore") {
-        newapp = ["Web Store", "builtinimage", "../../defaultapps/webstore/48.png", "link", "https://chromewebstore.google.com/", "true"]
+        newapp = ["Web Store", "builtinimage", "../../defaultapps/webstore/icon_256.png", "link", "https://chromewebstore.google.com/", "true"]
     } else if (app == "docs") {
         newapp = ["Docs", "builtinimage", "../../defaultapps/docs/icon_128.png", "link", "https://docs.google.com/", "true"]
     } else if (app == "drive") {
-        newapp = ["Google Drive", "builtinimage", "../../defaultapps/drive/128.png", "link", "https://drive.google.com", "true"]
+        newapp = ["Google Drive", "builtinimage", "../../defaultapps/drive/icon_128.png", "link", "https://drive.google.com", "true"]
     } else if (app == "gmail") {
-        newapp = ["Gmail", "builtinimage", "../../defaultapps/gmail/128.png", "link", "https://mail.google.com", "true"]
+        newapp = ["Gmail", "builtinimage", "../../defaultapps/gmail/icon_128.png", "link", "https://mail.google.com", "true"]
     } else if (app == "search") {
-        newapp = ["Google Search", "builtinimage", "../../defaultapps/search/48.png", "link", "https://google.com/?source=search_app", "true"]
+        newapp = ["Google Search", "builtinimage", "../../defaultapps/search/icon_48.png", "link", "https://google.com/?source=search_app", "true"]
     } else if (app == "youtube") {
-        newapp = ["YouTube", "builtinimage", "../../defaultapps/youtube/128.png", "link", "https://youtube.com", "true"]
+        newapp = ["YouTube", "builtinimage", "../../defaultapps/youtube/icon_128.png", "link", "https://youtube.com", "true"]
     }
     
     config.apps.push(newapp)

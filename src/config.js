@@ -11,7 +11,8 @@ const defaultConfig = {
   closeonapp: true,
   darkmode: false,
   appicon: "default",
-  appiconera: "2016",
+  appiconera: "2015",
+  chromiumwebstoreicon: false,
   apps: [
     ["Web Store", "builtinimage", "../../defaultapps/webstore/icon_256.png", "link", "https://chromewebstore.google.com/", "true"],
     ["Docs", "builtinimage", "../../defaultapps/docs/icon_128.png", "link", "https://docs.google.com/", "true"],
