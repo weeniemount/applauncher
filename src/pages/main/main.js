@@ -28,15 +28,27 @@ async function refreshapps(config) {
             if (app[1] == "builtinimage") {
                 if (app[0] == "Web Store" || app[0] == "Gmail" || app[0] == "Google Search" || app[0] == "YouTube") {
                     if (config.appiconera == "2011") {
-                        appIcon.src = app[2].replace(".png", "_2011.png");
+                        if (config.chromiumwebstoreicon && app[0] == "Web Store") {
+                            appIcon.src = app[2].replace(".png", "_2011_chromium.png");
+                        } else {
+                            appIcon.src = app[2].replace(".png", "_2011.png");
+                        }
                     } else if (config.appiconera == "2013") {
                         if (app[0] == "Web Store") {
-                            appIcon.src = app[2].replace(".png", "_2013.png");
+                            if (config.chromiumwebstoreicon) {
+                                appIcon.src = app[2].replace(".png", "_2013_chromium.png");
+                            } else {
+                                appIcon.src = app[2].replace(".png", "_2013.png");
+                            }
                         } else {
                             appIcon.src = app[2];
                         }
                     } else if (config.appiconera == "2015") {
-                        appIcon.src = app[2];
+                        if (config.chromiumwebstoreicon && app[0] == "Web Store") {
+                            appIcon.src = app[2].replace(".png", "_chromium.png");
+                        } else {
+                            appIcon.src = app[2];
+                        }
                     }
                 } else {
                     appIcon.src = app[2];

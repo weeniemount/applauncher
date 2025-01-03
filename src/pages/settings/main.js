@@ -10,6 +10,7 @@ async function setvalues() {
     titlebar.checked = loadconfig.titlebar
     closelauncher.checked = loadconfig.closeonapp
     darkmode.checked = loadconfig.darkmode
+    chromiumwebstoreicon.checked = loadconfig.chromiumwebstoreicon
     document.getElementById(loadconfig.appicon).checked = true
     document.getElementById(loadconfig.appiconera).checked = true
 }
