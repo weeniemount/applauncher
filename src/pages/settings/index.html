@@ -28,6 +28,19 @@
             <input type="radio" class="chromeradio" name="appicon" id="chromium" onchange="appiconradio()">Chromium<br>
             <hr>
             <p id="settingheading">Apps</p><br>
+            <p>Add default apps:</p>
+            <button class="genericbutton" onclick="addoptionalapp('webstore')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/webstore/256.png"></button>
+            <button class="genericbutton" onclick="addoptionalapp('docs')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/docs/icon_128.png"></button>
+            <button class="genericbutton" onclick="addoptionalapp('drive')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/drive/128.png"></button>
+            <button class="genericbutton" onclick="addoptionalapp('gmail')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/gmail/128.png"></button>
+            <button class="genericbutton" onclick="addoptionalapp('search')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/search/128.png"></button>
+            <button class="genericbutton" onclick="addoptionalapp('youtube')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/youtube/128.png"></button>
+            <br>
+            <p>Add optional apps:</p>
+            <button class="genericbutton" onclick="addoptionalapp('slides')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/slides/icon_128.png"></button>
+            <button class="genericbutton" onclick="addoptionalapp('sheets')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/sheets/icon_128.png"></button>
+            <button class="genericbutton" onclick="addoptionalapp('keep')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/keep/icon_128.png"></button>
+            <br>
             <table id="apptable" border="1">
                 <thead>
                     <tr>
@@ -41,11 +54,6 @@
                     <!-- rows will be added here -->
                 </tbody>
             </table><br>
-            <p>Add optional apps:</p>
-            <button class="genericbutton" onclick="addoptionalapp('slides')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/slides/icon_128.png"></button>
-            <button class="genericbutton" onclick="addoptionalapp('sheets')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/sheets/icon_128.png"></button>
-            <button class="genericbutton" onclick="addoptionalapp('keep')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/keep/icon_128.png"></button>
-            <br>
             <button class="genericbutton" id="resetapps" style="height: 35px; width: 140px;">Reset apps to default</button>
         </div>
         <script src="main.js"></script>

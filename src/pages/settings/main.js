@@ -121,6 +121,18 @@ async function addoptionalapp(app) {
         newapp = ["Sheets", "builtinimage", "../../defaultapps/sheets/icon_128.png", "link", "https://docs.google.com/spreadsheets/", "true"]
     } else if (app == "keep") {
         newapp = ["Keep", "builtinimage", "../../defaultapps/keep/icon_128.png", "link", "https://keep.google.com/", "true"]
+    } else if (app == "webstore") {
+        newapp = ["Web Store", "builtinimage", "../../defaultapps/webstore/48.png", "link", "https://chromewebstore.google.com/", "true"]
+    } else if (app == "docs") {
+        newapp = ["Docs", "builtinimage", "../../defaultapps/docs/icon_128.png", "link", "https://docs.google.com/", "true"]
+    } else if (app == "drive") {
+        newapp = ["Google Drive", "builtinimage", "../../defaultapps/drive/128.png", "link", "https://drive.google.com", "true"]
+    } else if (app == "gmail") {
+        newapp = ["Gmail", "builtinimage", "../../defaultapps/gmail/128.png", "link", "https://mail.google.com", "true"]
+    } else if (app == "search") {
+        newapp = ["Google Search", "builtinimage", "../../defaultapps/search/48.png", "link", "https://google.com/?source=search_app", "true"]
+    } else if (app == "youtube") {
+        newapp = ["YouTube", "builtinimage", "../../defaultapps/youtube/128.png", "link", "https://youtube.com", "true"]
     }
     
     config.apps.push(newapp)
