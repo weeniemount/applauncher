@@ -19,6 +19,28 @@ async function refreshapps(config) {
     appsContent.innerHTML = '';
     if (config && config.apps && config.apps.length > 0) {
 
+        if (config.showbrowserapp) {
+            const appDiv = document.createElement("div");
+            appDiv.id = "app";
+
+            const appIcon = document.createElement("img");
+            appIcon.id = "appicon";
+            appIcon.src = "../../defaultapps/noicon.png";
+
+            appIcon.alt = "chromeaafa"
+
+            const appText = document.createElement("p");
+            appText.id = "apptext";
+            appText.textContent = "Browser";
+
+            appDiv.appendChild(appIcon)
+            appDiv.appendChild(appText);
+            appDiv.onclick = function() {
+                alert("brooser")
+            }
+            appsContent.appendChild(appDiv);
+        }
+
         for (const app of config.apps) {
             const appDiv = document.createElement("div");
             appDiv.id = "app";
