@@ -1,6 +1,6 @@
 {
   "name": "app-launcher",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "App Launcher",
   "main": "src/main.js",
   "author": {
