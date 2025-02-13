@@ -37,6 +37,9 @@ async function refreshapps(config) {
             } else if (config.browserappiconam == "firefox") {
                 appIcon.src = `../../defaultapps/browser/firefox_${config.appiconera}.png`;
                 appText.textContent = "Firefox";
+            } else if (config.browserappiconam == "chromium") {
+                appIcon.src = `../../defaultapps/browser/chromium_${config.appiconera}.png`;
+                appText.textContent = "Chromium";
             }
 
             appDiv.appendChild(appIcon)

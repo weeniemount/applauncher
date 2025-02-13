@@ -14,6 +14,7 @@ async function setvalues() {
     chromiumwebstoreicon.checked = loadconfig.chromiumwebstoreicon
     showbrowserapp.checked = loadconfig.showbrowserapp
     document.getElementById(loadconfig.appicon).checked = true
+    document.getElementById(loadconfig.browserappiconam).checked = true
     document.getElementById(loadconfig.appiconera).checked = true
 }
 
