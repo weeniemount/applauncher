@@ -3,6 +3,7 @@ let closelauncher = document.getElementById("closelauncher")
 let chromiumwebstoreicon = document.getElementById("chromiumwebstoreicon")
 let darkmode = document.getElementById("darkmode")
 let resetapps = document.getElementById("resetapps")
+let showbrowserapp = document.getElementById("showbrowserapp")
 
 async function setvalues() {
     let loadconfig = await window.electron.getConfig()
@@ -11,6 +12,7 @@ async function setvalues() {
     closelauncher.checked = loadconfig.closeonapp
     darkmode.checked = loadconfig.darkmode
     chromiumwebstoreicon.checked = loadconfig.chromiumwebstoreicon
+    showbrowserapp.checked = loadconfig.showbrowserapp
     document.getElementById(loadconfig.appicon).checked = true
     document.getElementById(loadconfig.appiconera).checked = true
 }
@@ -47,6 +49,15 @@ darkmode.addEventListener('change', async (event) => {
 
     var config = await window.electron.getConfig()
     config.darkmode = isChecked
+    window.electron.updateConfig(config)
+    window.electron.launcherRefreshConfig();
+});
+
+showbrowserapp.addEventListener('change', async (event) => {
+    const isChecked = event.target.checked;
+
+    var config = await window.electron.getConfig()
+    config.showbrowserapp = isChecked
     window.electron.updateConfig(config)
     window.electron.launcherRefreshConfig();
 });

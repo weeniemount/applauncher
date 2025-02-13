@@ -19,19 +19,25 @@ async function refreshapps(config) {
     appsContent.innerHTML = '';
     if (config && config.apps && config.apps.length > 0) {
 
-        if (config.showbrowserapp) {
+        if (config.showbrowserapp == true) {
             const appDiv = document.createElement("div");
             appDiv.id = "app";
 
             const appIcon = document.createElement("img");
             appIcon.id = "appicon";
-            appIcon.src = "../../defaultapps/noicon.png";
-
-            appIcon.alt = "chromeaafa"
-
+            
+            appIcon.alt = "browser";
+            
             const appText = document.createElement("p");
             appText.id = "apptext";
-            appText.textContent = "Browser";
+
+            if (config.browserappiconam == "chrome") {
+                appIcon.src = `../../defaultapps/browser/chrome_${config.appiconera}.png`;
+                appText.textContent = "Chrome";
+            } else if (config.browserappiconam == "firefox") {
+                appIcon.src = `../../defaultapps/browser/firefox_${config.appiconera}.png`;
+                appText.textContent = "Firefox";
+            }
 
             appDiv.appendChild(appIcon)
             appDiv.appendChild(appText);
