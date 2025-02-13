@@ -36,7 +36,7 @@ async function refreshapps(config) {
             appDiv.appendChild(appIcon)
             appDiv.appendChild(appText);
             appDiv.onclick = function() {
-                alert("brooser")
+                window.electron.openBrowser();
             }
             appsContent.appendChild(appDiv);
         }

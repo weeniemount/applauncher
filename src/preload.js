@@ -44,4 +44,5 @@ contextBridge.exposeInMainWorld('electron', {
   launcherRefreshConfig: () => ipcRenderer.send('launcher-refreshconfig'),
   openAbout: () => ipcRenderer.send('open-about'),
   closeAbout: () => ipcRenderer.send('close-about'),
+  openBrowser: () => ipcRenderer.send('open-browser'),
 });

@@ -6,6 +6,9 @@ const fs = require('fs')
 const { spawn } = require('child_process');
 const os = require('os');
 const JSZip = require('jszip');
+const { exec } = require('child_process');
+const { promisify } = require('util');
+const execPromise = promisify(exec);
 
 createConfigIfNeeded();
 
@@ -97,6 +100,45 @@ ipcMain.on('open-link', (event, url) => {
 ipcMain.on('quit-app', () => {
   app.quit();
 });
+
+ipcMain.on('open-browser', async () => {
+  try {
+    let browserPath;
+
+    if (process.platform === 'linux') {
+      // For Linux, use xdg-open to open the default browser
+      browserPath = 'xdg-open';
+    } else if (process.platform === 'win32') {
+      // For Windows, query the registry to get the default browser
+      const { stdout } = await execPromise(
+        'C:\\Windows\\System32\\reg query "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice" /v ProgId'
+      );
+
+      const match = stdout.match(/REG_SZ\s+(.+)/);
+      if (!match) throw new Error('Could not determine default browser.');
+
+      const progId = match[1].trim();
+      const { stdout: browserPathOutput } = await execPromise(
+        `C:\\Windows\\System32\\reg query "HKEY_CLASSES_ROOT\\${progId}\\shell\\open\\command" /ve`
+      );
+
+      const pathMatch = browserPathOutput.match(/REG_SZ\s+(.+)/);
+      if (!pathMatch) throw new Error('Could not find browser executable.');
+
+      browserPath = pathMatch[1].trim();
+      browserPath = browserPath.split('"')[1] || browserPath.split(' ')[0];
+    } else {
+      throw new Error('Unsupported platform');
+    }
+
+    exec(`"${browserPath}"`, (err) => {
+      if (err) console.error('Error launching browser:', err);
+    });
+  } catch (error) {
+    console.error('Failed to open default browser:', error);
+  }
+});
+
 
 ipcMain.on('open-chrome-app', (event, crxId) => {
   const crxpath = path.join(app.getPath('userData'), `installedcrx`, crxId);
