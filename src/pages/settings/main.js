@@ -83,6 +83,15 @@ async function appiconradio() {
     window.electron.launcherRefreshConfig();
 }
 
+async function browsericonradio() {
+    const selectedRadio = document.querySelector('input[name="browsericon"]:checked');
+    
+    var config = await window.electron.getConfig()
+    config.browserappiconam = selectedRadio.id
+    window.electron.updateConfig(config)
+    window.electron.launcherRefreshConfig();
+}
+
 async function defaulticonera() {
     const selectedRadio = document.querySelector('input[name="defaulticonera"]:checked');
     
