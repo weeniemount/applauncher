@@ -26,6 +26,7 @@
     "compression": "maximum",
     "asar": true,
     "icon": "src/icons/applauncher.ico",
+    "afterPack": "./src/scripts/removeLocales.js",
     "files": [
       "**/*",
       "!**/*.map"
