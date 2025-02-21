@@ -46,6 +46,11 @@ async function refreshapps(config) {
             appDiv.appendChild(appText);
             appDiv.onclick = function() {
                 window.electron.openBrowser();
+                if (config.closeonapp) {
+                    setTimeout(() => {
+                        window.electron.quitApp();
+                    }, 100); // Delay to ensure the browser opens before quitting the app
+                }
             }
             appsContent.appendChild(appDiv);
         }
