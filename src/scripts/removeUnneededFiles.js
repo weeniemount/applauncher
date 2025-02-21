@@ -48,7 +48,7 @@ exports.default = async function(context) {
 
         files.forEach(file => {
             // List of files to keep in the main directory
-            const filesToKeep = ['App Launcher.exe', 'ffmpeg.dll', 'icudtl.dat', 'resources.pak', 'v8_context_snapshot.bin', 'resources', 'locales'];
+            const filesToKeep = ['App Launcher.exe', 'ffmpeg.dll', 'icudtl.dat', 'resources.pak', 'v8_context_snapshot.bin', 'resources', 'locales', 'chrome_100_percent.pak', 'chrome_200_percent.pak'];
             
             // If the file is not in the list, delete it
             if (!filesToKeep.includes(file)) {
