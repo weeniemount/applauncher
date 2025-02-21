@@ -1,16 +1,35 @@
 const { app, BrowserWindow, ipcMain, Menu, shell, dialog } = require('electron');
 const path = require('path');
 const { createConfigIfNeeded, readConfig, updateConfig, getdefaultconfig } = require('./config.js');
-const { title } = require('process');
 const fs = require('fs')
 const { spawn } = require('child_process');
-const os = require('os');
 const JSZip = require('jszip');
 const { exec } = require('child_process');
 const { promisify } = require('util');
 const execPromise = promisify(exec);
 
 createConfigIfNeeded();
+
+const globalWebPreferences = {
+  preload: path.join(__dirname, 'preload.js'), // Set up preload to enable secure communication
+  nodeIntegration: false,
+  experimentalFeatures: false,
+  serviceWorkers: false,
+  spellcheck: false,
+  webSecurity: false,
+  enableRemoteModule: false,
+  webviewTag: false,
+  sandbox: true,
+  backgroundThrottling: false,
+  offscreen: false,
+  devTools: false, // Disable DevTools
+  webgl: false, // Disable WebGL
+  webaudio: false, // Disable WebAudio
+  plugins: false, // Disable plugins
+  accelerated2dCanvas: false, // Disable accelerated 2D canvas
+  hardwareAcceleration: false, // Disable hardware acceleration
+  disableBlinkFeatures: "Auxclick,BackspaceDefaultHandler,Gamepad,KeyboardEventKey,Notification,PointerEvent,TouchEvent,WebAnimationsAPI,WebBluetooth,WebUSB,WebVR", // Disable unnecessary Blink features
+}
 
 const isLinux = process.platform === 'linux';
 const createWindow = () => {
@@ -34,13 +53,7 @@ const createWindow = () => {
     autoHideMenuBar: true,
     resizable: false,
     icon: path.join(__dirname, isLinux ? (iconMapLinux[config.appicon] || iconMapLinux.default) : (iconMapWin[config.appicon] || iconMapWin.default)),
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'), // Set up preload to enable secure communication
-      nodeIntegration: false,
-      experimentalFeatures: false,
-      serviceWorkers: false,
-      spellcheck: false,
-    },
+    webPreferences: globalWebPreferences
   });
 
   win.loadFile('src/pages/main/index.html');
@@ -183,12 +196,7 @@ ipcMain.on('open-chrome-app', (event, crxId) => {
           title: '',                  // Ensure no title
           icon: path.join(__dirname, 'icons/empty.ico'),                // No icon
           autoHideMenuBar: true,       // No menu bar
-          webPreferences: {
-            nodeIntegration: false,
-            experimentalFeatures: false,
-            serviceWorkers: false,
-            spellcheck: false,
-          },
+          webPreferences: globalWebPreferences
         });
 
         newWin.loadURL(scriptFilePath); // Load the modified HTML content
@@ -225,13 +233,7 @@ ipcMain.on('open-settings', () => {
     autoHideMenuBar: true,
     name: "Settings",
     icon: path.join(__dirname, 'icons/settings.ico'),
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'), // Set up preload to enable secure communication
-      nodeIntegration: false,
-      experimentalFeatures: false,
-      serviceWorkers: false,
-      spellcheck: false,
-    },
+    webPreferences: globalWebPreferences
   });
 
   win.loadFile('src/pages/settings/index.html');
@@ -250,13 +252,7 @@ ipcMain.on('open-createanapp', () => {
       name: "create-an-app",
       icon: path.join(__dirname, 'icons/settings.ico'),
       skipTaskbar: true,
-      webPreferences: {
-        preload: path.join(__dirname, 'preload.js'),
-        nodeIntegration: false,
-        experimentalFeatures: false,
-        serviceWorkers: false,
-        spellcheck: false,
-      },
+      webPreferences: globalWebPreferences
     });
 
     createanapp.loadFile('src/pages/createapp/index.html');
@@ -286,13 +282,7 @@ ipcMain.on('open-about', () => {
       name: "about",
       resizable: false,
       skipTaskbar: true,
-      webPreferences: {
-        preload: path.join(__dirname, 'preload.js'),
-        nodeIntegration: false,
-        experimentalFeatures: false,
-        serviceWorkers: false,
-        spellcheck: false,
-      },
+      webPreferences: globalWebPreferences
     });
 
     about.loadFile('src/pages/about/index.html');
