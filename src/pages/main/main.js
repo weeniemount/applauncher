@@ -146,7 +146,7 @@ async function refreshapps(config) {
             console.log("hi")
             if (appsrollover >= 16) {
                 page++
-                document.getElementById("pages").insertAdjacentHTML(`beforeend`, `<div class="page" id="page${page}" hidden></div>`)
+                document.getElementById("pages").insertAdjacentHTML(`beforeend`, `<div class="page" id="page${page}" style="display:none;"></div>`)
                 appsContent = document.getElementById(`page${page}`)
                 appsContent.appendChild(appDiv);
                 appsrollover = 1
