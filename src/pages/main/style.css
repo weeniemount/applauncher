@@ -7,8 +7,8 @@ body {
     user-select: none;
     margin: 0;
     padding: 0;
-    width: 402px;
-    height: 502px;
+    /*width: 400px;*/
+    height: 500px;
     background-color: #f2f2f2;
     overflow: hidden;
     font-family: Helvetica, Arial, sans-serif;
@@ -76,7 +76,6 @@ body {
 
 .page {
     margin-left: 24px;
-    margin-right: 24px;
     display: flex;
     gap: 0px;
     flex-wrap: wrap
@@ -84,6 +83,13 @@ body {
 
 .dark .page {
     background-color: #333333;
+}
+
+#pages {
+    display: flex;
+    gap: 0px;
+    flex-wrap: wrap;
+    flex-direction: row; /* Add this line */
 }
 
 #searchpage {

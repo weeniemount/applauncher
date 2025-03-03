@@ -47,8 +47,8 @@ const createWindow = () => {
     chromium: 'icons/linux/chromium.png',
   };
   const win = new BrowserWindow({
-    width: 402,
-    height: 502,
+    width: 400,
+    height: 500,
     frame: config["titlebar"],
     autoHideMenuBar: true,
     resizable: false,
