@@ -22,7 +22,7 @@ const globalWebPreferences = {
   sandbox: true,
   backgroundThrottling: false,
   offscreen: false,
-  devTools: false, // Disable DevTools
+  devTools: true, // Disable DevTools
   webgl: false, // Disable WebGL
   webaudio: false, // Disable WebAudio
   plugins: false, // Disable plugins

@@ -14,11 +14,13 @@ async function applyconfig() {
 }
 
 async function refreshapps(config) {
-    const appsContent = document.getElementById("apps-content");
+    document.getElementById("pages").innerHTML = ""
+    document.getElementById("pages").insertAdjacentHTML(`beforeend`, `<div class="page" id="page1"></div>`)
+    let appsContent = document.getElementById("page1");
 
-    appsContent.innerHTML = '';
     if (config && config.apps && config.apps.length > 0) {
-
+        let appsrollover = 0
+        let page = 1
         if (config.showbrowserapp == true) {
             const appDiv = document.createElement("div");
             appDiv.id = "app";
@@ -53,6 +55,7 @@ async function refreshapps(config) {
                 }
             }
             appsContent.appendChild(appDiv);
+            appsrollover++
         }
 
         for (const app of config.apps) {
@@ -140,11 +143,20 @@ async function refreshapps(config) {
                     }
                 }
             }
-            appsContent.appendChild(appDiv);
-
+            console.log("hi")
+            if (appsrollover >= 16) {
+                page++
+                document.getElementById("pages").insertAdjacentHTML(`beforeend`, `<div class="page" id="page${page}" hidden></div>`)
+                appsContent = document.getElementById(`page${page}`)
+                appsContent.appendChild(appDiv);
+                appsrollover = 1
+            } else {
+                appsContent.appendChild(appDiv);
+                appsrollover++
+            }
         };
     } else if (config.apps.length == 0) {
-        const appsContent = document.getElementById("apps-content");
+        const appsContent = document.getElementById("page1");
     }
 }
 
@@ -161,10 +173,10 @@ applyconfig();
 
 document.getElementById("searchbarurl").addEventListener("input", async () => {
 	if (document.getElementById("searchbarurl").value.trim() === "") {
-        document.getElementById("apps-content").style.display = "flex"
+        document.getElementById("page1").style.display = "flex"
         document.getElementById("searchpage").style.display = "none"
     } else {
-        document.getElementById("apps-content").style.display = "none"
+        document.getElementById("page1").style.display = "none"
         document.getElementById("searchpage").style.display = "flex"
         searchbar()
     }

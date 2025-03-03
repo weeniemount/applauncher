@@ -74,7 +74,7 @@ body {
     background-image: url("images/hamburgerhover.png");
 }
 
-#apps-content {
+.page {
     margin-left: 24px;
     margin-right: 24px;
     display: flex;
@@ -82,7 +82,7 @@ body {
     flex-wrap: wrap
 }
 
-.dark #apps-content {
+.dark .page {
     background-color: #333333;
 }
 
