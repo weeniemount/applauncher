@@ -1,4 +1,6 @@
 let closeonapp = true
+let amountofpages = 1
+let selectedpage = 1
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -17,6 +19,7 @@ async function refreshapps(config) {
     document.getElementById("pages").innerHTML = ""
     document.getElementById("pages").insertAdjacentHTML(`beforeend`, `<div class="page" id="page1"></div>`)
     let appsContent = document.getElementById("page1");
+    
 
     if (config && config.apps && config.apps.length > 0) {
         let appsrollover = 0
@@ -146,6 +149,7 @@ async function refreshapps(config) {
             console.log("hi")
             if (appsrollover >= 16) {
                 page++
+                amountofpages++
                 document.getElementById("pages").insertAdjacentHTML(`beforeend`, `<div class="page" id="page${page}" style="display:none;"></div>`)
                 appsContent = document.getElementById(`page${page}`)
                 appsContent.appendChild(appDiv);
@@ -294,6 +298,25 @@ const getSuggestions = async (query) => {
 	}
 };
 
+window.addEventListener('wheel', (event) => {
+    if (event.deltaY > 0) {
+        if (selectedpage > 1) {
+            selectedpage--;
+            const currentPage = document.getElementById(`page${selectedpage}`);
+            const previousPage = document.getElementById(`page${selectedpage + 1}`);
+            if (currentPage) currentPage.style.display = "flex";
+            if (previousPage) previousPage.style.display = "none";
+        }
+    } else if (event.deltaY < 0) {
+        if (selectedpage < amountofpages) {
+            selectedpage++;
+            const currentPage = document.getElementById(`page${selectedpage}`);
+            const nextPage = document.getElementById(`page${selectedpage - 1}`);
+            if (currentPage) currentPage.style.display = "flex";
+            if (nextPage) nextPage.style.display = "none";
+        }
+    }
+});
 
 // electron stuff
 
