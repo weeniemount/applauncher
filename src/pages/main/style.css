@@ -7,7 +7,7 @@ body {
     user-select: none;
     margin: 0;
     padding: 0;
-    /*width: 400px;*/
+    width: 400px;
     height: 500px;
     background-color: #f2f2f2;
     overflow: hidden;
@@ -78,7 +78,7 @@ body {
     margin-left: 24px;
     display: flex;
     gap: 0px;
-    flex-wrap: wrap
+    flex-wrap: wrap;
 }
 
 .dark .page {
