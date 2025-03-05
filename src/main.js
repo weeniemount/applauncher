@@ -237,6 +237,7 @@ ipcMain.on('open-settings', () => {
   });
 
   win.loadFile('src/pages/settings/index.html');
+  win.webContents.setZoomFactor(1)
 });
 
 let createanapp;

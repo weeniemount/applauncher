@@ -27,6 +27,12 @@ body {
     background-color: #ffffff;
 }
 
+.pageindicator {
+    background-color: #468FFC;
+    width: 68px;
+    height: 6px;
+}
+
 .dark #searchbar {
     background-color: #444444;
     border-bottom: 1px solid #555555;
