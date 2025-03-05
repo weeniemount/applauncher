@@ -18,6 +18,7 @@ async function applyconfig() {
 
 async function refreshapps(config) {
     document.getElementById("pages").innerHTML = ""
+    document.getElementById("pageindicatorbar").innerHTML = ""
     document.getElementById("pages").insertAdjacentHTML(`beforeend`, `<div class="page" id="page1"></div>`)
     let appsContent = document.getElementById("page1");
     amountofpages = 1
@@ -148,11 +149,13 @@ async function refreshapps(config) {
                     }
                 }
             }
-            console.log("hi")
+
             if (appsrollover >= 16) {
                 page++
                 amountofpages++
                 document.getElementById("pages").insertAdjacentHTML(`beforeend`, `<div class="page" id="page${page}" style="display: none;"></div>`)
+                if (page == 2) {document.getElementById("pageindicatorbar").insertAdjacentHTML("beforeend", `<div id="pageindicator1" class="pageindicator">`)}
+                document.getElementById("pageindicatorbar").insertAdjacentHTML("beforeend", `<div id="pageindicator${page}" class="pageindicator disabled">`)
                 appsContent = document.getElementById(`page${page}`)
                 appsContent.appendChild(appDiv);
                 appsrollover = 1
@@ -304,6 +307,8 @@ const getSuggestions = async (query) => {
 
 window.addEventListener('wheel', (event) => {
     if (!searching) {
+        const pageindicatorbar = document.getElementById('pageindicatorbar');
+        const pageIndicators = pageindicatorbar.querySelectorAll('.pageindicator');
         if (event.deltaY > 0) {
             if (selectedpage > 1) {
                 selectedpage--;
@@ -311,6 +316,10 @@ window.addEventListener('wheel', (event) => {
                 const previousPage = document.getElementById(`page${selectedpage + 1}`);
                 if (currentPage) currentPage.style.display = "flex";
                 if (previousPage) previousPage.style.display = "none";
+                pageIndicators.forEach(indicator => {
+                    indicator.classList.add('disabled');
+                });
+                document.getElementById(`pageindicator${selectedpage }`).classList = "pageindicator"
             }
         } else if (event.deltaY < 0) {
             if (selectedpage < amountofpages) {
@@ -319,6 +328,11 @@ window.addEventListener('wheel', (event) => {
                 const nextPage = document.getElementById(`page${selectedpage - 1}`);
                 if (currentPage) currentPage.style.display = "flex";
                 if (nextPage) nextPage.style.display = "none";
+                
+                pageIndicators.forEach(indicator => {
+                  indicator.classList.add('disabled');
+                });
+                document.getElementById(`pageindicator${selectedpage }`).classList = "pageindicator"
             }
         }
     }

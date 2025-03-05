@@ -27,10 +27,24 @@ body {
     background-color: #ffffff;
 }
 
+#pageindicatorbar {
+    position: absolute;
+    bottom: 28px;
+    width: 100%;
+    text-align: center;
+}
+
 .pageindicator {
     background-color: #468FFC;
     width: 68px;
     height: 6px;
+    border-radius: 2px;
+    display: inline-block;
+    margin: 0 9px;
+}
+
+.pageindicator.disabled {
+    background-color: #e2e2e2;
 }
 
 .dark #searchbar {
