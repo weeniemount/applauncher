@@ -19,6 +19,14 @@
             <p id="settingheading">General</p><br>
                 <p>Enable title bar for App Launcher: </p><input type="checkbox" id="titlebarbox" class="chromecheckbox"><br>
                 <p>Close App Launcher after launching an app: </p><input type="checkbox" id="closelauncher" class="chromecheckbox"><br>
+                <p>App Launcher start position:</p><br>
+                <input type="radio" class="chromeradio" name="startpos" id="center" onchange="startposradio()" checked>Center<br>
+                <input type="radio" class="chromeradio" name="startpos" id="lefttop" onchange="startposradio()">Left Top<br>
+                <input type="radio" class="chromeradio" name="startpos" id="leftbottom" onchange="startposradio()">Left Bottom<br>
+                <input type="radio" class="chromeradio" name="startpos" id="righttop" onchange="startposradio()">Right Top<br>
+                <input type="radio" class="chromeradio" name="startpos" id="rightbottom" onchange="startposradio()">Right Bottom<br>
+                <p>Start position X offset:</p> <input type="number" id="xoffset" placeholder="X offset..."><br>
+                <p>Start position Y offset:</p> <input type="number" id="yoffset" placeholder="Y offset...">
                 <hr>
 
             <p id="settingheading">Customization</p><br>

@@ -16,6 +16,9 @@ async function setvalues() {
     document.getElementById(loadconfig.appicon).checked = true
     document.getElementById(loadconfig.browserappiconam).checked = true
     document.getElementById(loadconfig.appiconera).checked = true
+    document.getElementById(loadconfig.startpos).checked = true
+    document.getElementById("xoffset").value = loadconfig.startoffsetx
+    document.getElementById("yoffset").value = loadconfig.startoffsety
 }
 
 titlebar.addEventListener('change', async (event) => {
@@ -75,11 +78,45 @@ resetapps.addEventListener('click', async () => {
     appstable()
 })
 
+document.getElementById("xoffset").addEventListener('input', async function() {
+    var config = await window.electron.getConfig()
+
+    if (document.getElementById("xoffset").value == "") {
+        config.startoffsetx = 0
+        document.getElementById("xoffset").value = 0
+    } else {
+        config.startoffsetx = parseInt(document.getElementById("xoffset").value)
+    }
+    
+    window.electron.updateConfig(config);
+});
+
+document.getElementById("yoffset").addEventListener('input', async function() {
+    var config = await window.electron.getConfig()
+    
+    if (document.getElementById("yoffset").value == "") {
+        config.startoffsety = 0
+        document.getElementById("yoffset").value = 0
+    } else {
+        config.startoffsety = parseInt(document.getElementById("yoffset").value)
+    }
+    window.electron.updateConfig(config);
+});
+
 async function appiconradio() {
     const selectedRadio = document.querySelector('input[name="appicon"]:checked');
     
     var config = await window.electron.getConfig()
     config.appicon = selectedRadio.id
+    window.electron.updateConfig(config)
+    window.electron.launcherRefreshConfig();
+}
+
+async function startposradio() {
+    const selectedRadio = document.querySelector('input[name="startpos"]:checked');
+    
+    var config = await window.electron.getConfig()
+    config.startpos = selectedRadio.id
     window.electron.updateConfig(config)
     window.electron.launcherRefreshConfig();
 }

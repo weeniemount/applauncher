@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Menu, shell, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, shell, dialog, screen } = require('electron');
 const path = require('path');
 const { createConfigIfNeeded, readConfig, updateConfig, getdefaultconfig } = require('./config.js');
 const fs = require('fs')
@@ -34,6 +34,7 @@ const globalWebPreferences = {
 const isLinux = process.platform === 'linux';
 const createWindow = () => {
   const config = readConfig()
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
   const iconMapWin = {
     default: 'icons/applauncher.ico',
@@ -55,6 +56,23 @@ const createWindow = () => {
     icon: path.join(__dirname, isLinux ? (iconMapLinux[config.appicon] || iconMapLinux.default) : (iconMapWin[config.appicon] || iconMapWin.default)),
     webPreferences: globalWebPreferences
   });
+
+  if (config.startpos == "center") {
+    win.center()
+    win.setPosition(win.getPosition()[0] + config.startoffsetx, win.getPosition()[1] + config.startoffsety)
+  } else if (config.startpos == "lefttop") {
+    win.setPosition(0 + config.startoffsetx, 0 + config.startoffsety)
+  } else if (config.startpos == "righttop") {
+    win.setPosition(width - 400 - config.startoffsetx, 0 + config.startoffsety)
+  } else if (config.startpos == "leftbottom") {
+    win.setPosition(0 + config.startoffsetx, height - 500 - config.startoffsety + 40)
+  } else if (config.startpos == "rightbottom") {
+    win.setPosition(width - 400 - config.startoffsetx, height - 500 - config.startoffsety + 40)
+  } else {
+    win.center()
+  }
+
+
 
   win.loadFile('src/pages/main/index.html');
 
