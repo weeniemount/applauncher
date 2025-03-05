@@ -12,7 +12,7 @@
     "jszip": "^3.10.1"
   },
   "devDependencies": {
-    "electron": "^13.6.9",
+    "electron": "^35.0.0",
     "electron-builder": "^25.1.8"
   },
   "scripts": {
