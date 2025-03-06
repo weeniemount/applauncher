@@ -102,7 +102,12 @@ async function refreshapps(config) {
                 var editedstring = app[2].replace(/\\/g, '/');
                 const image = await window.electron.getImage(editedstring)
 
-                appIcon.src = `data:image/png;base64,${image}`;
+                if (image.includes("|SVG|")) {
+                    appIcon.src = `data:image/svg+xml;base64,${image.replace("|SVG|", "")}`;
+                }
+                else {
+                    appIcon.src = `data:image/png;base64,${image}`;
+                }
             } else if (app[1] == "crxicon") {
                 const image = await window.electron.getCrxImage(app[2], app[4])
 
@@ -245,7 +250,12 @@ async function searchbar() {
             } else if (app[1] === "localimage") {
                 const editedstring = app[2].replace(/\\/g, '/');
                 const image = await window.electron.getImage(editedstring);
-                appIcon.src = `data:image/png;base64,${image}`;
+                if (image.includes("|SVG|")) {
+                    appIcon.src = `data:image/svg+xml;base64,${image.replace("|SVG|", "")}`;
+                }
+                else {
+                    appIcon.src = `data:image/png;base64,${image}`;
+                }
                 appIcon.style.width = "24px"
                 appIcon.style.marginLeft = "16px"
                 appIcon.style.objectFit = "fill"

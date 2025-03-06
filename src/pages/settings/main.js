@@ -162,8 +162,12 @@ async function appstable() {
             } else if (app[1] == "localimage") {
                 var editedstring = app[2].replace(/\\/g, '/');
                 const image = await window.electron.getImage(editedstring)
-
-                iconCell.innerHTML = `<img src="data:image/png;base64,${image}" id='appicon'>`
+                if (image.includes("|SVG|")) {
+                    iconCell.innerHTML = `<img src="data:image/svg+xml;base64,${image.replace("|SVG|", "")}" id='appicon'>`
+                }
+                else {
+                    iconCell.innerHTML = `<img src="data:image/png;base64,${image}" id='appicon'>`
+                }
             } else if (app[1] == "crxicon") {
                 const image = await window.electron.getCrxImage(app[2], app[4])
 

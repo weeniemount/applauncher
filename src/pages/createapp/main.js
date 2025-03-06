@@ -5,7 +5,13 @@ var apppath
 async function chooseappicon() {
     const file = await window.electron.chooseAppIcon();
     console.log(file[0]);
-    document.getElementById("appicon").src = `data:image/png;base64,${file[1]}`;
+    console.log(file[1]);
+    if (file[1].includes("|SVG|")) {
+        document.getElementById("appicon").src = `data:image/svg+xml;base64,${file[1].replace("|SVG|", "")}`;
+    }
+    else {
+        document.getElementById("appicon").src = `data:image/png;base64,${file[1]}`;
+    }
     iconfilepath = file[0]
 };
 

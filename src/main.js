@@ -321,8 +321,14 @@ ipcMain.on('open-about', () => {
 ipcMain.handle('get-image', async (event, filePath) => {
   try {
     if (fs.existsSync(filePath)) {
+      const fileExtension = path.extname(filePath).toLowerCase();
       const fileData = fs.readFileSync(filePath);
-      return fileData.toString('base64');
+
+      if (fileExtension === '.svg') {
+        return "|SVG|" + fileData.toString('base64'); // Return SVG content as a string
+      } else {
+        return fileData.toString('base64'); // Return other image types as base64
+      }
     } else {
       return "filenotfound";
     }
@@ -357,11 +363,16 @@ ipcMain.handle('choose-app-icon', async () => {
   const result = await dialog.showOpenDialog({
     properties: ['openFile'], // This opens a file dialog (use 'openDirectory' for folders)
     filters: [
-      { name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] }
+      { name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp', 'svg'] }
     ],
   });
+  const fileExtension = path.extname(result.filePaths[0]).toLowerCase();
 
-  return [result.filePaths, fs.readFileSync(result.filePaths[0]).toString('base64')]; // Return the file paths selected by the user
+  if (fileExtension == '.svg') {
+    return [result.filePaths, "|SVG|" + fs.readFileSync(result.filePaths[0]).toString('base64')]; // Return the file paths selected by the user
+  } else {
+    return [result.filePaths, fs.readFileSync(result.filePaths[0]).toString('base64')]; // Return the file paths selected by the user
+  }
 });
 
 ipcMain.handle('choose-program', async () => {
