@@ -319,7 +319,7 @@ window.addEventListener('wheel', (event) => {
     if (!searching) {
         const pageindicatorbar = document.getElementById('pageindicatorbar');
         const pageIndicators = pageindicatorbar.querySelectorAll('.pageindicator');
-        if (event.deltaY > 0) {
+        if (event.deltaY < 0) {
             if (selectedpage > 1) {
                 selectedpage--;
                 const currentPage = document.getElementById(`page${selectedpage}`);
@@ -331,7 +331,7 @@ window.addEventListener('wheel', (event) => {
                 });
                 document.getElementById(`pageindicator${selectedpage }`).classList = "pageindicator"
             }
-        } else if (event.deltaY < 0) {
+        } else if (event.deltaY > 0) {
             if (selectedpage < amountofpages) {
                 selectedpage++;
                 const currentPage = document.getElementById(`page${selectedpage}`);
