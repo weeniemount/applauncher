@@ -12,6 +12,7 @@ createConfigIfNeeded();
 
 const globalWebPreferences = {
   preload: path.join(__dirname, 'preload.js'), // Set up preload to enable secure communication
+  contextIsolation: true,
   nodeIntegration: false,
   experimentalFeatures: false,
   serviceWorkers: false,
@@ -19,7 +20,7 @@ const globalWebPreferences = {
   webSecurity: false,
   enableRemoteModule: false,
   webviewTag: false,
-  sandbox: true,
+  sandbox: false,
   backgroundThrottling: false,
   offscreen: false,
   devTools: true, // Disable DevTools
