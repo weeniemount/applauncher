@@ -103,6 +103,19 @@ const createWindow = () => {
       window: win,
     });
   });
+
+  ipcMain.on('context-options-app', (event, appname) => {
+    const contextoptions = Menu.buildFromTemplate([
+      { label: 'Create shortcuts...', click: () => event.sender.send('context-options-command-app', 'shortcuts', appname) },
+      { type: 'separator'},
+      { label: 'Uninstall...', click: () => event.sender.send('context-options-command-app', 'uninstall', appname) },
+      { label: 'App info', click: () => event.sender.send('context-options-command-app', 'appinfo', appname) },
+    ]);
+  
+    contextoptions.popup({
+      window: win,
+    });
+  });
 };
 
 // html to main communication

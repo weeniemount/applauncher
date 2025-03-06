@@ -121,6 +121,11 @@ async function refreshapps(config) {
             appText.id = "apptext";
             appText.textContent = app[0];
 
+            appDiv.oncontextmenu = function(e) {
+                e.preventDefault();
+                window.electron.showAppContextMenu(app[0]);
+            }
+
             appDiv.appendChild(appIcon)
             appDiv.appendChild(appText);
 
@@ -374,6 +379,14 @@ window.electron.onHamburgerMenuCommand((command) => {
         window.electron.openLink("https://support.google.com/chrome_webstore/?p=cws_app_launcher")
     } else if (command === 'choosecrx') {
         window.electron.installCrx()
+    }
+});
+
+window.electron.onAppContextMenuCommand((command, appname) => {
+    console.log(`Context menu command received: ${command}`);
+
+    if (command === 'appinfo') {
+        alert(appname)
     }
 });
 
