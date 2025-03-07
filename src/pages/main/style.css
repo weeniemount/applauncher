@@ -47,7 +47,6 @@ body {
     background-color: #b4b4b4;
 }
 
-
 .pageindicator.disabled:active:hover {
     background-color: #e2e2e2;
 }
@@ -59,6 +58,64 @@ body {
 .dark #searchbar {
     background-color: #444444;
     border-bottom: 1px solid #555555;
+}
+
+#appinfo {
+    background-color: #f2f2f2;
+    width: 400px;
+    height: 500px;
+}
+
+#appinfoicon {
+    width: 64px;
+    height: 64px;
+    position: absolute;
+    top: 9px;
+    left: 13px;
+}
+
+#appinfoheader {
+    position: absolute;
+    height: 82px;
+    width: 100%;
+    border-bottom: 1px solid #c0c0c0;
+}
+
+#appinfotext {
+    position: absolute;
+    margin-top: 37px;
+    margin-bottom: 34px;
+    margin-left: 86px;
+    font-size: 15px;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+#appinfooverview {
+    position: absolute;
+    margin-top: 102px;
+    left: 20px;
+    font-size: 16px;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+#appinfooverviewbody {
+    position: absolute;
+    margin-top: 130px;
+    left: 20px;
+    font-size: 14px;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+#appinfofooter {
+    bottom: 0px;
+    position: absolute;
+    height: 50px;
+    width: 100%;
+    border-top: 1px solid #c0c0c0;
+}
+
+.dark #appinfo {
+    background-color: #333333;
 }
 
 #searchbarfield {

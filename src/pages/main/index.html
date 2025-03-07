@@ -7,8 +7,25 @@
         <link rel="stylesheet" href="style.css" />
         <script src="../../preload.js" defer></script>
         <link rel="preload" href="images/hamburgerhover.png" as="image" />
+        <link rel="stylesheet" href="../../resources/chrome_ui.css" />
     </head>
     <body>
+        <div id="imagepreload-genericbutton"></div>
+        <div id="appinfo" hidden>
+            <img src="images/appinfox.png" style="position: absolute; top: 14px; right: 13px;" alt="">
+            <div id="appinfoheader">
+                <img id="appinfoicon" src="../../defaultapps/noicon.png">
+                <p id="appinfotext">Test App</p>
+            </div>
+            <div id="appinfobody">
+                <p id="appinfooverview">Overview</p>
+                <p id="appinfooverviewbody">Size: < 1 MB<br>Version: 1.0</p>
+            </div>
+            <div id="appinfofooter">
+                <button class="genericbutton" style="position: absolute; left: 15px; top: 9px; width: 127px; height: 33px;">Create Shortcuts...</button>
+                <button class="genericbutton" style="position: absolute; left: 149px; top: 9px; width: 78px; height: 33px;">Remove...</button>
+            </div>
+        </div>
         <div id="applauncherbody">
             <div id="searchbar">
                 <img id="searchicon" src="images/search.png" alt="Search" />
