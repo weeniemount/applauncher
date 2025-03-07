@@ -43,6 +43,15 @@ body {
     margin: 0 9px;
 }
 
+.pageindicator.disabled:hover {
+    background-color: #b4b4b4;
+}
+
+
+.pageindicator.disabled:active:hover {
+    background-color: #e2e2e2;
+}
+
 .pageindicator.disabled {
     background-color: #e2e2e2;
 }

@@ -14,7 +14,22 @@ async function applyconfig() {
     closeonapp = config.closeonapp
 
     refreshapps(config)
+    resizePageIndicators();
 }
+
+function pageswap(page) {
+    selectedpage = page
+    for (let i = 1; i <= amountofpages; i++) {
+        if (i == page) {
+            document.getElementById(`page${i}`).style.display = "flex"
+            document.getElementById(`pageindicator${i}`).classList = "pageindicator"
+        } else {
+            document.getElementById(`page${i}`).style.display = "none"
+            document.getElementById(`pageindicator${i}`).classList = "pageindicator disabled"
+        }
+    }
+}
+
 
 async function refreshapps(config) {
     document.getElementById("pages").innerHTML = ""
@@ -164,8 +179,8 @@ async function refreshapps(config) {
                 page++
                 amountofpages++
                 document.getElementById("pages").insertAdjacentHTML(`beforeend`, `<div class="page" id="page${page}" style="display: none;"></div>`)
-                if (page == 2) {document.getElementById("pageindicatorbar").insertAdjacentHTML("beforeend", `<div id="pageindicator1" class="pageindicator">`)}
-                document.getElementById("pageindicatorbar").insertAdjacentHTML("beforeend", `<div id="pageindicator${page}" class="pageindicator disabled">`)
+                if (page == 2) {document.getElementById("pageindicatorbar").insertAdjacentHTML("beforeend", `<div id="pageindicator1" onclick="pageswap(1)" class="pageindicator">`)}
+                document.getElementById("pageindicatorbar").insertAdjacentHTML("beforeend", `<div id="pageindicator${page}" onclick="pageswap(${page})" class="pageindicator disabled">`)
                 appsContent = document.getElementById(`page${page}`)
                 appsContent.appendChild(appDiv);
                 appsrollover = 1
@@ -352,6 +367,23 @@ window.addEventListener('wheel', (event) => {
         }
     }
 });
+
+function resizePageIndicators() {
+    const pageIndicatorBar = document.getElementById('pageindicatorbar');
+    const pageIndicators = document.querySelectorAll('.pageindicator');
+    const pageCount = pageIndicators.length;
+
+    if (pageCount >= 5) {
+        let newWidth = 48;
+        if (pageCount > 4) {
+            newWidth -= (pageCount - 5) * 8;
+        }
+
+        pageIndicators.forEach(indicator => {
+            indicator.style.width = `${newWidth}px`;
+        });
+    }
+}
 
 // electron stuff
 
