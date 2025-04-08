@@ -12,6 +12,32 @@ img {
     user-select: none;    /* Prevent selection */
 }
 
+#titlebar {
+    position: absolute;
+    background-color: #808281;
+    height: 36px;
+    width: 400px;
+    z-index: 9999;
+    top: 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-image: url("images/titlebar/repeat.png");
+    background-repeat: repeat; /* Ensures the image repeats infinitely */
+    background-size: auto; /* Keeps the original size of the image */
+}
+
+#titlebar-buttons {
+    display: flex;
+    margin-right: 0px; /* Add some padding from the right edge */
+}
+
+#titlebarbutton {
+    width: 36px; /* Adjust button size if needed */
+    height: 36px;
+    cursor: pointer;
+}
+
 #applauncherbody {
     user-select: none;
     margin: 0;

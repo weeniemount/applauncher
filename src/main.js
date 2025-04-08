@@ -48,11 +48,12 @@ const createWindow = () => {
     canary: 'icons/linux/canary.png',
     chromium: 'icons/linux/chromium.png',
   };
-  const win = new BrowserWindow({
+  let win = new BrowserWindow({
     width: 400,
     height: 500,
     frame: config["titlebar"],
     autoHideMenuBar: true,
+    transparent: true,
     resizable: false,
     icon: path.join(__dirname, isLinux ? (iconMapLinux[config.appicon] || iconMapLinux.default) : (iconMapWin[config.appicon] || iconMapWin.default)),
     webPreferences: globalWebPreferences
@@ -73,6 +74,9 @@ const createWindow = () => {
     win.center()
   }
 
+  if (config["chromeostitlebar"]) {
+    win.setSize(400, 536)
+  }
 
 
   win.loadFile('src/pages/main/index.html');

@@ -17,6 +17,16 @@ async function applyconfig() {
     resizePageIndicators();
 }
 
+async function titlebar() {
+    let winconfig = await window.electron.getConfig()
+    if (winconfig["chromeostitlebar"] === true) {
+        document.getElementById("applauncherbody").style.marginTop = "36px"
+        document.getElementById("appinfo").style.marginTop = "36px"
+    }
+}
+
+titlebar()
+
 function pageswap(page) {
     selectedpage = page
     for (let i = 1; i <= amountofpages; i++) {
