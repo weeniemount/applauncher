@@ -23,6 +23,14 @@ async function titlebar() {
         document.getElementById("titlebar").style.display = "flex"
         document.getElementById("applauncherbody").style.marginTop = "36px"
         document.getElementById("appinfo").style.marginTop = "36px"
+
+        document.getElementById("applauncherbody").style.borderLeft = "#373837 1px solid"
+        document.getElementById("applauncherbody").style.borderRight = "#373837 1px solid"
+        document.getElementById("applauncherbody").style.borderBottom = "#373837 1px solid"
+
+        document.getElementById("searchicon").style.marginTop = "36px"
+        document.getElementById("searchbarurl").style.marginTop = "36px"
+        document.getElementById("hamburgermenu").style.marginTop = "36px"
     }
 }
 
