@@ -41,6 +41,12 @@ img {
     cursor: pointer;
 }
 
+#titlebarbutton:hover {
+    /* Combine all filter effects in one property */
+    filter: sepia(1) saturate(5) hue-rotate(90deg) brightness(0.7);
+}
+
+
 #applauncherbody {
     box-sizing: border-box;
     user-select: none;
