@@ -75,7 +75,7 @@ const createWindow = () => {
   }
 
   if (config["chromeostitlebar"]) {
-    win.setSize(800, 536)
+    win.setSize(400, 536)
   }
 
 
