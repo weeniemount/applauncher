@@ -19,6 +19,7 @@ async function setvalues() {
     document.getElementById(loadconfig.startpos).checked = true
     document.getElementById("xoffset").value = loadconfig.startoffsetx
     document.getElementById("yoffset").value = loadconfig.startoffsety
+    document.getElementById("chromeostitlebarbox").checked = loadconfig.chromeostitlebar
 }
 
 titlebar.addEventListener('change', async (event) => {
@@ -66,6 +67,15 @@ showbrowserapp.addEventListener('change', async (event) => {
     window.electron.launcherRefreshConfig();
 });
 
+
+document.getElementById("chromeostitlebarbox").addEventListener('change', async (event) => {
+    const isChecked = event.target.checked;
+    
+    var config = await window.electron.getConfig()
+    config.chromeostitlebar = isChecked
+    window.electron.updateConfig(config)
+});
+
 resetapps.addEventListener('click', async () => {
     var config = await window.electron.getConfig()
     var defaultconfig = await window.electron.getDefaultConfig()
@@ -77,6 +87,7 @@ resetapps.addEventListener('click', async () => {
     window.electron.launcherRefreshConfig();
     appstable()
 })
+
 
 document.getElementById("xoffset").addEventListener('input', async function() {
     var config = await window.electron.getConfig()
