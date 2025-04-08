@@ -3,6 +3,15 @@ body {
     padding: 0;
 }
 
+* {
+    user-select: none;
+}
+
+img {
+    pointer-events: none; /* Prevent interaction with images */
+    user-select: none;    /* Prevent selection */
+}
+
 #applauncherbody {
     user-select: none;
     margin: 0;

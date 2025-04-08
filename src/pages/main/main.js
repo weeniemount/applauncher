@@ -414,11 +414,42 @@ window.electron.onHamburgerMenuCommand((command) => {
     }
 });
 
-window.electron.onAppContextMenuCommand((command, appname) => {
+window.electron.onAppContextMenuCommand(async (command, appname) => {
     console.log(`Context menu command received: ${command}`);
 
+    let appinfoicon = document.getElementById("appinfoicon")
+
     if (command === 'appinfo') {
-        alert(appname)
+        let config = await window.electron.getConfig()
+        for (const app of config.apps) {
+            if (app[0] == appname) {
+                if (app[1] === "builtinimage") {
+                    appinfoicon.src = app[2];
+                    appinfoicon.style.objectFit = "fill"
+                } else if (app[1] === "localimage") {
+                    const editedstring = app[2].replace(/\\/g, '/');
+                    const image = await window.electron.getImage(editedstring);
+                    if (image.includes("|SVG|")) {
+                        appinfoicon.src = `data:image/svg+xml;base64,${image.replace("|SVG|", "")}`;
+                    }
+                    else {
+                        appinfoicon.src = `data:image/png;base64,${image}`;
+                    }
+                    appIcon.style.objectFit = "fill"
+                } else if (app[1] === "crxicon") {
+                    const image = await window.electron.getCrxImage(app[2], app[4]);
+                    appinfoicon.src = `data:image/png;base64,${image}`;
+                    appIcon.style.objectFit = "fill"
+                } else if (app[1] === "noicon") {
+                    appinfoicon.src = '../../defaultapps/noicon.png';
+                    appIcon.style.objectFit = "fill"
+                }
+            }
+            console.error(`App ${appname} not found in config`);
+        }
+        document.getElementById("appinfo").style.display = "block"
+        document.getElementById("appinfotext").innerHTML = appname
+        document.getElementById("applauncherbody").style.display = "none"
     }
 });
 
