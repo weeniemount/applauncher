@@ -8,7 +8,6 @@ body {
 }
 
 img {
-    pointer-events: none; /* Prevent interaction with images */
     user-select: none;    /* Prevent selection */
 }
 
@@ -25,11 +24,13 @@ img {
     background-image: url("images/titlebar/repeat.png");
     background-repeat: repeat; /* Ensures the image repeats infinitely */
     background-size: auto; /* Keeps the original size of the image */
+    -webkit-app-region: drag; /* Allow dragging the window */
 }
 
 #titlebar-buttons {
     display: flex;
     margin-right: 0px; /* Add some padding from the right edge */
+    -webkit-app-region: no-drag; /* Prevents buttons from being draggable */
 }
 
 #titlebarbutton {

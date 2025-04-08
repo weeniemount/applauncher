@@ -75,11 +75,25 @@ const createWindow = () => {
   }
 
   if (config["chromeostitlebar"]) {
-    win.setSize(400, 536)
+    win.setSize(800, 536)
   }
 
 
   win.loadFile('src/pages/main/index.html');
+
+  ipcMain.on('window-action', (event, action) => {
+    if (action === 'minimize') {
+      win.minimize();
+    } else if (action === 'maximize') {
+      if (win.isMaximized()) {
+        win.unmaximize();
+      } else {
+        win.maximize();
+      }
+    } else if (action === 'close') {
+      win.close();
+    }
+  });
 
   ipcMain.on('launcher-refreshconfig', () => {
     // Logic to refresh or fetch updated config

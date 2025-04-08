@@ -28,6 +28,16 @@ async function titlebar() {
 
 titlebar()
 
+document.getElementById("close").onclick = function() {
+    window.electron.windowAction("close")
+}
+document.getElementById("minimize").onclick = function() {
+    window.electron.windowAction("minimize")
+}
+document.getElementById("maximize").onclick = function() {
+    window.electron.windowAction("maximize")
+}
+
 function pageswap(page) {
     selectedpage = page
     for (let i = 1; i <= amountofpages; i++) {
