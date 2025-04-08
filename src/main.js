@@ -53,7 +53,7 @@ const createWindow = () => {
     height: 500,
     frame: config["titlebar"],
     autoHideMenuBar: true,
-    transparent: true,
+    transparent: config["chromeostitlebar"],
     resizable: false,
     icon: path.join(__dirname, isLinux ? (iconMapLinux[config.appicon] || iconMapLinux.default) : (iconMapWin[config.appicon] || iconMapWin.default)),
     webPreferences: globalWebPreferences

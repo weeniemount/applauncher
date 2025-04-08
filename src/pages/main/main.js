@@ -20,6 +20,7 @@ async function applyconfig() {
 async function titlebar() {
     let winconfig = await window.electron.getConfig()
     if (winconfig["chromeostitlebar"] === true) {
+        document.getElementById("titlebar").style.display = "flex"
         document.getElementById("applauncherbody").style.marginTop = "36px"
         document.getElementById("appinfo").style.marginTop = "36px"
     }
