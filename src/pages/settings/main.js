@@ -16,6 +16,16 @@ async function titlebarfunc(config) {
     }
 }
 
+document.getElementById("close").onclick = function() {
+    window.electron.windowAction("close", "settings")
+}
+document.getElementById("minimize").onclick = function() {
+    window.electron.windowAction("minimize", "settings")
+}
+document.getElementById("maximize").onclick = function() {
+    window.electron.windowAction("maximize", "settings")
+}
+
 async function setvalues() {
     let loadconfig = await window.electron.getConfig()
 

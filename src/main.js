@@ -32,6 +32,20 @@ const globalWebPreferences = {
   disableBlinkFeatures: "Auxclick,BackspaceDefaultHandler,Gamepad,KeyboardEventKey,Notification,PointerEvent,TouchEvent,WebAnimationsAPI,WebBluetooth,WebUSB,WebVR", // Disable unnecessary Blink features
 }
 
+function windowAction(action, win) {
+  if (action === 'minimize') {
+    win.minimize();
+  } else if (action === 'maximize') {
+    if (win.isMaximized()) {
+      win.unmaximize();
+    } else {
+      win.maximize();
+    }
+  } else if (action === 'close') {
+    win.close();
+  }
+}
+
 const isLinux = process.platform === 'linux';
 const createWindow = () => {
   const config = readConfig()
@@ -81,17 +95,9 @@ const createWindow = () => {
 
   win.loadFile('src/pages/main/index.html');
 
-  ipcMain.on('window-action', (event, action) => {
-    if (action === 'minimize') {
-      win.minimize();
-    } else if (action === 'maximize') {
-      if (win.isMaximized()) {
-        win.unmaximize();
-      } else {
-        win.maximize();
-      }
-    } else if (action === 'close') {
-      win.close();
+  ipcMain.on('window-action', (event, action, window) => {
+    if (window === 'launcher') {
+      windowAction(action, win);
     }
   });
 
@@ -286,6 +292,12 @@ ipcMain.on('open-settings', () => {
     name: "Settings",
     icon: path.join(__dirname, 'icons/settings.ico'),
     webPreferences: globalWebPreferences
+  });
+
+  ipcMain.on('window-action', (event, action, window) => {
+    if (window === 'settings') {
+      windowAction(action, win);
+    }
   });
 
   win.loadFile('src/pages/settings/index.html');

@@ -37,13 +37,13 @@ async function titlebar() {
 titlebar()
 
 document.getElementById("close").onclick = function() {
-    window.electron.windowAction("close")
+    window.electron.windowAction("close", "launcher")
 }
 document.getElementById("minimize").onclick = function() {
-    window.electron.windowAction("minimize")
+    window.electron.windowAction("minimize", "launcher")
 }
 document.getElementById("maximize").onclick = function() {
-    window.electron.windowAction("maximize")
+    window.electron.windowAction("maximize", "launcher")
 }
 
 function pageswap(page) {
