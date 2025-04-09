@@ -232,6 +232,43 @@
     filter: sepia(1) saturate(5) hue-rotate(90deg) brightness(0.7);
 }
 
+/* Add a background image for the minimize button */
+#minimize {
+    background-image: url('titlebar/minimize.png');
+    border: none;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+}
+
+#minimize:hover {
+    background-image: url('titlebar/minimize-hover.png');
+}
+
+#maximize {
+    background-image: url('titlebar/maximize.png');
+    border: none;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+}
+
+#maximize:hover {
+    background-image: url('titlebar/maximize-hover.png');
+}
+
+#close {
+    background-image: url('titlebar/close.png');
+    border: none;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+}
+
+#close:hover {
+    background-image: url('titlebar/close-hover.png');
+}
+
 /* titlebar */
 
 /* IMAGE PRELOAD */
