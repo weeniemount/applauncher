@@ -294,6 +294,10 @@ ipcMain.on('open-settings', () => {
     webPreferences: globalWebPreferences
   });
 
+  if (config["chromeostitlebar"]) {
+    win.setSize(770, 586)
+  }
+
   ipcMain.on('window-action', (event, action, window) => {
     if (window === 'settings') {
       windowAction(action, win);

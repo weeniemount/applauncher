@@ -42,9 +42,6 @@ document.getElementById("close").onclick = function() {
 document.getElementById("minimize").onclick = function() {
     window.electron.windowAction("minimize", "launcher")
 }
-document.getElementById("maximize").onclick = function() {
-    window.electron.windowAction("maximize", "launcher")
-}
 
 function pageswap(page) {
     selectedpage = page
