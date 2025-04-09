@@ -65,9 +65,9 @@ const createWindow = () => {
   let win = new BrowserWindow({
     width: 400,
     height: 500,
-    frame: config["titlebar"],
+    frame: config["titlebar"] && !config["chromeostitlebar"],
     autoHideMenuBar: true,
-    transparent: config["chromeostitlebar"],
+    transparent: config["chromeostitlebar"] && config["titlebar"],
     resizable: false,
     icon: path.join(__dirname, isLinux ? (iconMapLinux[config.appicon] || iconMapLinux.default) : (iconMapWin[config.appicon] || iconMapWin.default)),
     webPreferences: globalWebPreferences
@@ -88,7 +88,7 @@ const createWindow = () => {
     win.center()
   }
 
-  if (config["chromeostitlebar"]) {
+  if (config["chromeostitlebar"] && config["titlebar"]) {
     win.setSize(400, 536)
   }
 
