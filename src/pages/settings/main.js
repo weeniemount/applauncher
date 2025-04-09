@@ -5,9 +5,21 @@ let darkmode = document.getElementById("darkmode")
 let resetapps = document.getElementById("resetapps")
 let showbrowserapp = document.getElementById("showbrowserapp")
 
+async function titlebarfunc(config) {
+    if (config["chromeostitlebar"] === true) {
+        document.getElementById("chrome-titlebar").style.display = "flex"
+        document.getElementById("settingsbox").style.marginTop = "36px"
+
+        document.getElementById("settingsbox").style.borderLeft = "#373837 1px solid"
+        document.getElementById("settingsbox").style.borderRight = "#373837 1px solid"
+        document.getElementById("settingsbox").style.borderBottom = "#373837 1px solid"
+    }
+}
+
 async function setvalues() {
     let loadconfig = await window.electron.getConfig()
 
+    titlebarfunc(loadconfig)
     titlebar.checked = loadconfig.titlebar
     closelauncher.checked = loadconfig.closeonapp
     darkmode.checked = loadconfig.darkmode

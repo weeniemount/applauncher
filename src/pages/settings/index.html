@@ -8,74 +8,85 @@
         <script src="../../preload.js" defer></script>
     </head>
     <body>
-        <p id="settings">Settings</p>
-        <input type="text" id="search" placeholder="Search settings">
-        <div id="imagepreload-checkbox"></div>
-        <div id="imagepreload-genericbutton"></div>
-        <div id="imagepreload-radio"></div>
-        <hr id="seperator">
-        <div style="height: 75px;"></div>
-        <div style="margin-left: 23px;">
-            <p id="settingheading">General</p><br>
-                <p>Enable title bar for App Launcher: </p><input type="checkbox" id="titlebarbox" class="chromecheckbox"><br>
-                <p>Enable Chrome OS style title bar for App Launcher: </p><input type="checkbox" id="chromeostitlebarbox" class="chromecheckbox"><br>
-                <p>Close App Launcher after launching an app: </p><input type="checkbox" id="closelauncher" class="chromecheckbox"><br>
-                <p>App Launcher start position:</p><br>
-                <input type="radio" class="chromeradio" name="startpos" id="center" onchange="startposradio()" checked>Center<br>
-                <input type="radio" class="chromeradio" name="startpos" id="lefttop" onchange="startposradio()">Left Top<br>
-                <input type="radio" class="chromeradio" name="startpos" id="leftbottom" onchange="startposradio()">Left Bottom<br>
-                <input type="radio" class="chromeradio" name="startpos" id="righttop" onchange="startposradio()">Right Top<br>
-                <input type="radio" class="chromeradio" name="startpos" id="rightbottom" onchange="startposradio()">Right Bottom<br>
-                <p>Start position X offset:</p> <input type="number" id="xoffset" placeholder="X offset..."><br>
-                <p>Start position Y offset:</p> <input type="number" id="yoffset" placeholder="Y offset...">
-                <hr>
+        <div id="chrome-titlebar" style="display: none;">
+            <img src="../../resources/titlebar/left.png">
+            <div id="titlebar-buttons">
+                <img src="../../resources/titlebar/minimize.png" id= "minimize" alt="" id="titlebarbutton">
+                <img src="../../resources/titlebar/inbetween.png">
+                <img src="../../resources/titlebar/maximize.png" id="maximize" alt="" id="titlebarbutton">
+                <img src="../../resources/titlebar/close.png" id="close" alt="" id="titlebarbutton">
+            </div>
+        </div>
+        <div id="settingsbox">
+            <p id="settings">Settings</p>
+            <input type="text" id="search" placeholder="Search settings">
+            <div id="imagepreload-checkbox"></div>
+            <div id="imagepreload-genericbutton"></div>
+            <div id="imagepreload-radio"></div>
+            <hr id="seperator">
+            <div style="height: 75px;"></div>
+            <div style="margin-left: 23px;">
+                <p id="settingheading">General</p><br>
+                    <p>Enable title bar for App Launcher: </p><input type="checkbox" id="titlebarbox" class="chromecheckbox"><br>
+                    <p>Enable Chrome OS style title bar for App Launcher: </p><input type="checkbox" id="chromeostitlebarbox" class="chromecheckbox"><br>
+                    <p>Close App Launcher after launching an app: </p><input type="checkbox" id="closelauncher" class="chromecheckbox"><br>
+                    <p>App Launcher start position:</p><br>
+                    <input type="radio" class="chromeradio" name="startpos" id="center" onchange="startposradio()" checked>Center<br>
+                    <input type="radio" class="chromeradio" name="startpos" id="lefttop" onchange="startposradio()">Left Top<br>
+                    <input type="radio" class="chromeradio" name="startpos" id="leftbottom" onchange="startposradio()">Left Bottom<br>
+                    <input type="radio" class="chromeradio" name="startpos" id="righttop" onchange="startposradio()">Right Top<br>
+                    <input type="radio" class="chromeradio" name="startpos" id="rightbottom" onchange="startposradio()">Right Bottom<br>
+                    <p>Start position X offset:</p> <input type="number" id="xoffset" placeholder="X offset..."><br>
+                    <p>Start position Y offset:</p> <input type="number" id="yoffset" placeholder="Y offset...">
+                    <hr>
 
-            <p id="settingheading">Customization</p><br>
-                <p>Dark Mode: </p><input type="checkbox" id="darkmode" class="chromecheckbox"><br>
-                <p>App Launcher taskbar icon:</p><br>
-                <input type="radio" class="chromeradio" name="appicon" id="default" onchange="appiconradio()" checked>Default<br>
-                <input type="radio" class="chromeradio" name="appicon" id="canary" onchange="appiconradio()">Canary<br>
-                <input type="radio" class="chromeradio" name="appicon" id="chromium" onchange="appiconradio()">Chromium<br>
-                <p>Show "Browser" App: </p><input type="checkbox" id="showbrowserapp" class="chromecheckbox"><br>
-                <p>"Browser" icon</p><br>
-                <input type="radio" class="chromeradio" name="browsericon" id="chrome" onchange="browsericonradio()" checked>Chrome<br>
-                <input type="radio" class="chromeradio" name="browsericon" id="firefox" onchange="browsericonradio()">Firefox<br>
-                <input type="radio" class="chromeradio" name="browsericon" id="chromium" onchange="browsericonradio()">Chromium<br>
-                <hr>
-            
-            <p id="settingheading">Apps</p><br>
-                <p>Default Apps icon era:</p><br>
-                <input type="radio" class="chromeradio" name="defaulticonera" id="2015" onchange="defaulticonera()" checked>2015<br>
-                <input type="radio" class="chromeradio" name="defaulticonera" id="2013" onchange="defaulticonera()">2013<br>
-                <input type="radio" class="chromeradio" name="defaulticonera" id="2011" onchange="defaulticonera()">2011<br>
-                <p>Chromium Web Store icon: </p><input type="checkbox" id="chromiumwebstoreicon" class="chromecheckbox"><br>
-                <p>Add default apps:</p>
-                <button class="genericbutton" onclick="addoptionalapp('webstore')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/webstore/icon_256.png"></button>
-                <button class="genericbutton" onclick="addoptionalapp('docs')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/docs/icon_128.png"></button>
-                <button class="genericbutton" onclick="addoptionalapp('drive')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/drive/icon_128.png"></button>
-                <button class="genericbutton" onclick="addoptionalapp('gmail')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/gmail/icon_128.png"></button>
-                <button class="genericbutton" onclick="addoptionalapp('search')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/search/icon_128.png"></button>
-                <button class="genericbutton" onclick="addoptionalapp('youtube')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/youtube/icon_128.png"></button>
-                <br>
-                <p>Add optional apps:</p>
-                <button class="genericbutton" onclick="addoptionalapp('slides')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/slides/icon_128.png"></button>
-                <button class="genericbutton" onclick="addoptionalapp('sheets')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/sheets/icon_128.png"></button>
-                <button class="genericbutton" onclick="addoptionalapp('keep')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/keep/icon_128.png"></button>
-                <br>
-                <table id="apptable" border="1">
-                    <thead>
-                        <tr>
-                            <th>App Name</th>
-                            <th>App Link/Path/ID</th>
-                            <th>App Icon</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- rows will be added here -->
-                    </tbody>
-                </table><br>
-                <button class="genericbutton" id="resetapps" style="height: 35px; width: 140px;">Reset apps to default</button>
+                <p id="settingheading">Customization</p><br>
+                    <p>Dark Mode: </p><input type="checkbox" id="darkmode" class="chromecheckbox"><br>
+                    <p>App Launcher taskbar icon:</p><br>
+                    <input type="radio" class="chromeradio" name="appicon" id="default" onchange="appiconradio()" checked>Default<br>
+                    <input type="radio" class="chromeradio" name="appicon" id="canary" onchange="appiconradio()">Canary<br>
+                    <input type="radio" class="chromeradio" name="appicon" id="chromium" onchange="appiconradio()">Chromium<br>
+                    <p>Show "Browser" App: </p><input type="checkbox" id="showbrowserapp" class="chromecheckbox"><br>
+                    <p>"Browser" icon</p><br>
+                    <input type="radio" class="chromeradio" name="browsericon" id="chrome" onchange="browsericonradio()" checked>Chrome<br>
+                    <input type="radio" class="chromeradio" name="browsericon" id="firefox" onchange="browsericonradio()">Firefox<br>
+                    <input type="radio" class="chromeradio" name="browsericon" id="chromium" onchange="browsericonradio()">Chromium<br>
+                    <hr>
+                
+                <p id="settingheading">Apps</p><br>
+                    <p>Default Apps icon era:</p><br>
+                    <input type="radio" class="chromeradio" name="defaulticonera" id="2015" onchange="defaulticonera()" checked>2015<br>
+                    <input type="radio" class="chromeradio" name="defaulticonera" id="2013" onchange="defaulticonera()">2013<br>
+                    <input type="radio" class="chromeradio" name="defaulticonera" id="2011" onchange="defaulticonera()">2011<br>
+                    <p>Chromium Web Store icon: </p><input type="checkbox" id="chromiumwebstoreicon" class="chromecheckbox"><br>
+                    <p>Add default apps:</p>
+                    <button class="genericbutton" onclick="addoptionalapp('webstore')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/webstore/icon_256.png"></button>
+                    <button class="genericbutton" onclick="addoptionalapp('docs')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/docs/icon_128.png"></button>
+                    <button class="genericbutton" onclick="addoptionalapp('drive')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/drive/icon_128.png"></button>
+                    <button class="genericbutton" onclick="addoptionalapp('gmail')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/gmail/icon_128.png"></button>
+                    <button class="genericbutton" onclick="addoptionalapp('search')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/search/icon_128.png"></button>
+                    <button class="genericbutton" onclick="addoptionalapp('youtube')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/youtube/icon_128.png"></button>
+                    <br>
+                    <p>Add optional apps:</p>
+                    <button class="genericbutton" onclick="addoptionalapp('slides')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/slides/icon_128.png"></button>
+                    <button class="genericbutton" onclick="addoptionalapp('sheets')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/sheets/icon_128.png"></button>
+                    <button class="genericbutton" onclick="addoptionalapp('keep')" style="height: 35px; width: 35px;"><img style="width: 25px;" src="../../defaultapps/keep/icon_128.png"></button>
+                    <br>
+                    <table id="apptable" border="1">
+                        <thead>
+                            <tr>
+                                <th>App Name</th>
+                                <th>App Link/Path/ID</th>
+                                <th>App Icon</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- rows will be added here -->
+                        </tbody>
+                    </table><br>
+                    <button class="genericbutton" id="resetapps" style="height: 35px; width: 140px;">Reset apps to default</button>
+            </div>
         </div>
         <script src="main.js"></script>
     </body>

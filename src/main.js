@@ -276,10 +276,12 @@ ipcMain.on('open-program', (event, program) => {
 });
 
 ipcMain.on('open-settings', () => {
+  const config = readConfig()
   const win = new BrowserWindow({
     width: 770,
     height: 550,
-    frame: true,
+    frame: !config["chromeostitlebar"],
+    transparent: config["chromeostitlebar"],
     autoHideMenuBar: true,
     name: "Settings",
     icon: path.join(__dirname, 'icons/settings.ico'),
