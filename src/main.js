@@ -11,6 +11,9 @@ const { openCrxApp, chooseAndExtractCrx, sampleCrxInstall } = require('./crx.js'
 
 createConfigIfNeeded();
 
+app.commandLine.appendSwitch('disable-crash-reporter');
+
+
 const globalWebPreferences = {
   preload: path.join(__dirname, 'preload.js'), // Set up preload to enable secure communication
   contextIsolation: true,
@@ -21,7 +24,7 @@ const globalWebPreferences = {
   webSecurity: false,
   enableRemoteModule: false,
   webviewTag: false,
-  sandbox: false,
+  sandbox: true,
   backgroundThrottling: false,
   offscreen: false,
   devTools: true, // Disable DevTools
@@ -31,6 +34,7 @@ const globalWebPreferences = {
   accelerated2dCanvas: false, // Disable accelerated 2D canvas
   hardwareAcceleration: false, // Disable hardware acceleration
   disableBlinkFeatures: "Auxclick,BackspaceDefaultHandler,Gamepad,KeyboardEventKey,Notification,PointerEvent,TouchEvent,WebAnimationsAPI,WebBluetooth,WebUSB,WebVR", // Disable unnecessary Blink features
+  partition: 'nopersist',
 }
 
 function windowAction(action, window) {
