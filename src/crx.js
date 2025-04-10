@@ -150,7 +150,56 @@ async function chooseAndExtractCrx() {
       return "it went okay"
 }
 
+async function sampleCrxInstall() {
+    const crxpath = path.join(__dirname, "samplecrx", "PELIMFLKPJIICNAJDJCMEKPIOACMAHKH_1_2_0_0.crx")
+    const crxdata = fs.readFileSync(crxpath)
+    const jszipcrx = await JSZip.loadAsync(crxdata);
+
+    const extractPath = path.join(app.getPath('userData'), `installedcrx`, `PELIMFLKPJIICNAJDJCMEKPIOACMAHKH_1_2_0_0`);
+
+    if (!fs.existsSync(extractPath)) {
+        fs.mkdirSync(extractPath, { recursive: true });
+    }
+
+    for (const [relativePath, zipEntry] of Object.entries(jszipcrx.files)) {
+    const outputPath = path.join(extractPath, relativePath);
+
+    if (zipEntry.dir) {
+        fs.mkdirSync(outputPath, { recursive: true });
+    } else {
+        fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+        const content = await zipEntry.async("nodebuffer");
+        fs.writeFileSync(outputPath, content);
+        //console.log(`Extracted: ${outputPath}`);
+    }
+    }
+
+    const manifestPath = path.join(extractPath, 'manifest.json');
+    const manifestData = fs.readFileSync(manifestPath, 'utf8');
+    const manifest = JSON.parse(manifestData);
+
+    let iconpathvery = "noicon"
+    let appname
+
+    if (manifest.icons && typeof manifest.icons === 'object') {
+        const iconPaths = Object.values(manifest.icons);
+        if (iconPaths.length > 0) {
+            iconpathvery = iconPaths[0];
+        }
+    }
+    
+    appname = manifest.name
+    const config = await readConfig()
+
+    config.apps.push([appname, "crxicon", iconpathvery, "installedcrx", "PELIMFLKPJIICNAJDJCMEKPIOACMAHKH_1_2_0_0"])
+
+    updateConfig(config)
+    console.log("it went okay")
+    return "it went okay"
+}
+
 module.exports = {
     openCrxApp,
-    chooseAndExtractCrx
+    chooseAndExtractCrx,
+    sampleCrxInstall
 }

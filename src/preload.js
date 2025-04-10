@@ -48,5 +48,5 @@ contextBridge.exposeInMainWorld('electron', {
   windowAction: (action, window) => ipcRenderer.send('window-action', action, window),
   showAppContextMenu: (appname) => ipcRenderer.send('context-options-app', appname),
   onAppContextMenuCommand: (callback) => ipcRenderer.on('context-options-command-app', (event, command, appname) => callback(command, appname)),
-  dino: () => ipcRenderer.send('dino'),
+  addSampleCrx: () => ipcRenderer.send('add-sample-crx'),
 });

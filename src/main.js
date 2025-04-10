@@ -7,7 +7,7 @@ const JSZip = require('jszip');
 const { exec } = require('child_process');
 const { promisify } = require('util');
 const execPromise = promisify(exec);
-const { openCrxApp, chooseAndExtractCrx } = require('./crx.js');
+const { openCrxApp, chooseAndExtractCrx, sampleCrxInstall } = require('./crx.js');
 
 createConfigIfNeeded();
 
@@ -214,7 +214,9 @@ ipcMain.on('open-chrome-app', (event, crxId) => {
   openCrxApp(crxId)
 });
 
-
+ipcMain.on('add-sample-crx', (event) => {
+  sampleCrxInstall()
+});
 
 ipcMain.on('open-program', (event, program) => {
   const programtoopen = spawn(program, [], {
