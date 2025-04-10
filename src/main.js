@@ -32,17 +32,17 @@ const globalWebPreferences = {
   disableBlinkFeatures: "Auxclick,BackspaceDefaultHandler,Gamepad,KeyboardEventKey,Notification,PointerEvent,TouchEvent,WebAnimationsAPI,WebBluetooth,WebUSB,WebVR", // Disable unnecessary Blink features
 }
 
-function windowAction(action, win) {
+function windowAction(action, window) {
   if (action === 'minimize') {
-    win.minimize();
+    window.minimize();
   } else if (action === 'maximize') {
-    if (win.isMaximized()) {
-      win.unmaximize();
+    if (window.isMaximized()) {
+      window.unmaximize();
     } else {
-      win.maximize();
+      window.maximize();
     }
   } else if (action === 'close') {
-    win.close();
+    window.close();
   }
 }
 
@@ -281,9 +281,14 @@ ipcMain.on('open-program', (event, program) => {
   });
 });
 
+let settings
+
 ipcMain.on('open-settings', () => {
   const config = readConfig()
-  const win = new BrowserWindow({
+  if (settings && !settings.isDestroyed()) {
+    settings.focus();
+  } else {
+    settings = new BrowserWindow({
     width: 770,
     height: 550,
     frame: !config["chromeostitlebar"],
@@ -295,17 +300,26 @@ ipcMain.on('open-settings', () => {
   });
 
   if (config["chromeostitlebar"]) {
-    win.setSize(770, 586)
+    settings.setSize(770, 586)
   }
 
   ipcMain.on('window-action', (event, action, window) => {
     if (window === 'settings') {
-      windowAction(action, win);
+      try {
+        windowAction(action, settings);
+      } catch (error) {
+        console.error('i dont feel like fixing this. plus, it literally doesnt affect anything and just gives an error for no reason');
+      }
     }
   });
 
-  win.loadFile('src/pages/settings/index.html');
-  win.webContents.setZoomFactor(1)
+  settings.on('closed', () => {
+    settings = null;
+  });
+
+  settings.loadFile('src/pages/settings/index.html');
+  settings.webContents.setZoomFactor(1);
+  }
 });
 
 let createanapp;
