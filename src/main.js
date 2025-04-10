@@ -51,6 +51,17 @@ function windowAction(action, window) {
   }
 }
 
+let applauncher
+
+ipcMain.on('launcher-refreshconfig', () => {
+  refreshConfig()
+});
+
+async function refreshConfig() {
+  applauncher.webContents.send('launcher-refreshconfig');
+}
+
+
 const isLinux = process.platform === 'linux';
 const createWindow = () => {
   const config = readConfig()
@@ -67,7 +78,7 @@ const createWindow = () => {
     canary: 'icons/linux/canary.png',
     chromium: 'icons/linux/chromium.png',
   };
-  let win = new BrowserWindow({
+  applauncher = new BrowserWindow({
     width: 400,
     height: 500,
     frame: config["titlebar"] && !config["chromeostitlebar"],
@@ -79,40 +90,35 @@ const createWindow = () => {
   });
 
   if (config.startpos == "center") {
-    win.center()
-    win.setPosition(win.getPosition()[0] + config.startoffsetx, win.getPosition()[1] + config.startoffsety)
+    applauncher.center()
+    applauncher.setPosition(applauncher.getPosition()[0] + config.startoffsetx, applauncher.getPosition()[1] + config.startoffsety)
   } else if (config.startpos == "lefttop") {
-    win.setPosition(0 + config.startoffsetx, 0 + config.startoffsety)
+    applauncher.setPosition(0 + config.startoffsetx, 0 + config.startoffsety)
   } else if (config.startpos == "righttop") {
-    win.setPosition(width - 400 - config.startoffsetx, 0 + config.startoffsety)
+    applauncher.setPosition(width - 400 - config.startoffsetx, 0 + config.startoffsety)
   } else if (config.startpos == "leftbottom") {
-    win.setPosition(0 + config.startoffsetx, height - 500 - config.startoffsety + 40)
+    applauncher.setPosition(0 + config.startoffsetx, height - 500 - config.startoffsety + 40)
   } else if (config.startpos == "rightbottom") {
-    win.setPosition(width - 400 - config.startoffsetx, height - 500 - config.startoffsety + 40)
+    applauncher.setPosition(width - 400 - config.startoffsetx, height - 500 - config.startoffsety + 40)
   } else {
-    win.center()
+    applauncher.center()
   }
 
   if (config["chromeostitlebar"] && config["titlebar"]) {
-    win.setSize(400, 536)
+    applauncher.setSize(400, 536)
   }
 
 
-  win.loadFile('src/pages/main/index.html');
+  applauncher.loadFile('src/pages/main/index.html');
 
   ipcMain.on('window-action', (event, action, window) => {
     if (window === 'launcher') {
-      windowAction(action, win);
+      windowAction(action, applauncher);
     }
   });
 
-  ipcMain.on('launcher-refreshconfig', () => {
-    // Logic to refresh or fetch updated config
-    win.webContents.send('launcher-refreshconfig');
-  });
-
   ipcMain.on('launcher-close', () => {
-    win.close()
+    applauncher.close()
   });
 
   ipcMain.on('hamburger-options', (event) => {
@@ -129,7 +135,7 @@ const createWindow = () => {
     ]);
 
     hamburgeroptions.popup({
-      window: win,
+      window: applauncher,
     });
   });
 
@@ -142,7 +148,7 @@ const createWindow = () => {
     ]);
   
     contextoptions.popup({
-      window: win,
+      window: applauncher,
     });
   });
 };
@@ -218,8 +224,9 @@ ipcMain.on('open-chrome-app', (event, crxId) => {
   openCrxApp(crxId)
 });
 
-ipcMain.on('add-sample-crx', (event) => {
-  sampleCrxInstall()
+ipcMain.on('add-sample-crx', async (event) => {
+  await sampleCrxInstall()
+  refreshConfig()
 });
 
 ipcMain.on('open-program', (event, program) => {
@@ -399,7 +406,8 @@ ipcMain.handle('choose-program', async () => {
 });
 
 ipcMain.handle('choose-crx', async () => {
-  chooseAndExtractCrx()
+  await chooseAndExtractCrx()
+  refreshConfig()
 });
 
 app.whenReady().then(createWindow);
