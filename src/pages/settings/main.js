@@ -9,6 +9,7 @@ async function titlebarfunc(config) {
     if (config["chromeostitlebar"] === true) {
         document.getElementById("chrome-titlebar").style.display = "flex"
         document.getElementById("settingsbox").style.marginTop = "36px"
+        document.getElementById("settingsbox").style.height = "calc(100vh - 37px)"
 
         document.getElementById("settingsbox").style.borderLeft = "#373837 1px solid"
         document.getElementById("settingsbox").style.borderRight = "#373837 1px solid"
