@@ -23,6 +23,7 @@
   "build": {
     "appId": "com.weenie.applauncher",
     "productName": "App Launcher",
+    "executableName": "app-launcher",
     "compression": "maximum",
     "asar": true,
     "icon": "src/icons/applauncher.ico",
