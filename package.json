@@ -43,8 +43,13 @@
         "deb",
         "rpm"
       ],
-      "rpm": {
-        "depends": [
+      "category": "Utility"
+    },
+    "rpm": {
+      "fpm": [
+        "--iteration=1.0.0"
+      ],
+      "depends": [
           "gtk3",
           "libnotify",
           "nss",
@@ -54,13 +59,6 @@
           "at-spi2-core",
           "libuuid"
         ]
-      },
-      "category": "Utility"
-    },
-    "rpm": {
-      "fpm": [
-        "--iteration=1.0.0"
-      ]
     }
   }
 }
