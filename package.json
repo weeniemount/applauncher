@@ -43,7 +43,24 @@
         "deb",
         "rpm"
       ],
+      "rpm": {
+        "depends": [
+          "gtk3",
+          "libnotify",
+          "nss",
+          "libXScrnSaver",
+          "libXtst",
+          "xdg-utils",
+          "at-spi2-core",
+          "libuuid"
+        ]
+      },
       "category": "Utility"
+    },
+    "rpm": {
+      "fpm": [
+        "--iteration=1.0.0"
+      ]
     }
   }
 }
