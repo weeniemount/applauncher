@@ -9,7 +9,8 @@
   },
   "license": "ISC",
   "dependencies": {
-    "jszip": "^3.10.1"
+    "jszip": "^3.10.1",
+    "png-to-ico": "^2.1.8"
   },
   "devDependencies": {
     "electron": "^13.6.9",
@@ -51,15 +52,15 @@
         "--iteration=1.0.0"
       ],
       "depends": [
-          "gtk3",
-          "libnotify",
-          "nss",
-          "libXScrnSaver",
-          "libXtst",
-          "xdg-utils",
-          "at-spi2-core",
-          "libuuid"
-        ]
+        "gtk3",
+        "libnotify",
+        "nss",
+        "libXScrnSaver",
+        "libXtst",
+        "xdg-utils",
+        "at-spi2-core",
+        "libuuid"
+      ]
     }
   }
 }

@@ -49,5 +49,8 @@ contextBridge.exposeInMainWorld('electron', {
   windowAction: (action, window) => ipcRenderer.send('window-action', action, window),
   showAppContextMenu: (appname) => ipcRenderer.send('context-options-app', appname),
   onAppContextMenuCommand: (callback) => ipcRenderer.on('context-options-command-app', (event, command, appname) => callback(command, appname)),
+  createShortcut: (appname) => ipcRenderer.send('create-shortcut', appname),
+  onShortcutCreationSuccess: (callback) => ipcRenderer.on('shortcut-creation-success', (event, message) => callback(message)),
+  onShortcutCreationError: (callback) => ipcRenderer.on('shortcut-creation-error', (event, message) => callback(message)),
   addSampleCrx: () => ipcRenderer.send('add-sample-crx'),
 });

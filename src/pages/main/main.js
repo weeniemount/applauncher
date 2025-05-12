@@ -487,16 +487,42 @@ window.electron.onAppContextMenuCommand(async (command, appname) => {
         document.getElementById("applauncherbody").style.display = "none"
     } else if (command === 'uninstall') {
         window.electron.uninstallApp(appname);
+    } else if (command === 'shortcuts') {
+        console.log('Create shortcut clicked from context menu for:', appname);
+        window.electron.createShortcut(appname);
     }
 });
 
-// Add click handler for the remove button in app info
-document.getElementById('removeapp').onclick = function() {
-    const appname = document.getElementById("appinfotext").innerHTML;
-    window.electron.uninstallApp(appname);
-    document.getElementById("appinfo").style.display = "none";
-    document.getElementById("applauncherbody").style.display = "block";
-};
+// Add click handler for the create shortcut button in app info
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('createshortcut').onclick = function() {
+        const appname = document.getElementById("appinfotext").innerHTML;
+        console.log('Create shortcut clicked for:', appname);
+        window.electron.createShortcut(appname);
+    };
+
+    // Add click handler for the remove button in app info
+    document.getElementById('removeapp').onclick = function() {
+        const appname = document.getElementById("appinfotext").innerHTML;
+        window.electron.uninstallApp(appname);
+        document.getElementById("appinfo").style.display = "none";
+        document.getElementById("applauncherbody").style.display = "block";
+    };
+
+    // Handle shortcut creation success
+    window.electron.onShortcutCreationSuccess((message) => {
+        console.log('Shortcut creation success:', message);
+        // You could show a notification or update UI here
+        alert(message);
+    });
+
+    // Handle shortcut creation error
+    window.electron.onShortcutCreationError((message) => {
+        console.error('Shortcut creation error:', message);
+        // You could show an error notification or update UI here
+        alert('Error: ' + message);
+    });
+});
 
 window.electron.onMessage('launcher-refreshconfig', (event) => {
     applyconfig()

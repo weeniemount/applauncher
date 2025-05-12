@@ -8,6 +8,7 @@ const { exec } = require('child_process');
 const { promisify } = require('util');
 const execPromise = promisify(exec);
 const { openCrxApp, chooseAndExtractCrx, sampleCrxInstall } = require('./crx.js');
+const pngToIco = require('png-to-ico');
 
 createConfigIfNeeded();
 
@@ -434,6 +435,144 @@ ipcMain.on('uninstall-app', async (event, appname) => {
     config.apps.splice(appIndex, 1);
     await updateConfig(config);
     refreshConfig();
+  }
+});
+
+// Function to convert image to ICO
+async function convertToIco(sourcePath, appName) {
+  try {
+    // Create shortcuticons directory if it doesn't exist
+    const shortcutIconsDir = path.join(app.getPath('userData'), 'shortcuticons');
+    if (!fs.existsSync(shortcutIconsDir)) {
+      fs.mkdirSync(shortcutIconsDir, { recursive: true });
+    }
+
+    // Generate a unique filename based on app name and timestamp
+    const timestamp = Date.now();
+    const icoPath = path.join(shortcutIconsDir, `${appName}_${timestamp}.ico`);
+
+    // Convert to ICO
+    const buf = await pngToIco(sourcePath);
+    fs.writeFileSync(icoPath, buf);
+
+    return icoPath;
+  } catch (error) {
+    console.error('Error converting image to ICO:', error);
+    // Return the default noicon path if conversion fails
+    return path.join(__dirname, 'defaultapps/noicon.png');
+  }
+}
+
+// Add shortcut creation handler
+ipcMain.on('create-shortcut', async (event, appname) => {
+  console.log('Create shortcut requested for:', appname);
+  try {
+    const config = await readConfig();
+    const appData = config.apps.find(app => app[0] === appname);
+    
+    if (!appData) {
+      console.error(`App ${appname} not found in config`);
+      event.sender.send('shortcut-creation-error', `App ${appname} not found`);
+      return;
+    }
+    console.log('Found app data:', appData);
+
+    const desktopPath = path.join(app.getPath('desktop'));
+    console.log('Desktop path:', desktopPath);
+    let shortcutPath;
+    let iconPath;
+
+    // Get icon path based on app type
+    if (appData[1] === 'builtinimage') {
+      const sourcePath = path.join(__dirname, appData[2].replace('../../', ''));
+      console.log('Converting builtin image:', sourcePath);
+      iconPath = await convertToIco(sourcePath, appname);
+    } else if (appData[1] === 'localimage') {
+      console.log('Converting local image:', appData[2]);
+      iconPath = await convertToIco(appData[2], appname);
+    } else if (appData[1] === 'crxicon') {
+      const sourcePath = path.join(app.getPath('userData'), 'installedcrx', appData[4], appData[2]);
+      console.log('Converting CRX icon:', sourcePath);
+      iconPath = await convertToIco(sourcePath, appname);
+    } else {
+      const sourcePath = path.join(__dirname, 'defaultapps/noicon.png');
+      console.log('Using default icon:', sourcePath);
+      iconPath = await convertToIco(sourcePath, appname);
+    }
+    console.log('Icon path:', iconPath);
+
+    if (process.platform === 'win32') {
+      // Windows shortcut creation
+      shortcutPath = path.join(desktopPath, `${appname}.lnk`);
+      console.log('Creating Windows shortcut at:', shortcutPath);
+      
+      let targetPath;
+      if (appData[3] === 'link') {
+        targetPath = appData[4];
+      } else if (appData[3] === 'program') {
+        targetPath = appData[4];
+      } else if (appData[3] === 'installedcrx') {
+        // For CRX apps, create a shortcut to the launcher with the app ID
+        targetPath = process.execPath;
+        const args = `--launch-crx=${appData[4]}`;
+        console.log('Creating CRX shortcut with args:', args);
+        try {
+          await execPromise(`powershell "$WS = New-Object -ComObject WScript.Shell; $SC = $WS.CreateShortcut('${shortcutPath}'); $SC.TargetPath = '${targetPath}'; $SC.Arguments = '${args}'; $SC.IconLocation = '${iconPath}'; $SC.Save()"`);
+          console.log('CRX shortcut created successfully');
+          event.sender.send('shortcut-creation-success', `Shortcut created for ${appname}`);
+        } catch (error) {
+          console.error('Error creating CRX shortcut:', error);
+          event.sender.send('shortcut-creation-error', `Failed to create shortcut: ${error.message}`);
+        }
+        return;
+      }
+
+      // Create Windows shortcut
+      try {
+        await execPromise(`powershell "$WS = New-Object -ComObject WScript.Shell; $SC = $WS.CreateShortcut('${shortcutPath}'); $SC.TargetPath = '${targetPath}'; $SC.IconLocation = '${iconPath}'; $SC.Save()"`);
+        console.log('Shortcut created successfully');
+        event.sender.send('shortcut-creation-success', `Shortcut created for ${appname}`);
+      } catch (error) {
+        console.error('Error creating shortcut:', error);
+        event.sender.send('shortcut-creation-error', `Failed to create shortcut: ${error.message}`);
+      }
+    } else if (process.platform === 'linux') {
+      // Linux desktop entry creation
+      shortcutPath = path.join(desktopPath, `${appname}.desktop`);
+      console.log('Creating Linux desktop entry at:', shortcutPath);
+      
+      let execCommand;
+      if (appData[3] === 'link') {
+        execCommand = `xdg-open "${appData[4]}"`;
+      } else if (appData[3] === 'program') {
+        execCommand = appData[4];
+      } else if (appData[3] === 'installedcrx') {
+        // For CRX apps, create a desktop entry that launches the app through the launcher
+        execCommand = `${process.execPath} --launch-crx=${appData[4]}`;
+      }
+
+      const desktopEntry = `[Desktop Entry]
+Type=Application
+Name=${appname}
+Exec=${execCommand}
+Icon=${iconPath}
+Terminal=false
+Categories=Utility;`;
+
+      try {
+        fs.writeFileSync(shortcutPath, desktopEntry);
+        // Make the desktop entry executable
+        fs.chmodSync(shortcutPath, '755');
+        console.log('Desktop entry created successfully');
+        event.sender.send('shortcut-creation-success', `Shortcut created for ${appname}`);
+      } catch (error) {
+        console.error('Error creating desktop entry:', error);
+        event.sender.send('shortcut-creation-error', `Failed to create shortcut: ${error.message}`);
+      }
+    }
+  } catch (error) {
+    console.error('Error in shortcut creation:', error);
+    event.sender.send('shortcut-creation-error', `Failed to create shortcut: ${error.message}`);
   }
 });
 
