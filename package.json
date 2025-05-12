@@ -43,6 +43,7 @@
       "icon": "src/icons/linux",
       "target": [
         "deb",
+        "AppImage",
         "rpm"
       ],
       "category": "Utility"
