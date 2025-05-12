@@ -19,7 +19,7 @@
   "scripts": {
     "start": "electron .",
     "build": "electron-builder",
-    "dist": "electron-builder --x64"
+    "dist": "electron-builder"
   },
   "build": {
     "appId": "com.weenie.applauncher",
