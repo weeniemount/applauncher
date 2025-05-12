@@ -7,6 +7,54 @@ const JSZip = require('jszip');
 const { exec } = require('child_process');
 const { promisify } = require('util');
 const execPromise = promisify(exec);
+const pngToIco = require('png-to-ico');
+
+async function getAppIcon(manifest, crxpath) {
+  let iconPath = null;
+  
+  // Try to find the largest icon from manifest
+  if (manifest.icons) {
+    const iconSizes = Object.keys(manifest.icons).map(size => parseInt(size));
+    const largestSize = Math.max(...iconSizes);
+    const iconFile = manifest.icons[largestSize];
+    if (iconFile) {
+      iconPath = path.join(crxpath, iconFile);
+    }
+  }
+
+  if (!iconPath || !fs.existsSync(iconPath)) {
+    // Fallback to default icon
+    return path.join(__dirname, 'icons/empty.ico');
+  }
+
+  // Convert icon to appropriate format for platform
+  try {
+    const iconDir = path.join(app.getPath('userData'), 'crxicons');
+    if (!fs.existsSync(iconDir)) {
+      fs.mkdirSync(iconDir, { recursive: true });
+    }
+
+    const iconName = path.basename(iconPath, path.extname(iconPath));
+    const platformIconPath = path.join(iconDir, `${iconName}_${process.platform}.${process.platform === 'win32' ? 'ico' : 'png'}`);
+
+    // Only convert if the icon doesn't exist
+    if (!fs.existsSync(platformIconPath)) {
+      if (process.platform === 'win32') {
+        // Convert to ICO for Windows
+        const buf = await pngToIco(iconPath);
+        fs.writeFileSync(platformIconPath, buf);
+      } else {
+        // For Linux, just copy the PNG
+        fs.copyFileSync(iconPath, platformIconPath);
+      }
+    }
+
+    return platformIconPath;
+  } catch (error) {
+    console.error('Error converting icon:', error);
+    return path.join(__dirname, 'icons/empty.ico');
+  }
+}
 
 async function openCrxApp(crxId) {
   const crxpath = path.join(app.getPath('userData'), `installedcrx`, crxId);
@@ -44,12 +92,15 @@ async function openCrxApp(crxId) {
 
         let htmlContent = fs.readFileSync(scriptFilePath, 'utf-8');
 
+        // Get the app icon
+        const appIcon = await getAppIcon(manifest, crxpath);
+
         const newWin = new BrowserWindow({
           width: width,
           height: height,
           resizable: false,
           title: '',                  // Ensure no title
-          icon: path.join(__dirname, 'icons/empty.ico'),                // No icon
+          icon: appIcon,              // Set the converted icon
           autoHideMenuBar: true,       // No menu bar
           webPreferences: {
             contextIsolation: true,
