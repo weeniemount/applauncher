@@ -2,6 +2,7 @@ let closeonapp = true
 let amountofpages = 1
 let selectedpage = 1
 let searching = false
+let draggedAppName = null;
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -71,24 +72,31 @@ async function refreshapps(config) {
         if (config.showbrowserapp == true) {
             const appDiv = document.createElement("div");
             appDiv.id = "app";
+            // Browser app is not draggable, no drag events added
+            
+            // Set browser app name based on the selected browser
+            let browserName = "Chrome";
+            if (config.browserappiconam == "firefox") {
+                browserName = "Firefox";
+            } else if (config.browserappiconam == "chromium") {
+                browserName = "Chromium";
+            }
+            appDiv.dataset.appName = browserName;
 
             const appIcon = document.createElement("img");
             appIcon.id = "appicon";
-            
             appIcon.alt = "browser";
             
             const appText = document.createElement("p");
             appText.id = "apptext";
+            appText.textContent = browserName;
 
             if (config.browserappiconam == "chrome") {
                 appIcon.src = `../../defaultapps/browser/chrome_${config.appiconera}.png`;
-                appText.textContent = "Chrome";
             } else if (config.browserappiconam == "firefox") {
                 appIcon.src = `../../defaultapps/browser/firefox_${config.appiconera}.png`;
-                appText.textContent = "Firefox";
             } else if (config.browserappiconam == "chromium") {
                 appIcon.src = `../../defaultapps/browser/chromium_${config.appiconera}.png`;
-                appText.textContent = "Chromium";
             }
 
             appDiv.appendChild(appIcon)
@@ -98,7 +106,7 @@ async function refreshapps(config) {
                 if (config.closeonapp) {
                     setTimeout(() => {
                         window.electron.quitApp();
-                    }, 100); // Delay to ensure the browser opens before quitting the app
+                    }, 100);
                 }
             }
             appsContent.appendChild(appDiv);
@@ -108,6 +116,13 @@ async function refreshapps(config) {
         for (const app of config.apps) {
             const appDiv = document.createElement("div");
             appDiv.id = "app";
+            appDiv.draggable = true;
+            appDiv.addEventListener('dragstart', handleDragStart);
+            appDiv.addEventListener('dragend', handleDragEnd);
+            appDiv.addEventListener('dragover', handleDragOver);
+            appDiv.addEventListener('dragleave', handleDragLeave);
+            appDiv.addEventListener('drop', handleDrop);
+            appDiv.dataset.appName = app[0];
 
             const appIcon = document.createElement("img");
             appIcon.id = "appicon";
@@ -527,3 +542,89 @@ document.addEventListener('DOMContentLoaded', function() {
 window.electron.onMessage('launcher-refreshconfig', (event) => {
     applyconfig()
 });
+
+function handleDragStart(e) {
+    this.style.opacity = '0.4';
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', this.dataset.appName);
+}
+
+function handleDragEnd(e) {
+    this.style.opacity = '1';
+    // Remove drag-over class from all apps
+    document.querySelectorAll('#app').forEach(app => {
+        app.classList.remove('drag-over');
+    });
+}
+
+function handleDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (this !== draggedAppName) {
+        this.classList.add('drag-over');
+    }
+    return false;
+}
+
+function handleDragLeave(e) {
+    this.classList.remove('drag-over');
+}
+
+async function handleDrop(e) {
+    e.preventDefault();
+    this.classList.remove('drag-over');
+    
+    const draggedName = e.dataTransfer.getData('text/plain');
+    const targetName = this.dataset.appName;
+    
+    if (draggedName && draggedName !== targetName) {
+        try {
+            console.log('Getting config...');
+            const config = await window.electron.getConfig();
+            console.log('Current config:', config);
+            
+            const apps = config.apps;
+            console.log('Dragged app name:', draggedName);
+            console.log('Target app name:', targetName);
+            
+            // Handle browser app specially
+            let draggedIndex = -1;
+            let targetIndex = -1;
+            
+            if (draggedName === "Chrome" || draggedName === "Firefox" || draggedName === "Chromium") {
+                draggedIndex = -1; // Browser app is not in the apps array
+            } else {
+                draggedIndex = apps.findIndex(app => app[0] === draggedName);
+            }
+            
+            if (targetName === "Chrome" || targetName === "Firefox" || targetName === "Chromium") {
+                targetIndex = 0; // Insert at the beginning for browser app
+            } else {
+                targetIndex = apps.findIndex(app => app[0] === targetName);
+            }
+            
+            console.log('Dragged index:', draggedIndex, 'Target index:', targetIndex);
+            
+            if (draggedIndex !== -1 || targetIndex !== -1) {
+                // Reorder the apps array
+                if (draggedIndex !== -1) {
+                    const [movedApp] = apps.splice(draggedIndex, 1);
+                    apps.splice(targetIndex, 0, movedApp);
+                }
+                
+                console.log('Updated apps array:', apps);
+                
+                // Update the config
+                console.log('Updating config...');
+                await window.electron.updateConfig({...config, apps: apps});
+                
+                // Refresh the display
+                console.log('Refreshing display...');
+                await applyconfig();
+            }
+        } catch (error) {
+            console.error('Error during drag and drop:', error);
+        }
+    }
+    return false;
+}

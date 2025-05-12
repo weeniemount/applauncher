@@ -272,6 +272,8 @@ img {
     height: 97px;
     background-color: #f2f2f2;
     position: relative;
+    cursor: move;
+    transition: opacity 0.2s ease;
 }
 
 .dark #app {
@@ -284,6 +286,15 @@ img {
 
 .dark #app:hover {
     background-color: #3D3D3D;
+}
+
+#app.dragging {
+    opacity: 0.4;
+}
+
+#app.drag-over {
+    border: 2px dashed #666;
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 #appicon {
