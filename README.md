@@ -4,7 +4,7 @@
 
 
 ![version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fweeniemount%2Fapplauncher%2Frefs%2Fheads%2Fmain%2Fpackage.json&query=%24.version&label=version&color=orange
-)
+) ![made with electron](github/electron.svg)
 <hr>
 
 > [!WARNING]
@@ -31,9 +31,4 @@ Download the latest release from [Github Releases](https://github.com/weeniemoun
 - Dark mode
 - Opening local programs
 - Chromium, Canary and default app icons (only works when launching from exe, not shortcut)
-
-## Planned features
-- Add multiple pages
-- Make the window go to the location of your start menu button
-- Dragging apps to reorder them
-- ~~Make the search bar functional~~ ADDED!
+- Opening sample CRX'es
