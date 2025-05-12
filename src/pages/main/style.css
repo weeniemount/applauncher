@@ -101,6 +101,10 @@ img {
     font-family: Helvetica, Arial, sans-serif;
 }
 
+.dark #appinfotext {
+    color: #ffffff;
+}
+
 #appinfooverview {
     position: absolute;
     margin-top: 102px;
@@ -109,12 +113,20 @@ img {
     font-family: Helvetica, Arial, sans-serif;
 }
 
+.dark #appinfooverview {
+    color: #ffffff;
+}
+
 #appinfooverviewbody {
     position: absolute;
     margin-top: 130px;
     left: 20px;
     font-size: 14px;
     font-family: Helvetica, Arial, sans-serif;
+}
+
+.dark #appinfooverviewbody {
+    color: #ffffff;
 }
 
 #appinfofooter {

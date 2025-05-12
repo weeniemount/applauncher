@@ -447,8 +447,11 @@ window.electron.onAppContextMenuCommand(async (command, appname) => {
 
     if (command === 'appinfo') {
         let config = await window.electron.getConfig()
+        let appFound = false;
+        
         for (const app of config.apps) {
             if (app[0] == appname) {
+                appFound = true;
                 if (app[1] === "builtinimage") {
                     appinfoicon.src = app[2];
                     appinfoicon.style.objectFit = "fill"
@@ -461,23 +464,39 @@ window.electron.onAppContextMenuCommand(async (command, appname) => {
                     else {
                         appinfoicon.src = `data:image/png;base64,${image}`;
                     }
-                    appIcon.style.objectFit = "fill"
+                    appinfoicon.style.objectFit = "fill"
                 } else if (app[1] === "crxicon") {
                     const image = await window.electron.getCrxImage(app[2], app[4]);
                     appinfoicon.src = `data:image/png;base64,${image}`;
-                    appIcon.style.objectFit = "fill"
+                    appinfoicon.style.objectFit = "fill"
                 } else if (app[1] === "noicon") {
                     appinfoicon.src = '../../defaultapps/noicon.png';
-                    appIcon.style.objectFit = "fill"
+                    appinfoicon.style.objectFit = "fill"
                 }
+                break;
             }
-            console.error(`App ${appname} not found in config`);
         }
+        
+        if (!appFound) {
+            console.error(`App ${appname} not found in config`);
+            return;
+        }
+        
         document.getElementById("appinfo").style.display = "block"
         document.getElementById("appinfotext").innerHTML = appname
         document.getElementById("applauncherbody").style.display = "none"
+    } else if (command === 'uninstall') {
+        window.electron.uninstallApp(appname);
     }
 });
+
+// Add click handler for the remove button in app info
+document.getElementById('removeapp').onclick = function() {
+    const appname = document.getElementById("appinfotext").innerHTML;
+    window.electron.uninstallApp(appname);
+    document.getElementById("appinfo").style.display = "none";
+    document.getElementById("applauncherbody").style.display = "block";
+};
 
 window.electron.onMessage('launcher-refreshconfig', (event) => {
     applyconfig()

@@ -410,4 +410,31 @@ ipcMain.handle('choose-crx', async () => {
   refreshConfig()
 });
 
+// Add uninstall handler
+ipcMain.on('uninstall-app', async (event, appname) => {
+  const config = await readConfig();
+  const appIndex = config.apps.findIndex(app => app[0] === appname);
+  
+  if (appIndex !== -1) {
+    const appData = config.apps[appIndex];
+    
+    // If it's a CRX app, remove its files
+    if (appData[3] === 'installedcrx') {
+      const crxPath = path.join(app.getPath('userData'), 'installedcrx', appData[4]);
+      try {
+        if (fs.existsSync(crxPath)) {
+          fs.rmSync(crxPath, { recursive: true, force: true });
+        }
+      } catch (error) {
+        console.error('Error removing CRX files:', error);
+      }
+    }
+    
+    // Remove from config
+    config.apps.splice(appIndex, 1);
+    await updateConfig(config);
+    refreshConfig();
+  }
+});
+
 app.whenReady().then(createWindow);
