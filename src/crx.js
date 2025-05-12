@@ -113,6 +113,8 @@ async function openCrxApp(crxId) {
 
         newWin.on('closed', () => {
           console.log('Window closed.');
+          // Emit event to main process
+          ipcMain.emit('crx-window-closed');
         });
 
       } else {

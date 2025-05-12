@@ -223,8 +223,12 @@ ipcMain.on('open-browser', async () => {
 });
 
 
-ipcMain.on('open-chrome-app', (event, crxId) => {
-  openCrxApp(crxId)
+// Track if we're launching a CRX app
+let isLaunchingCrx = false;
+
+ipcMain.on('open-chrome-app', async (event, crxId) => {
+  isLaunchingCrx = true;
+  await openCrxApp(crxId);
 });
 
 ipcMain.on('add-sample-crx', async (event) => {
@@ -586,4 +590,25 @@ app.whenReady().then(() => {
     // Otherwise create the main window
     createWindow();
   }
+});
+
+// Handle window closing
+app.on('window-all-closed', (event) => {
+  // Only prevent quitting if we're launching a CRX app
+  if (isLaunchingCrx) {
+    event.preventDefault();
+  } else {
+    app.quit();
+  }
+});
+
+// Only quit when explicitly requested
+app.on('before-quit', (event) => {
+  // Allow the quit to proceed
+  return true;
+});
+
+// Add a handler for when CRX windows are closed
+ipcMain.on('crx-window-closed', () => {
+  isLaunchingCrx = false;
 });
