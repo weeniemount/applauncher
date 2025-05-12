@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>com.weenie.applauncher</id>
+  <name>App Launcher</name>
+  <summary>Chrome 48's App Launcher recreation in Electron for Windows and Linux.</summary>
+  <description>
+    <p>
+      Chrome 48's App Launcher recreation in Electron for Windows and Linux.
+    </p>
+  </description>
+  <icon type="stock">applauncher</icon>
+  <url type="homepage">https://github.com/weeniemount/applauncher</url>
+  <developer_name>weenie</developer_name>
+  <update_contact>bonkicool@protonmail.com</update_contact>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>ISC</project_license>
+  <keywords>
+    <keyword>chrome</keyword>
+    <keyword>launcher</keyword>
+    <keyword>apps</keyword>
+    <keyword>electron</keyword>
+  </keywords>
+</component>

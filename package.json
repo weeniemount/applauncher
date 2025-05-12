@@ -46,6 +46,12 @@
         "AppImage",
         "rpm"
       ],
+      "extraFiles": [
+        {
+          "from": "src/linux/com.weenie.applauncher.appdata.xml",
+          "to": "usr/share/metainfo/com.weenie.applauncher.appdata.xml"
+        }
+      ],
       "category": "Utility"
     },
     "rpm": {
