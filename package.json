@@ -1,7 +1,7 @@
 {
   "name": "app-launcher",
   "version": "0.2.0",
-  "description": "App Launcher",
+  "description": "Chrome 48's App Launcher recreation in Electron for Windows and Linux.",
   "main": "src/main.js",
   "author": {
     "name": "weenie",
@@ -23,7 +23,7 @@
   },
   "build": {
     "appId": "com.weenie.applauncher",
-    "productName": "app-launcher",
+    "productName": "App Launcher",
     "executableName": "app-launcher",
     "compression": "maximum",
     "asar": true,
