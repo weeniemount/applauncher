@@ -14,6 +14,8 @@ createConfigIfNeeded();
 
 app.commandLine.appendSwitch('disable-crash-reporter');
 
+// Check for --launch-crx parameter
+const launchCrxId = process.argv.find(arg => arg.startsWith('--launch-crx='))?.split('=')[1];
 
 const globalWebPreferences = {
   preload: path.join(__dirname, 'preload.js'), // Set up preload to enable secure communication
@@ -576,4 +578,12 @@ Categories=Utility;`;
   }
 });
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  if (launchCrxId) {
+    // If --launch-crx parameter is present, launch the CRX app directly
+    openCrxApp(launchCrxId);
+  } else {
+    // Otherwise create the main window
+    createWindow();
+  }
+});
