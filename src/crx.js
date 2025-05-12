@@ -23,8 +23,8 @@ async function getAppIcon(manifest, crxpath) {
   }
 
   if (!iconPath || !fs.existsSync(iconPath)) {
-    // Fallback to default icon
-    return path.join(__dirname, 'icons/empty.ico');
+    // Fallback to default noicon.png
+    iconPath = path.join(__dirname, 'defaultapps/noicon.png');
   }
 
   // Convert icon to appropriate format for platform
@@ -37,14 +37,14 @@ async function getAppIcon(manifest, crxpath) {
     const iconName = path.basename(iconPath, path.extname(iconPath));
     const platformIconPath = path.join(iconDir, `${iconName}_${process.platform}.${process.platform === 'win32' ? 'ico' : 'png'}`);
 
-    // Only convert if the icon doesn't exist
-    if (!fs.existsSync(platformIconPath)) {
-      if (process.platform === 'win32') {
-        // Convert to ICO for Windows
-        const buf = await pngToIco(iconPath);
-        fs.writeFileSync(platformIconPath, buf);
-      } else {
-        // For Linux, just copy the PNG
+    // Always convert for Windows, even if it's the default icon
+    if (process.platform === 'win32') {
+      // Convert to ICO for Windows
+      const buf = await pngToIco(iconPath);
+      fs.writeFileSync(platformIconPath, buf);
+    } else {
+      // For Linux, just copy the PNG if it doesn't exist
+      if (!fs.existsSync(platformIconPath)) {
         fs.copyFileSync(iconPath, platformIconPath);
       }
     }
@@ -52,7 +52,8 @@ async function getAppIcon(manifest, crxpath) {
     return platformIconPath;
   } catch (error) {
     console.error('Error converting icon:', error);
-    return path.join(__dirname, 'icons/empty.ico');
+    // If conversion fails, return the original noicon.png
+    return path.join(__dirname, 'defaultapps/noicon.png');
   }
 }
 
