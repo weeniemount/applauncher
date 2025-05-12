@@ -272,7 +272,6 @@ img {
     height: 97px;
     background-color: #f2f2f2;
     position: relative;
-    cursor: move;
     transition: opacity 0.2s ease;
 }
 
@@ -290,6 +289,7 @@ img {
 
 #app.dragging {
     opacity: 0.4;
+    cursor: move;
 }
 
 #app.drag-over {
