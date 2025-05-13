@@ -214,6 +214,13 @@ async function refreshapps(config) {
                         window.electron.closeLauncher()
                     }
                 }
+            } else if (app[3] == "dino") {
+                appDiv.onclick = function() {
+                    window.electron.dino();
+                    if (closeonapp) {
+                        window.electron.closeLauncher()
+                    }
+                }
             }
 
             if (appsrollover >= 16) {
@@ -338,6 +345,12 @@ async function searchbar() {
                     window.electron.openLink(app[4]);
                 } else if (app[3] === "program") {
                     window.electron.openProgram(app[4]);
+                }
+                else if (app[3] === "installedcrx") {
+                    window.electron.openCrxApp(app[4]);
+                }
+                else if (app[3] === "dino") {
+                    window.electron.dino();
                 }
                 if (closeonapp) {
                     window.electron.quitApp();
@@ -628,3 +641,40 @@ async function handleDrop(e) {
     }
     return false;
 }
+
+
+
+/* shhhh */
+
+
+const konamiCode = [
+    "ArrowUp", "ArrowUp",
+    "ArrowDown", "ArrowDown",
+    "ArrowLeft", "ArrowRight",
+    "ArrowLeft", "ArrowRight",
+    "b", "a"
+];
+let konamiIndex = 0;
+
+window.addEventListener("keydown", async function(e) {
+    if (e.key === konamiCode[konamiIndex]) {
+        konamiIndex++;
+        if (konamiIndex === konamiCode.length) {
+            let config = await window.electron.getConfig();
+
+            // Check if "Dino" app already exists
+            const hasDino = config.apps.some(app => app[0] === "Dino");
+            if (!hasDino) {
+                config.apps.push(["Dino", "builtinimage", "../../defaultapps/dino.png", "dino"]);
+                await window.electron.updateConfig(config);
+                refreshapps(config);
+            }
+
+            // Konami code complete!
+            window.electron.dino();
+            konamiIndex = 0;
+        }
+    } else {
+        konamiIndex = 0;
+    }
+});

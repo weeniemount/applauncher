@@ -16,6 +16,7 @@ app.commandLine.appendSwitch('disable-crash-reporter');
 
 // Check for --launch-crx parameter
 const launchCrxId = process.argv.find(arg => arg.startsWith('--launch-crx='))?.split('=')[1];
+const dinoId = process.argv.find(arg => arg.startsWith('--dino'))?.split('=')[1];
 
 const globalWebPreferences = {
   preload: path.join(__dirname, 'preload.js'), // Set up preload to enable secure communication
@@ -344,6 +345,43 @@ ipcMain.on('open-about', () => {
   }
 });
 
+let dino;
+
+function opendino() {
+  if (dino && !dino.isDestroyed()) {
+    dino.focus();
+  } else {
+    dino = new BrowserWindow({
+      width: 640,
+      height: 480,
+      frame: false,
+      name: "dino",
+      resizable: false,
+      skipTaskbar: false,
+      webPreferences: globalWebPreferences
+    });
+
+    dino.loadFile('src/pages/dino/index.html');
+
+    ipcMain.on('close-about', () => {
+      if (dino && !dino.isDestroyed()) {
+        dino.close(); 
+      }
+    });
+
+    dino.on('closed', () => {
+      dino = null;
+      if (dinoId) {
+        app.quit();
+      }
+    });
+  }
+}
+
+ipcMain.on('open-dino', () => {
+  opendino()
+});
+
 ipcMain.handle('get-image', async (event, filePath) => {
   try {
     if (fs.existsSync(filePath)) {
@@ -531,7 +569,22 @@ ipcMain.on('create-shortcut', async (event, appname) => {
           event.sender.send('shortcut-creation-error', `Failed to create shortcut: ${error.message}`);
         }
         return;
+      } else if (appData[3] === 'dino') {
+        // dino
+        targetPath = process.execPath;
+        const args = `--dino=true`;
+        console.log('Creating CRX shortcut with args:', args);
+        try {
+          await execPromise(`powershell "$WS = New-Object -ComObject WScript.Shell; $SC = $WS.CreateShortcut('${shortcutPath}'); $SC.TargetPath = '${targetPath}'; $SC.Arguments = '${args}'; $SC.IconLocation = '${iconPath}'; $SC.Save()"`);
+          console.log('CRX shortcut created successfully');
+          event.sender.send('shortcut-creation-success', `Shortcut created for ${appname}`);
+        } catch (error) {
+          console.error('Error creating CRX shortcut:', error);
+          event.sender.send('shortcut-creation-error', `Failed to create shortcut: ${error.message}`);
+        }
+        return;
       }
+        
 
       // Create Windows shortcut
       try {
@@ -555,6 +608,9 @@ ipcMain.on('create-shortcut', async (event, appname) => {
       } else if (appData[3] === 'installedcrx') {
         // For CRX apps, create a desktop entry that launches the app through the launcher
         execCommand = `${process.execPath} --launch-crx=${appData[4]}`;
+      } else if (appData[3] === 'dino') {
+        // For CRX apps, create a desktop entry that launches the app through the launcher
+        execCommand = `${process.execPath} --dino`;
       }
 
       const desktopEntry = `[Desktop Entry]
@@ -586,6 +642,9 @@ app.whenReady().then(() => {
   if (launchCrxId) {
     // If --launch-crx parameter is present, launch the CRX app directly
     openCrxApp(launchCrxId);
+  } else if (dinoId) {
+    // If --dino parameter is present, launch dino directly
+    opendino();
   } else {
     // Otherwise create the main window
     createWindow();

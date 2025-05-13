@@ -53,4 +53,5 @@ contextBridge.exposeInMainWorld('electron', {
   onShortcutCreationSuccess: (callback) => ipcRenderer.on('shortcut-creation-success', (event, message) => callback(message)),
   onShortcutCreationError: (callback) => ipcRenderer.on('shortcut-creation-error', (event, message) => callback(message)),
   addSampleCrx: () => ipcRenderer.send('add-sample-crx'),
+  dino: () => ipcRenderer.send('open-dino'),
 });
