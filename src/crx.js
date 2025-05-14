@@ -1,13 +1,14 @@
 const { app, BrowserWindow, ipcMain, Menu, shell, dialog, screen } = require('electron');
 const path = require('path');
 const { createConfigIfNeeded, readConfig, updateConfig, getdefaultconfig } = require('./config.js');
-const fs = require('fs')
+const fs = require('fs');
 const { spawn } = require('child_process');
 const JSZip = require('jszip');
 const { exec } = require('child_process');
 const { promisify } = require('util');
 const execPromise = promisify(exec);
 const pngToIco = require('png-to-ico');
+const url = require('url'); // Add URL module for file URL handling
 
 async function getAppIcon(manifest, crxpath) {
   let iconPath = null;
@@ -58,24 +59,34 @@ async function getAppIcon(manifest, crxpath) {
 }
 
 async function openCrxApp(crxId) {
-  const crxpath = path.join(app.getPath('userData'), `installedcrx`, crxId);
+  console.log(`Opening CRX app: ${crxId}`);
+  const crxpath = path.join(app.getPath('userData'), 'installedcrx', crxId);
   const manifestPath = path.join(crxpath, 'manifest.json');
 
   if (fs.existsSync(manifestPath)) {
+    console.log(`Manifest file found at: ${manifestPath}`);
     const manifestData = fs.readFileSync(manifestPath, 'utf-8');
     const manifest = JSON.parse(manifestData);
 
     let mainScriptPath = null;
 
+    // Find the main script from the manifest
     if (manifest.app && manifest.app.background && manifest.app.background.scripts && manifest.app.background.scripts.length > 0) {
       const backgroundScript = manifest.app.background.scripts[0];
       mainScriptPath = path.join(crxpath, backgroundScript);
+      console.log(`Main script path: ${mainScriptPath}`);
+    } else {
+      console.log('No background scripts found in manifest.json');
+      return;
     }
 
-    if (mainScriptPath) {
+    if (fs.existsSync(mainScriptPath)) {
       const mainJsContent = fs.readFileSync(mainScriptPath, 'utf-8');
+      
+      // Extract HTML files referenced in main.js
+      // Improved regex to match various HTML filename patterns
       const htmlFiles = mainJsContent.match(/['"](.+?\.html)['"]/g);
-
+      
       let width = 800;  // Default width
       let height = 600; // Default height
 
@@ -87,29 +98,72 @@ async function openCrxApp(crxId) {
       }
 
       if (htmlFiles && htmlFiles.length > 0) {
-        const htmlPaths = htmlFiles.map(match => path.join(crxpath, match.replace(/['"]/g, '')));
-        const scriptName = path.basename(htmlPaths[0], '.html');
-        const scriptFilePath = path.join(crxpath, `${scriptName}.html`);
-
-        let htmlContent = fs.readFileSync(scriptFilePath, 'utf-8');
+        // Clean up the file paths from the regex matches
+        const cleanedHtmlPaths = htmlFiles.map(match => match.replace(/['"]/g, ''));
+        console.log(`Found HTML files: ${cleanedHtmlPaths.join(', ')}`);
+        
+        // Get the first HTML file
+        const firstHtmlFile = cleanedHtmlPaths[0];
+        const htmlFilePath = path.join(crxpath, firstHtmlFile);
+        
+        console.log(`Attempting to load HTML file: ${htmlFilePath}`);
+        
+        if (!fs.existsSync(htmlFilePath)) {
+          console.error(`HTML file does not exist: ${htmlFilePath}`);
+          // Try to find the HTML file with a case-insensitive search (helpful on Linux)
+          const dirContents = fs.readdirSync(path.dirname(htmlFilePath));
+          const matchingFile = dirContents.find(file => 
+            file.toLowerCase() === path.basename(htmlFilePath).toLowerCase()
+          );
+          
+          if (matchingFile) {
+            const correctedPath = path.join(path.dirname(htmlFilePath), matchingFile);
+            console.log(`Found HTML file with different case: ${correctedPath}`);
+            htmlFilePath = correctedPath;
+          } else {
+            console.error('Could not find HTML file, even with case-insensitive search');
+            return;
+          }
+        }
 
         // Get the app icon
         const appIcon = await getAppIcon(manifest, crxpath);
+        console.log(`Using app icon: ${appIcon}`);
 
         const newWin = new BrowserWindow({
           width: width,
           height: height,
-          resizable: false,
-          title: '',                  // Ensure no title
-          icon: appIcon,              // Set the converted icon
-          autoHideMenuBar: true,       // No menu bar
+          resizable: true, // Allow resizing for better debugging
+          title: manifest.name || 'Chrome App',
+          icon: appIcon,
+          autoHideMenuBar: true,
           webPreferences: {
             contextIsolation: true,
-            preload: path.join(__dirname, 'preload.js'), // Use your preload script
+            nodeIntegration: false,
+            webSecurity: false, // Disable web security to allow local file access
+            preload: path.join(__dirname, 'preload.js'),
+            enableRemoteModule: true, // Enable remote module if needed by the app
           }
         });
 
-        newWin.loadURL(scriptFilePath); // Load the modified HTML content
+        // Use proper file URL format for loading local files
+        const fileUrl = url.format({
+          pathname: htmlFilePath,
+          protocol: 'file:',
+          slashes: true
+        });
+        
+        console.log(`Loading URL: ${fileUrl}`);
+        newWin.loadURL(fileUrl);
+        
+        // Show DevTools in development
+        if (process.env.NODE_ENV === 'development') {
+          newWin.webContents.openDevTools();
+        }
+
+        newWin.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
+          console.error(`Failed to load: ${errorCode} - ${errorDescription}`);
+        });
 
         newWin.on('closed', () => {
           console.log('Window closed.');
@@ -121,10 +175,10 @@ async function openCrxApp(crxId) {
         console.log('No HTML files found in the main.js script');
       }
     } else {
-      console.log('No background scripts found in the manifest.json');
+      console.error(`Main script does not exist: ${mainScriptPath}`);
     }
   } else {
-    console.log('Manifest.json not found');
+    console.error(`Manifest file not found: ${manifestPath}`);
   }
 }
 
@@ -136,15 +190,20 @@ async function chooseAndExtractCrx() {
         ],
       });
     
-      const crxdata = fs.readFileSync(result.filePaths[0])
+      if (result.canceled || result.filePaths.length === 0) {
+        console.log("No file selected");
+        return "No file selected";
+      }
+    
+      const crxdata = fs.readFileSync(result.filePaths[0]);
       const jszipcrx = await JSZip.loadAsync(crxdata);
     
       if (!jszipcrx.files["manifest.json"]) {
-        console.log("erm... that isnt a valid crx!!")
-        return "erm... that isnt a valid crx!!"
+        console.log("erm... that isnt a valid crx!!");
+        return "erm... that isnt a valid crx!!";
       }
     
-      console.log("ima go extract funny " + path.basename(result.filePaths[0]) + " now lol")
+      console.log("ima go extract funny " + path.basename(result.filePaths[0]) + " now lol");
     
       const filename = path.basename(result.filePaths[0], '.crx');
       const extractPath = path.join(app.getPath('userData'), `installedcrx`, `${filename}`);
@@ -162,7 +221,6 @@ async function chooseAndExtractCrx() {
           fs.mkdirSync(path.dirname(outputPath), { recursive: true });
           const content = await zipEntry.async("nodebuffer");
           fs.writeFileSync(outputPath, content);
-          //console.log(`Extracted: ${outputPath}`);
         }
       }
     
@@ -170,43 +228,42 @@ async function chooseAndExtractCrx() {
       const manifestData = fs.readFileSync(manifestPath, 'utf8');
       const manifest = JSON.parse(manifestData);
     
-      let iconpathvery = "noicon"
-      let appname
+      let iconpathvery = "noicon";
+      let appname;
     
       if (manifest.icons && typeof manifest.icons === 'object') {
         const iconPaths = Object.values(manifest.icons);
         if (iconPaths.length > 0) {
           iconpathvery = iconPaths[0];
         } else {
-          iconpathvery = "noicon"
+          iconpathvery = "noicon";
         }
       }
       
-      
       if (manifest.name) {
         console.log("App Name: " + manifest.name);
-        appname = manifest.name
+        appname = manifest.name;
       } else {
         console.log("No name found in the manifest.json");
-        appname = "No Named App"
+        appname = "No Named App";
       }
     
-      const config = await readConfig()
+      const config = await readConfig();
     
       if (iconpathvery == "noicon") {
-        config.apps.push([appname, "noicon", "", "installedcrx", filename])
+        config.apps.push([appname, "noicon", "", "installedcrx", filename]);
       } else {
-        config.apps.push([appname, "crxicon", iconpathvery, "installedcrx", filename])
+        config.apps.push([appname, "crxicon", iconpathvery, "installedcrx", filename]);
       } 
     
-      updateConfig(config)
-      console.log("it went okay")
-      return "it went okay"
+      updateConfig(config);
+      console.log("it went okay");
+      return "it went okay";
 }
 
 async function sampleCrxInstall() {
-    const crxpath = path.join(__dirname, "samplecrx", "PELIMFLKPJIICNAJDJCMEKPIOACMAHKH_1_2_0_0.crx")
-    const crxdata = fs.readFileSync(crxpath)
+    const crxpath = path.join(__dirname, "samplecrx", "PELIMFLKPJIICNAJDJCMEKPIOACMAHKH_1_2_0_0.crx");
+    const crxdata = fs.readFileSync(crxpath);
     const jszipcrx = await JSZip.loadAsync(crxdata);
 
     const extractPath = path.join(app.getPath('userData'), `installedcrx`, `PELIMFLKPJIICNAJDJCMEKPIOACMAHKH_1_2_0_0`);
@@ -216,24 +273,23 @@ async function sampleCrxInstall() {
     }
 
     for (const [relativePath, zipEntry] of Object.entries(jszipcrx.files)) {
-    const outputPath = path.join(extractPath, relativePath);
+      const outputPath = path.join(extractPath, relativePath);
 
-    if (zipEntry.dir) {
-        fs.mkdirSync(outputPath, { recursive: true });
-    } else {
-        fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-        const content = await zipEntry.async("nodebuffer");
-        fs.writeFileSync(outputPath, content);
-        //console.log(`Extracted: ${outputPath}`);
-    }
+      if (zipEntry.dir) {
+          fs.mkdirSync(outputPath, { recursive: true });
+      } else {
+          fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+          const content = await zipEntry.async("nodebuffer");
+          fs.writeFileSync(outputPath, content);
+      }
     }
 
     const manifestPath = path.join(extractPath, 'manifest.json');
     const manifestData = fs.readFileSync(manifestPath, 'utf8');
     const manifest = JSON.parse(manifestData);
 
-    let iconpathvery = "noicon"
-    let appname
+    let iconpathvery = "noicon";
+    let appname;
 
     if (manifest.icons && typeof manifest.icons === 'object') {
         const iconPaths = Object.values(manifest.icons);
@@ -242,18 +298,18 @@ async function sampleCrxInstall() {
         }
     }
     
-    appname = manifest.name
-    const config = await readConfig()
+    appname = manifest.name;
+    const config = await readConfig();
 
-    config.apps.push([appname, "crxicon", iconpathvery, "installedcrx", "PELIMFLKPJIICNAJDJCMEKPIOACMAHKH_1_2_0_0"])
+    config.apps.push([appname, "crxicon", iconpathvery, "installedcrx", "PELIMFLKPJIICNAJDJCMEKPIOACMAHKH_1_2_0_0"]);
 
-    updateConfig(config)
-    console.log("it went okay")
-    return "it went okay"
+    updateConfig(config);
+    console.log("it went okay");
+    return "it went okay";
 }
 
 module.exports = {
     openCrxApp,
     chooseAndExtractCrx,
     sampleCrxInstall
-}
+};
