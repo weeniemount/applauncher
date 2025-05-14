@@ -488,6 +488,11 @@ ipcMain.on('uninstall-app', async (event, appname) => {
 // Function to convert image to ICO
 async function convertToIco(sourcePath, appName) {
   try {
+    // On Linux, return the original image path without conversion
+    if (process.platform === 'linux') {
+      return sourcePath;
+    }
+
     // Create shortcuticons directory if it doesn't exist
     const shortcutIconsDir = path.join(app.getPath('userData'), 'shortcuticons');
     if (!fs.existsSync(shortcutIconsDir)) {
