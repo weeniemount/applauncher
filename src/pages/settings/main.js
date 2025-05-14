@@ -122,7 +122,11 @@ async function appstable() {
         for (const app of config.apps) {
             const newRow = tableBody.insertRow()
             newRow.insertCell(0).textContent = app[0]
-            newRow.insertCell(1).textContent = app[4]
+            if (app[3] == "dino") {
+                newRow.insertCell(1).textContent = "chrome://dino"
+            } else {
+                newRow.insertCell(1).textContent = app[4]
+            }
             
             const iconCell = newRow.insertCell(2)
             const iconHtml = await getAppIconHtml(app)
