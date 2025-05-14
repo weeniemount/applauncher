@@ -488,9 +488,16 @@ ipcMain.on('uninstall-app', async (event, appname) => {
 // Function to convert image to ICO
 async function convertToIco(sourcePath, appName) {
   try {
-    // On Linux, return the original image path without conversion
+    // On Linux, use the original image path without conversion
     if (process.platform === 'linux') {
-      return sourcePath;
+      // Make sure the sourcePath exists before returning it
+      if (fs.existsSync(sourcePath)) {
+        return sourcePath;
+      } else {
+        console.error(`Image file not found: ${sourcePath}`);
+        // Fall back to default icon for Linux
+        return path.join(__dirname, 'defaultapps/noicon.png');
+      }
     }
 
     // Create shortcuticons directory if it doesn't exist
@@ -529,7 +536,11 @@ ipcMain.on('create-shortcut', async (event, appname) => {
     }
     console.log('Found app data:', appData);
 
-    const desktopPath = path.join(app.getPath('desktop'));
+    // For Linux, use the actual Desktop directory rather than the user home
+    const desktopPath = process.platform === 'linux' 
+      ? path.join(app.getPath('home'), 'Desktop')  // Use actual Desktop folder on Linux
+      : path.join(app.getPath('desktop'));
+    
     console.log('Desktop path:', desktopPath);
     let shortcutPath;
     let iconPath;
@@ -593,7 +604,6 @@ ipcMain.on('create-shortcut', async (event, appname) => {
         return;
       }
         
-
       // Create Windows shortcut
       try {
         await execPromise(`powershell "$WS = New-Object -ComObject WScript.Shell; $SC = $WS.CreateShortcut('${shortcutPath}'); $SC.TargetPath = '${targetPath}'; $SC.IconLocation = '${iconPath}'; $SC.Save()"`);
@@ -612,13 +622,13 @@ ipcMain.on('create-shortcut', async (event, appname) => {
       if (appData[3] === 'link') {
         execCommand = `xdg-open "${appData[4]}"`;
       } else if (appData[3] === 'program') {
-        execCommand = appData[4];
+        execCommand = `"${appData[4]}"`;  // Wrap program path in quotes
       } else if (appData[3] === 'installedcrx') {
         // For CRX apps, create a desktop entry that launches the app through the launcher
-        execCommand = `${process.execPath} --launch-crx=${appData[4]}`;
+        execCommand = `"${process.execPath}" --launch-crx=${appData[4]}`;  // Wrap executable path in quotes
       } else if (appData[3] === 'dino') {
-        // For CRX apps, create a desktop entry that launches the app through the launcher
-        execCommand = `${process.execPath} --dino`;
+        // For Dino game, create a desktop entry that launches the app through the launcher
+        execCommand = `"${process.execPath}" --dino=true`;  // Wrap executable path in quotes
       }
 
       const desktopEntry = `[Desktop Entry]
