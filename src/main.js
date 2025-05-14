@@ -357,6 +357,9 @@ function opendino() {
       frame: false,
       name: "dino",
       resizable: false,
+      icon: process.platform === 'linux'
+        ? path.join(__dirname, 'defaultapps/dino.png')
+        : path.join(__dirname, 'defaultapps/dino.ico'),
       skipTaskbar: false,
       webPreferences: globalWebPreferences
     });
