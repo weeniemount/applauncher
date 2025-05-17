@@ -1,6 +1,6 @@
 {
   "name": "app-launcher",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Chrome 48's App Launcher recreation in Electron for Windows and Linux.",
   "main": "src/main.js",
   "author": {
