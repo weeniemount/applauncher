@@ -4,7 +4,7 @@
 
 
 ![version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fweeniemount%2Fapplauncher%2Frefs%2Fheads%2Fmain%2Fpackage.json&query=%24.version&label=version&color=orange
-) ![made with electron](github/electron.svg)
+) ![made with electron](github/electron.svg) ![repo size](https://img.shields.io/github/repo-size/weeniemount/applauncher)
 <hr>
 
 > [!WARNING]
