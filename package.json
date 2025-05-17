@@ -34,12 +34,15 @@
       "!**/*.map"
     ],
     "win": {
-      "icon": "src/icons/applauncher.ico"
+      "icon": "src/icons/applauncher.ico",
+      "executableName": "app-launcher"
     },
     "mac": {
       "icon": "src/icons/mac.icns"
     },
     "linux": {
+      "electronLanguages": ["en-US"],
+      "executableName": "app-launcher",
       "icon": "src/icons/linux",
       "target": [
         "deb",
