@@ -49,7 +49,7 @@ exports.default = async function(context) {
         files.forEach(file => {
             // List of files to keep in the main directory
             const filesToKeep = ['App Launcher.exe', 'app-launcher.exe', 'ffmpeg.dll', 'icudtl.dat', 'resources.pak', 'v8_context_snapshot.bin', 'resources', 'locales', 'chrome_100_percent.pak', 'chrome_200_percent.pak', 'swiftshader'];
-            const filesToKeepLinux = ['app-launcher', 'chrome_crashpad_handler', 'chrome-sandbox', 'libffmpeg.so', 'icudtl.dat', 'resources.pak', 'v8_context_snapshot.bin', 'resources', 'locales', 'chrome_100_percent.pak', 'chrome_200_percent.pak', 'swiftshader'];
+            const filesToKeepLinux = ['app-launcher', 'chrome_crashpad_handler', 'chrome-sandbox', 'libffmpeg.so', 'icudtl.dat', 'resources.pak', 'v8_context_snapshot.bin', 'resources', 'locales', 'chrome_100_percent.pak', 'chrome_200_percent.pak', 'swiftshader', 'usr'];
             
             // If the file is not in the list, delete it
             if (!filesToKeep.includes(file) && !filesToKeepLinux.includes(file)) {
