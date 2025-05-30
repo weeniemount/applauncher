@@ -77,7 +77,15 @@ async function setvalues() {
     // Set radio values
     document.getElementById(config.appicon).checked = true
     document.getElementById(config.browserappiconam).checked = true
-    document.getElementById(config.appiconera).checked = true
+    
+    // Set era radio values
+    document.querySelectorAll('input[name="defaulticonera"]').forEach(radio => {
+        if (radio.id === config.appiconera) radio.checked = true
+    });
+    document.querySelectorAll('input[name="browsericonera"]').forEach(radio => {
+        if (radio.id === config.browsericonera) radio.checked = true
+    });
+    
     document.getElementById(config.startpos).checked = true
     
     // Set number inputs
@@ -99,6 +107,7 @@ handleRadioChange('appicon', 'appicon')
 handleRadioChange('startpos', 'startpos')
 handleRadioChange('browsericon', 'browserappiconam')
 handleRadioChange('defaulticonera', 'appiconera')
+handleRadioChange('browsericonera', 'browsericonera')
 
 // Initialize number input handlers
 handleNumberInput(document.getElementById("xoffset"), 'startoffsetx')

@@ -15,6 +15,7 @@ const defaultConfig = {
   startoffsety: 0,
   appicon: "default",
   appiconera: "2015",
+  browsericonera: "2015",
   chromiumwebstoreicon: false,
   showbrowserapp: true,
   browserappiconam: "chrome",

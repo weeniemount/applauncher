@@ -80,6 +80,20 @@ async function refreshapps(config) {
                 browserName = "Firefox";
             } else if (config.browserappiconam == "chromium") {
                 browserName = "Chromium";
+            } else if (config.browserappiconam == "ie") {
+                browserName = "Internet Explorer";
+            } else if (config.browserappiconam == "edge") {
+                browserName = "Microsoft Edge";
+            } else if (config.browserappiconam == "opera") {
+                browserName = "Opera";
+            } else if (config.browserappiconam == "operagx") {
+                browserName = "Opera GX";
+            } else if (config.browserappiconam == "brave") {
+                browserName = "Brave";
+            } else if (config.browserappiconam == "vivaldi") {
+                browserName = "Vivaldi";
+            } else if (config.browserappiconam == "safari") {
+                browserName = "Safari";
             }
             appDiv.dataset.appName = browserName;
 
@@ -92,11 +106,31 @@ async function refreshapps(config) {
             appText.textContent = browserName;
 
             if (config.browserappiconam == "chrome") {
-                appIcon.src = `../../defaultapps/browser/chrome_${config.appiconera}.png`;
+                appIcon.src = `../../defaultapps/browser/chrome_${config.browsericonera}.svg`;
             } else if (config.browserappiconam == "firefox") {
-                appIcon.src = `../../defaultapps/browser/firefox_${config.appiconera}.png`;
+                if (config.browsericonera != "2011") {
+                    appIcon.src = `../../defaultapps/browser/firefox_${config.browsericonera}.svg`;
+                } else {
+                    appIcon.src = `../../defaultapps/browser/firefox_2011.png`;
+                }
             } else if (config.browserappiconam == "chromium") {
-                appIcon.src = `../../defaultapps/browser/chromium_${config.appiconera}.png`;
+                appIcon.src = `../../defaultapps/browser/chromium_${config.browsericonera}.svg`;
+            } else if (config.browserappiconam == "ie") {
+                appIcon.src = `../../defaultapps/browser/ie_${config.browsericonera}.svg`;
+            } else if (config.browserappiconam == "edge") {
+                appIcon.src = `../../defaultapps/browser/edge_${config.browsericonera}.svg`;
+            } else if (config.browserappiconam == "opera") {
+                appIcon.src = `../../defaultapps/browser/opera_${config.browsericonera}.svg`;
+            } else if (config.browserappiconam == "operagx") {
+                appIcon.src = `../../defaultapps/browser/operagx.svg`;
+            } else if (config.browserappiconam == "brave") {
+                appIcon.src = `../../defaultapps/browser/brave.svg`;
+            } else if (config.browserappiconam == "vivaldi") {
+                if (config.browsericonera != "2015") {
+                    appIcon.src = `../../defaultapps/browser/vivaldi_${config.browsericonera}.webp`;
+                } else {
+                    appIcon.src = `../../defaultapps/browser/vivaldi_${config.browsericonera}.svg`;
+                }
             }
 
             appDiv.appendChild(appIcon)
