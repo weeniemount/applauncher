@@ -9,6 +9,55 @@ const { promisify } = require('util');
 const execPromise = promisify(exec);
 const { openCrxApp, chooseAndExtractCrx, sampleCrxInstall } = require('./crx.js');
 const pngToIco = require('png-to-ico');
+const https = require('https');
+
+// Store update information globally
+let cachedUpdateInfo = null;
+
+// Function to check for updates
+async function checkForUpdates() {
+  // First check if updates are enabled in config
+  const config = readConfig();
+  if (!config.checkForUpdates) {
+    cachedUpdateInfo = { hasUpdate: false };
+    return cachedUpdateInfo;
+  }
+
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: 'api.github.com',
+      path: '/repos/weeniemount/applauncher/releases/latest',
+      headers: {
+        'User-Agent': 'App Launcher'
+      }
+    };
+
+    https.get(options, (res) => {
+      let data = '';
+      res.on('data', (chunk) => data += chunk);
+      res.on('end', () => {
+        try {
+          const release = JSON.parse(data);
+          const latestVersion = release.tag_name.replace('v', '');
+          const currentVersion = app.getVersion();
+          cachedUpdateInfo = {
+            hasUpdate: latestVersion > currentVersion,
+            latestVersion,
+            currentVersion,
+            releaseUrl: release.html_url
+          };
+          resolve(cachedUpdateInfo);
+        } catch (error) {
+          cachedUpdateInfo = { hasUpdate: false };
+          reject(error);
+        }
+      });
+    }).on('error', (error) => {
+      cachedUpdateInfo = { hasUpdate: false };
+      reject(error);
+    });
+  });
+}
 
 createConfigIfNeeded();
 
@@ -125,18 +174,34 @@ const createWindow = () => {
     applauncher.close()
   });
 
-  ipcMain.on('hamburger-options', (event) => {
-    const hamburgeroptions = Menu.buildFromTemplate([
+  ipcMain.on('hamburger-options', async (event) => {
+    // Use cached update info instead of checking every time
+    const updateMenuItem = cachedUpdateInfo?.hasUpdate ? {
+      label: `Update Available (${cachedUpdateInfo.latestVersion})`,
+      click: () => shell.openExternal(cachedUpdateInfo.releaseUrl)
+    } : null;
+
+    const menuTemplate = [
       { label: 'Add an app...', click: () => event.sender.send('hamburger-options-command', 'addapp') },
       { label: 'Install a CRX...', click: () => event.sender.send('hamburger-options-command', 'choosecrx') },
       { type: 'separator'},
+    ];
+
+    // Add update menu item if available
+    if (updateMenuItem) {
+      menuTemplate.push(updateMenuItem, { type: 'separator'});
+    }
+
+    menuTemplate.push(
       { label: 'Settings', click: () => event.sender.send('hamburger-options-command', 'opensettings') },
       { label: 'Help', click: () => event.sender.send('hamburger-options-command', 'help') },
       { label: 'Send feedback', click: () => event.sender.send('hamburger-options-command', 'githubissues') },
       { type: 'separator'},
       { label: 'About', click: () => event.sender.send('hamburger-options-command', 'about') },
       { role: 'quit' }
-    ]);
+    );
+
+    const hamburgeroptions = Menu.buildFromTemplate(menuTemplate);
 
     hamburgeroptions.popup({
       window: applauncher,
@@ -168,9 +233,16 @@ ipcMain.handle('get-app-version', () => {
   return app.getVersion();
 });
 
-ipcMain.handle('update-config', (event, newconfig) => {
-  //console.log("hello")
-  updateConfig(newconfig)
+ipcMain.handle('update-config', async (event, newConfig) => {
+  updateConfig(newConfig);
+  // If update checking was enabled, check for updates immediately
+  if (newConfig.checkForUpdates) {
+    try {
+      await checkForUpdates();
+    } catch (error) {
+      console.error('Failed to check for updates:', error);
+    }
+  }
 });
 
 ipcMain.on('open-link', (event, url) => {
@@ -656,7 +728,14 @@ Categories=Utility;`;
   }
 });
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  // Check for updates on startup if enabled
+  try {
+    await checkForUpdates();
+  } catch (error) {
+    console.error('Failed to check for updates on startup:', error);
+  }
+
   if (launchCrxId) {
     // If --launch-crx parameter is present, launch the CRX app directly
     openCrxApp(launchCrxId);
