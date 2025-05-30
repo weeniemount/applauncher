@@ -25,7 +25,7 @@ function selectProgram() {
     document.getElementById("applink").style.display = "none";
     document.getElementById("linkicon").style.display = "none";
     document.getElementById("linkbreak").style.display = "none";
-    document.getElementById("linkiconlabel").style.display = "none";
+    document.getElementById("linkicondiv").style.display = "none";
     document.getElementById("chooseapp").style.display = "block";
     apptype = "program";
 };
@@ -34,7 +34,7 @@ function selectLink() {
     document.getElementById("applink").style.display = "block";
     document.getElementById("linkicon").style.display = "block";
     document.getElementById("linkbreak").style.display = "block";
-    document.getElementById("linkiconlabel").style.display = "block";
+    document.getElementById("linkicondiv").style.display = "block";
     document.getElementById("chooseapp").style.display = "none";
     apptype = "link"
 };

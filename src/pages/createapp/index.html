@@ -31,10 +31,12 @@
             <input type="radio" class="chromeradio" name="selection" id="programRadio" onchange="selectProgram()"> Program<br>
             <br>
             <input type="text" id="applink" placeholder="App Link"><br id="linkbreak">
-            <label for="linkicon" id="linkiconlabel">
-                <input type="checkbox" name="Enable link icon?" id="linkicon" class="chromecheckbox" checked>
-                Enable link icon?
-            </label>
+            <div id="linkicondiv">
+                <label for="linkicon" id="linkiconlabel">
+                    <input type="checkbox" name="Enable link icon?" id="linkicon" class="chromecheckbox" checked>
+                    Enable link icon?
+                </label>
+            </div>
             <button id="chooseapp" onclick="chooseapp()" class="bluebutton" style="display: none; width: 140px; height: 25;">Choose Program...</button>
             <hr>
             <br>
