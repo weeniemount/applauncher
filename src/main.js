@@ -38,6 +38,13 @@ async function checkForUpdates() {
       res.on('end', () => {
         try {
           const release = JSON.parse(data);
+          // Check if release and tag_name exist before accessing
+          if (!release || !release.tag_name) {
+            cachedUpdateInfo = { hasUpdate: false };
+            resolve(cachedUpdateInfo);
+            return;
+          }
+          
           const latestVersion = release.tag_name.replace('v', '');
           const currentVersion = app.getVersion();
           cachedUpdateInfo = {
@@ -48,13 +55,15 @@ async function checkForUpdates() {
           };
           resolve(cachedUpdateInfo);
         } catch (error) {
+          console.error('Error parsing update data:', error);
           cachedUpdateInfo = { hasUpdate: false };
-          reject(error);
+          resolve(cachedUpdateInfo); // Resolve instead of reject to handle gracefully
         }
       });
     }).on('error', (error) => {
+      console.error('Error checking for updates:', error);
       cachedUpdateInfo = { hasUpdate: false };
-      reject(error);
+      resolve(cachedUpdateInfo); // Resolve instead of reject to handle gracefully
     });
   });
 }
