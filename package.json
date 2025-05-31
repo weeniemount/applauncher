@@ -39,11 +39,7 @@
     ],
     "win": {
       "icon": "src/icons/applauncher.ico",
-      "executableName": "app-launcher",
-      "target": [
-        "nsis",
-        "zip"
-      ]
+      "executableName": "app-launcher"
     },
     "mac": {
       "icon": "src/icons/mac.icns"
@@ -55,8 +51,7 @@
       "target": [
         "deb",
         "AppImage",
-        "rpm",
-        "zip"
+        "rpm"
       ],
       "extraFiles": [
         {
