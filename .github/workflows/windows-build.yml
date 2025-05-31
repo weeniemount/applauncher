@@ -1,10 +1,7 @@
 name: Build Electron Windows x64
 
 on:
-  push:
-    branches: [ github-actions-test, main, master ]
-  pull_request:
-    branches: [ github-actions-test, main, master ]
+  workflow_dispatch:  # Manual trigger only
 
 jobs:
   build:
@@ -22,11 +19,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build Electron app (Windows x64)
+      - name: Build App Launcher (Windows x64)
         run: npm run build -- --win --x64
+
+      - name: Build App Launcher (Windows x86)
+        run: npm run build -- --win --ia32
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: electron-windows-x64
+          name: applauncher-windows
           path: dist/*.exe
