@@ -42,8 +42,7 @@
       "executableName": "app-launcher"
     },
     "mac": {
-      "productName": "App Launcher",
-      "executableName": "app-launcher",
+      "executableName": "App Launcher",
       "icon": "src/icons/test.icns"
     },
     "linux": {
