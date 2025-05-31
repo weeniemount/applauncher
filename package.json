@@ -43,7 +43,7 @@
     },
     "mac": {
       "executableName": "App Launcher",
-      "icon": "src/icons/test.icns"
+      "icon": "src/icons/launcher.icns"
     },
     "linux": {
       "electronLanguages": ["en-US"],
