@@ -1,0 +1,32 @@
+name: Build App Launcher for Windows
+
+on:
+  workflow_dispatch:  # Manual trigger only
+
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # or your required Node.js version
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build App Launcher (Windows x64)
+        run: npm run build -- --win --x64
+
+      - name: Build App Launcher (Windows x86)
+        run: npm run build -- --win --ia32
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: applauncher-windows
+          path: dist/*.exe
