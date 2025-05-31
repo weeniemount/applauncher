@@ -42,7 +42,9 @@
       "executableName": "app-launcher"
     },
     "mac": {
-      "icon": "src/icons/mac.icns"
+      "productName": "App Launcher",
+      "executableName": "app-launcher",
+      "icon": "src/icons/test.icns"
     },
     "linux": {
       "electronLanguages": ["en-US"],
