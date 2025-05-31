@@ -1,4 +1,4 @@
-name: Build Electron Windows x64
+name: Build App Launcher for Windows
 
 on:
   workflow_dispatch:  # Manual trigger only
