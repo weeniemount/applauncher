@@ -2,9 +2,9 @@ name: Build Electron Windows x64
 
 on:
   push:
-    branches: [ main ]
+    branches: [ github-actions-test, main, master ]
   pull_request:
-    branches: [ main ]
+    branches: [ github-actions-test, main, master ]
 
 jobs:
   build:
