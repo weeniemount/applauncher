@@ -339,10 +339,18 @@ ipcMain.on('add-sample-crx', async (event) => {
 });
 
 ipcMain.on('open-program', (event, program) => {
-  const programtoopen = spawn(program, [], {
-    detached: true,
-    stdio: 'ignore'  // Ignore stdout and stderr
-  });
+  if (process.platform === 'darwin') {
+    // For macOS, use the 'open' command to launch applications
+    exec(`open "${program}"`, (err) => {
+      if (err) console.error('Error launching program:', err);
+    });
+  } else {
+    // For other platforms, use spawn as before
+    const programtoopen = spawn(program, [], {
+      detached: true,
+      stdio: 'ignore'  // Ignore stdout and stderr
+    });
+  }
 });
 
 let settings
