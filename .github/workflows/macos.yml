@@ -1,9 +1,6 @@
 name: Build App Launcher for macOS
 
 on:
-  push:
-    branches:
-      - macos
   workflow_dispatch:
 
 jobs:
@@ -23,8 +20,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build App Launcher (macOS x64)
-        run: npm run build -- --mac --x64
+      - name: Build App Launcher (macOS Universal)
+        run: npm run build -- --mac --universal
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
