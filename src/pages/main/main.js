@@ -131,6 +131,12 @@ async function refreshapps(config) {
                 } else {
                     appIcon.src = `../../defaultapps/browser/vivaldi_${config.browsericonera}.svg`;
                 }
+            } else if (config.browserappiconam == "safari") {
+                if (config.browsericonera != "2011") {
+                    appIcon.src = `../../defaultapps/browser/safari_${config.browsericonera}.svg`;
+                } else {
+                    appIcon.src = `../../defaultapps/browser/safari_2011.webp`;
+                }
             }
 
             appDiv.appendChild(appIcon)
