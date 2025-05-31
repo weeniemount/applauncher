@@ -44,10 +44,12 @@
 
                 <p id="settingheading">Customization</p><br>
                     <p>Dark Mode: </p><input type="checkbox" id="darkmode" class="chromecheckbox"><br>
-                    <p>App Launcher taskbar icon:</p><br>
-                    <input type="radio" class="chromeradio" name="appicon" id="default" onchange="appiconradio()" checked>Default<br>
-                    <input type="radio" class="chromeradio" name="appicon" id="canary" onchange="appiconradio()">Canary<br>
-                    <input type="radio" class="chromeradio" name="appicon" id="chromium" onchange="appiconradio()">Chromium<br>
+                    <p id="taskbar-icon-text">App Launcher taskbar icon:</p><br>
+                    <div id="taskbar-icon-options">
+                        <input type="radio" class="chromeradio" name="appicon" id="default" onchange="appiconradio()" checked>Default<br>
+                        <input type="radio" class="chromeradio" name="appicon" id="canary" onchange="appiconradio()">Canary<br>
+                        <input type="radio" class="chromeradio" name="appicon" id="chromium" onchange="appiconradio()">Chromium<br>
+                    </div>
                     <hr>
                 
                 <p id="settingheading">Browser</p><br>

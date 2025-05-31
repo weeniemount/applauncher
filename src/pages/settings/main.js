@@ -7,6 +7,10 @@ let showbrowserapp = document.getElementById("showbrowserapp")
 let checkforupdates = document.getElementById("checkforupdates")
 let showshortcutalerts = document.getElementById("showshortcutalerts")
 
+// Platform detection
+const isMac = navigator.platform.toLowerCase().includes('mac');
+const isLinux = navigator.platform.toLowerCase().includes('linux');
+
 // Helper function to update config
 async function updateConfigAndRefresh(updater) {
     const config = await window.electron.getConfig()
@@ -56,6 +60,24 @@ async function titlebarfunc(config) {
         document.getElementById("settingsbox").style.borderBottom = "#373837 1px solid"
     }
 }
+
+// Initialize platform-specific UI elements
+function initializePlatformSpecific() {
+    const taskbarText = document.getElementById('taskbar-icon-text');
+    const taskbarOptions = document.getElementById('taskbar-icon-options');
+
+    if (isMac) {
+        // Hide taskbar icon options on macOS as it's not supported
+        taskbarText.style.display = 'none';
+        taskbarOptions.style.display = 'none';
+    } else {
+        // Show appropriate text for other platforms
+        taskbarText.textContent = `App Launcher ${isLinux ? 'dock' : 'taskbar'} icon:`;
+    }
+}
+
+// Call initialization on window load
+window.addEventListener('load', initializePlatformSpecific);
 
 // Window control handlers
 document.getElementById("close").onclick = () => window.electron.windowAction("close", "settings")
