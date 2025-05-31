@@ -5,14 +5,31 @@ on:
 
 jobs:
   build-linux:
-    runs-on: fedora-latest
+    runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Install required packages
-        run: sudo dnf install -y nodejs npm libxcrypt-compat rpmbuild dpkg fakeroot rpmdevtools rpmlint rpm-build fedora-packager ruby rubygems xz p7zip unzip python3 squashfs-tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            nodejs \
+            npm \
+            build-essential \
+            dpkg-dev \
+            fakeroot \
+            rpm \
+            rpm2cpio \
+            ruby \
+            ruby-dev \
+            xz-utils \
+            p7zip-full \
+            unzip \
+            python3 \
+            squashfs-tools \
+            libxcrypt-dev
 
       - name: Install fpm gem
         run: sudo gem install fpm
