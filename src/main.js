@@ -143,7 +143,7 @@ const createWindow = () => {
   };
 
   const iconMapMac = {
-    default: 'icons/mac/icon.icns',
+    default: 'icons/mac/launcher.icns',
     canary: 'icons/mac/canary.icns',
     chromium: 'icons/mac/chromium.icns',
   };
@@ -352,37 +352,86 @@ ipcMain.on('open-settings', () => {
   if (settings && !settings.isDestroyed()) {
     settings.focus();
   } else {
+    // Get the appropriate settings icon based on platform
+    const settingsIconPath = process.platform === 'darwin' 
+      ? path.join(__dirname, 'icons/mac/settings.icns')
+      : process.platform === 'linux'
+        ? path.join(__dirname, 'icons/linux/settings.png')
+        : path.join(__dirname, 'icons/settings.ico');
+
     settings = new BrowserWindow({
-    width: 770,
-    height: 550,
-    frame: !config["chromeostitlebar"],
-    transparent: config["chromeostitlebar"],
-    autoHideMenuBar: true,
-    name: "Settings",
-    icon: path.join(__dirname, 'icons/settings.ico'),
-    webPreferences: globalWebPreferences
-  });
+      width: 770,
+      height: 550,
+      frame: !config["chromeostitlebar"],
+      transparent: config["chromeostitlebar"],
+      autoHideMenuBar: true,
+      name: "Settings",
+      icon: settingsIconPath,
+      titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
+      webPreferences: globalWebPreferences
+    });
 
-  if (config["chromeostitlebar"]) {
-    settings.setSize(770, 586)
-  }
-
-  ipcMain.on('window-action', (event, action, window) => {
-    if (window === 'settings') {
-      try {
-        windowAction(action, settings);
-      } catch (error) {
-        console.error('i dont feel like fixing this. plus, it literally doesnt affect anything and just gives an error for no reason');
-      }
+    if (config["chromeostitlebar"]) {
+      settings.setSize(770, 586)
     }
-  });
 
-  settings.on('closed', () => {
-    settings = null;
-  });
+    // Create macOS menu if needed
+    if (process.platform === 'darwin') {
+      const template = [
+        {
+          label: app.name,
+          submenu: [
+            { role: 'about' },
+            { type: 'separator' },
+            { role: 'hide' },
+            { role: 'hideOthers' },
+            { role: 'unhide' },
+            { type: 'separator' },
+            { role: 'quit' }
+          ]
+        },
+        {
+          label: 'Edit',
+          submenu: [
+            { role: 'undo' },
+            { role: 'redo' },
+            { type: 'separator' },
+            { role: 'cut' },
+            { role: 'copy' },
+            { role: 'paste' },
+            { role: 'selectAll' }
+          ]
+        },
+        {
+          label: 'Window',
+          submenu: [
+            { role: 'minimize' },
+            { role: 'zoom' },
+            { type: 'separator' },
+            { role: 'front' }
+          ]
+        }
+      ];
+      const menu = Menu.buildFromTemplate(template);
+      settings.setMenu(menu);
+    }
 
-  settings.loadFile('src/pages/settings/index.html');
-  settings.webContents.setZoomFactor(1);
+    ipcMain.on('window-action', (event, action, window) => {
+      if (window === 'settings') {
+        try {
+          windowAction(action, settings);
+        } catch (error) {
+          console.error('i dont feel like fixing this. plus, it literally doesnt affect anything and just gives an error for no reason');
+        }
+      }
+    });
+
+    settings.on('closed', () => {
+      settings = null;
+    });
+
+    settings.loadFile('src/pages/settings/index.html');
+    settings.webContents.setZoomFactor(1);
   }
 });
 
