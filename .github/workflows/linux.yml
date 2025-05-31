@@ -1,4 +1,4 @@
-name: Build App Launcher for Linux (Fedora)
+name: Build App Launcher for Linux
 
 on:
   workflow_dispatch:  # Manual trigger only
