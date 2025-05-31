@@ -22,15 +22,14 @@ jobs:
       - name: Build App Launcher (Windows x64)
         run: npm run build -- --win --x64
 
-      - name: Rename x64 setup file
+      - name: Rename x64 setup file (PowerShell)
+        shell: pwsh
         run: |
-          setlocal enabledelayedexpansion
-          for %%f in ("dist\App Launcher Setup (*.exe") do (
-            set "filename=%%~nxf"
-            echo Renaming "%%f" to "!filename:- Setup = Setup-x64!"
-            ren "%%f" "!filename:- Setup = Setup-x64!"
-          )
-        shell: cmd
+          $files = Get-ChildItem -Path dist -Filter "App Launcher Setup *.exe"
+          foreach ($file in $files) {
+            $newName = $file.BaseName + "-x64" + $file.Extension
+            Rename-Item -Path $file.FullName -NewName $newName
+          }
 
       - name: Build App Launcher (Windows x86)
         run: npm run build -- --win --ia32
