@@ -22,6 +22,16 @@ jobs:
       - name: Build App Launcher (Windows x64)
         run: npm run build -- --win --x64
 
+      - name: Rename x64 setup file
+        run: |
+          setlocal enabledelayedexpansion
+          for %%f in ("dist\App Launcher Setup (*.exe") do (
+            set "filename=%%~nxf"
+            echo Renaming "%%f" to "!filename:- Setup = Setup-x64!"
+            ren "%%f" "!filename:- Setup = Setup-x64!"
+          )
+        shell: cmd
+
       - name: Build App Launcher (Windows x86)
         run: npm run build -- --win --ia32
 
