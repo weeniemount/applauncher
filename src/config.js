@@ -21,6 +21,7 @@ const defaultConfig = {
   browserappiconam: "chrome",
   chromeostitlebar: false,
   checkForUpdates: true,
+  showShortcutAlerts: true,
   apps: [
     ["Web Store", "builtinimage", "../../defaultapps/webstore/icon_256.png", "link", "https://chromewebstore.google.com/", "true"],
     ["Docs", "builtinimage", "../../defaultapps/docs/icon_128.png", "link", "https://docs.google.com/", "true"],

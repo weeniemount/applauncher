@@ -5,6 +5,7 @@ let darkmode = document.getElementById("darkmode")
 let resetapps = document.getElementById("resetapps")
 let showbrowserapp = document.getElementById("showbrowserapp")
 let checkforupdates = document.getElementById("checkforupdates")
+let showshortcutalerts = document.getElementById("showshortcutalerts")
 
 // Helper function to update config
 async function updateConfigAndRefresh(updater) {
@@ -72,6 +73,7 @@ async function setvalues() {
     chromiumwebstoreicon.checked = config.chromiumwebstoreicon
     showbrowserapp.checked = config.showbrowserapp
     checkforupdates.checked = config.checkForUpdates
+    showshortcutalerts.checked = config.showShortcutAlerts
     document.getElementById("chromeostitlebarbox").checked = config.chromeostitlebar
     
     // Set radio values
@@ -100,6 +102,7 @@ handleCheckboxChange(chromiumwebstoreicon, 'chromiumwebstoreicon')
 handleCheckboxChange(darkmode, 'darkmode')
 handleCheckboxChange(showbrowserapp, 'showbrowserapp')
 handleCheckboxChange(checkforupdates, 'checkForUpdates')
+handleCheckboxChange(showshortcutalerts, 'showShortcutAlerts')
 handleCheckboxChange(document.getElementById("chromeostitlebarbox"), 'chromeostitlebar')
 
 // Initialize radio handlers

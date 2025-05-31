@@ -612,7 +612,9 @@ ipcMain.on('create-shortcut', async (event, appname) => {
     
     if (!appData) {
       console.error(`App ${appname} not found in config`);
-      event.sender.send('shortcut-creation-error', `App ${appname} not found`);
+      if (config.showShortcutAlerts) {
+        event.sender.send('shortcut-creation-error', `App ${appname} not found`);
+      }
       return;
     }
     console.log('Found app data:', appData);
@@ -663,10 +665,14 @@ ipcMain.on('create-shortcut', async (event, appname) => {
         try {
           await execPromise(`powershell "$WS = New-Object -ComObject WScript.Shell; $SC = $WS.CreateShortcut('${shortcutPath}'); $SC.TargetPath = '${targetPath}'; $SC.Arguments = '${args}'; $SC.IconLocation = '${iconPath}'; $SC.Save()"`);
           console.log('CRX shortcut created successfully');
-          event.sender.send('shortcut-creation-success', `Shortcut created for ${appname}`);
+          if (config.showShortcutAlerts) {
+            event.sender.send('shortcut-creation-success', `Shortcut created for ${appname}`);
+          }
         } catch (error) {
           console.error('Error creating CRX shortcut:', error);
-          event.sender.send('shortcut-creation-error', `Failed to create shortcut: ${error.message}`);
+          if (config.showShortcutAlerts) {
+            event.sender.send('shortcut-creation-error', `Failed to create shortcut: ${error.message}`);
+          }
         }
         return;
       } else if (appData[3] === 'dino') {
@@ -677,10 +683,14 @@ ipcMain.on('create-shortcut', async (event, appname) => {
         try {
           await execPromise(`powershell "$WS = New-Object -ComObject WScript.Shell; $SC = $WS.CreateShortcut('${shortcutPath}'); $SC.TargetPath = '${targetPath}'; $SC.Arguments = '${args}'; $SC.IconLocation = '${iconPath}'; $SC.Save()"`);
           console.log('CRX shortcut created successfully');
-          event.sender.send('shortcut-creation-success', `Shortcut created for ${appname}`);
+          if (config.showShortcutAlerts) {
+            event.sender.send('shortcut-creation-success', `Shortcut created for ${appname}`);
+          }
         } catch (error) {
           console.error('Error creating CRX shortcut:', error);
-          event.sender.send('shortcut-creation-error', `Failed to create shortcut: ${error.message}`);
+          if (config.showShortcutAlerts) {
+            event.sender.send('shortcut-creation-error', `Failed to create shortcut: ${error.message}`);
+          }
         }
         return;
       }
@@ -689,10 +699,14 @@ ipcMain.on('create-shortcut', async (event, appname) => {
       try {
         await execPromise(`powershell "$WS = New-Object -ComObject WScript.Shell; $SC = $WS.CreateShortcut('${shortcutPath}'); $SC.TargetPath = '${targetPath}'; $SC.IconLocation = '${iconPath}'; $SC.Save()"`);
         console.log('Shortcut created successfully');
-        event.sender.send('shortcut-creation-success', `Shortcut created for ${appname}`);
+        if (config.showShortcutAlerts) {
+          event.sender.send('shortcut-creation-success', `Shortcut created for ${appname}`);
+        }
       } catch (error) {
         console.error('Error creating shortcut:', error);
-        event.sender.send('shortcut-creation-error', `Failed to create shortcut: ${error.message}`);
+        if (config.showShortcutAlerts) {
+          event.sender.send('shortcut-creation-error', `Failed to create shortcut: ${error.message}`);
+        }
       }
     } else if (process.platform === 'linux') {
       // Linux desktop entry creation
@@ -725,15 +739,21 @@ Categories=Utility;`;
         // Make the desktop entry executable
         fs.chmodSync(shortcutPath, '755');
         console.log('Desktop entry created successfully');
-        event.sender.send('shortcut-creation-success', `Shortcut created for ${appname}`);
+        if (config.showShortcutAlerts) {
+          event.sender.send('shortcut-creation-success', `Shortcut created for ${appname}`);
+        }
       } catch (error) {
         console.error('Error creating desktop entry:', error);
-        event.sender.send('shortcut-creation-error', `Failed to create shortcut: ${error.message}`);
+        if (config.showShortcutAlerts) {
+          event.sender.send('shortcut-creation-error', `Failed to create shortcut: ${error.message}`);
+        }
       }
     }
   } catch (error) {
     console.error('Error in shortcut creation:', error);
-    event.sender.send('shortcut-creation-error', `Failed to create shortcut: ${error.message}`);
+    if (config.showShortcutAlerts) {
+      event.sender.send('shortcut-creation-error', `Failed to create shortcut: ${error.message}`);
+    }
   }
 });
 
