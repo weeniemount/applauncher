@@ -55,7 +55,8 @@
       "target": [
         "deb",
         "AppImage",
-        "rpm"
+        "rpm",
+        "zip"
       ],
       "extraFiles": [
         {

@@ -1,0 +1,41 @@
+name: Build App Launcher for Linux (Fedora)
+
+on:
+  workflow_dispatch:  # Manual trigger only
+
+jobs:
+  build-linux:
+    runs-on: fedora-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install required packages
+        run: sudo dnf install -y nodejs npm libxcrypt-compat rpmbuild dpkg fakeroot rpmdevtools rpmlint rpm-build fedora-packager ruby rubygems xz p7zip unzip python3 squashfs-tools
+
+      - name: Install fpm gem
+        run: sudo gem install fpm
+
+      - name: Set USE_SYSTEM_FPM env var
+        run: echo "USE_SYSTEM_FPM=true" >> $GITHUB_ENV
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Build App Launcher (Linux x64)
+        run: npm run dist -- --linux --x64
+
+      - name: Build App Launcher (Linux x86)
+        run: npm run dist -- --linux --ia32
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: applauncher-linux
+          path: dist/*.*
