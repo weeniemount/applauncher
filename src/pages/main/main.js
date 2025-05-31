@@ -594,27 +594,43 @@ function handleDragStart(e) {
     this.style.opacity = '0.4';
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', this.dataset.appName);
+    draggedAppName = this.dataset.appName;
 }
 
 function handleDragEnd(e) {
     this.style.opacity = '1';
-    // Remove drag-over class from all apps
+    // Remove pushing-right class from all apps
     document.querySelectorAll('#app').forEach(app => {
-        app.classList.remove('drag-over');
+        app.classList.remove('pushing-right');
     });
+    draggedAppName = null;
 }
 
 function handleDragOver(e) {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
-    if (this !== draggedAppName) {
-        this.classList.add('drag-over');
+    
+    if (this.dataset.appName !== draggedAppName) {
+        // Get all apps in the current page
+        const currentPage = this.closest('.page');
+        const apps = Array.from(currentPage.querySelectorAll('#app'));
+        const draggedIndex = apps.findIndex(app => app.dataset.appName === draggedAppName);
+        const targetIndex = apps.findIndex(app => app === this);
+        
+        // Only push apps that are after the target in the list
+        apps.forEach((app, index) => {
+            if (index > targetIndex && app.dataset.appName !== draggedAppName) {
+                app.classList.add('pushing-right');
+            } else {
+                app.classList.remove('pushing-right');
+            }
+        });
     }
     return false;
 }
 
 function handleDragLeave(e) {
-    this.classList.remove('drag-over');
+    // We'll handle cleanup in dragEnd
 }
 
 async function handleDrop(e) {
