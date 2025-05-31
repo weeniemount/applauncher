@@ -5,7 +5,7 @@
     "type": "git",
     "url": "https://github.com/weeniemount/applauncher.git"
   },
-  "description": "Chrome 48's App Launcher recreation in Electron for Windows and Linux.",
+  "description": "Chrome 48's App Launcher recreation in Electron for Windows, Linux, and macOS.",
   "main": "src/main.js",
   "author": {
     "name": "weenie",

@@ -125,6 +125,7 @@ async function refreshConfig() {
 
 
 const isLinux = process.platform === 'linux';
+const isMac = process.platform === 'darwin';
 const createWindow = () => {
   const config = readConfig()
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
@@ -140,6 +141,22 @@ const createWindow = () => {
     canary: 'icons/linux/canary.png',
     chromium: 'icons/linux/chromium.png',
   };
+
+  const iconMapMac = {
+    default: 'icons/mac/icon.icns',
+    canary: 'icons/mac/canary.icns',
+    chromium: 'icons/mac/chromium.icns',
+  };
+
+  let iconPath;
+  if (isMac) {
+    iconPath = iconMapMac[config.appicon] || iconMapMac.default;
+  } else if (isLinux) {
+    iconPath = iconMapLinux[config.appicon] || iconMapLinux.default;
+  } else {
+    iconPath = iconMapWin[config.appicon] || iconMapWin.default;
+  }
+
   applauncher = new BrowserWindow({
     width: 400,
     height: 500,
@@ -147,7 +164,7 @@ const createWindow = () => {
     autoHideMenuBar: true,
     transparent: config["chromeostitlebar"] && config["titlebar"],
     resizable: false,
-    icon: path.join(__dirname, isLinux ? (iconMapLinux[config.appicon] || iconMapLinux.default) : (iconMapWin[config.appicon] || iconMapWin.default)),
+    icon: path.join(__dirname, iconPath),
     webPreferences: globalWebPreferences
   });
 
@@ -270,8 +287,11 @@ ipcMain.on('open-browser', async () => {
   try {
     let browserPath;
 
-    if (process.platform === 'linux') {
-      // For Linux, use xdg-open to open the default browser
+    if (process.platform === 'darwin') {
+      // For macOS, use 'open' command
+      browserPath = 'open';
+    } else if (process.platform === 'linux') {
+      // For Linux, use xdg-open
       browserPath = 'xdg-open';
     } else if (process.platform === 'win32') {
       // For Windows, query the registry to get the default browser
@@ -526,9 +546,11 @@ ipcMain.handle('choose-app-icon', async () => {
 ipcMain.handle('choose-program', async () => {
   const result = await dialog.showOpenDialog({
     properties: ['openFile'],
-    filters: isLinux ? [] : [
+    filters: process.platform === 'win32' ? [
       { name: 'Programs', extensions: ['exe', 'bat', 'cmd'] }
-    ],
+    ] : process.platform === 'darwin' ? [
+      { name: 'Applications', extensions: ['app'] }
+    ] : []
   });
 
   return result.filePaths; // Return the file paths selected by the user
@@ -569,14 +591,14 @@ ipcMain.on('uninstall-app', async (event, appname) => {
 // Function to convert image to ICO
 async function convertToIco(sourcePath, appName) {
   try {
-    // On Linux, use the original image path without conversion
-    if (process.platform === 'linux') {
+    // On Linux or macOS, use the original image path without conversion
+    if (process.platform === 'linux' || process.platform === 'darwin') {
       // Make sure the sourcePath exists before returning it
       if (fs.existsSync(sourcePath)) {
         return sourcePath;
       } else {
         console.error(`Image file not found: ${sourcePath}`);
-        // Fall back to default icon for Linux
+        // Fall back to default icon for Linux/macOS
         return path.join(__dirname, 'defaultapps/noicon.png');
       }
     }
@@ -619,10 +641,12 @@ ipcMain.on('create-shortcut', async (event, appname) => {
     }
     console.log('Found app data:', appData);
 
-    // For Linux, use the actual Desktop directory rather than the user home
-    const desktopPath = process.platform === 'linux' 
-      ? path.join(app.getPath('home'), 'Desktop')  // Use actual Desktop folder on Linux
-      : path.join(app.getPath('desktop'));
+    // Get the desktop path based on platform
+    const desktopPath = process.platform === 'darwin'
+      ? path.join(app.getPath('home'), 'Desktop')
+      : process.platform === 'linux'
+        ? path.join(app.getPath('home'), 'Desktop')
+        : path.join(app.getPath('desktop'));
     
     console.log('Desktop path:', desktopPath);
     let shortcutPath;
@@ -647,7 +671,36 @@ ipcMain.on('create-shortcut', async (event, appname) => {
     }
     console.log('Icon path:', iconPath);
 
-    if (process.platform === 'win32') {
+    if (process.platform === 'darwin') {
+      // macOS .command file creation
+      shortcutPath = path.join(desktopPath, `${appname}.command`);
+      console.log('Creating macOS command file at:', shortcutPath);
+      
+      let scriptContent;
+      if (appData[3] === 'link') {
+        scriptContent = `#!/bin/bash\nopen "${appData[4]}"`;
+      } else if (appData[3] === 'program') {
+        scriptContent = `#!/bin/bash\n"${appData[4]}"`;
+      } else if (appData[3] === 'installedcrx') {
+        scriptContent = `#!/bin/bash\n"${process.execPath}" --launch-crx=${appData[4]}`;
+      } else if (appData[3] === 'dino') {
+        scriptContent = `#!/bin/bash\n"${process.execPath}" --dino=true`;
+      }
+
+      try {
+        fs.writeFileSync(shortcutPath, scriptContent);
+        fs.chmodSync(shortcutPath, '755'); // Make executable
+        console.log('Command file created successfully');
+        if (config.showShortcutAlerts) {
+          event.sender.send('shortcut-creation-success', `Shortcut created for ${appname}`);
+        }
+      } catch (error) {
+        console.error('Error creating command file:', error);
+        if (config.showShortcutAlerts) {
+          event.sender.send('shortcut-creation-error', `Failed to create shortcut: ${error.message}`);
+        }
+      }
+    } else if (process.platform === 'win32') {
       // Windows shortcut creation
       shortcutPath = path.join(desktopPath, `${appname}.lnk`);
       console.log('Creating Windows shortcut at:', shortcutPath);

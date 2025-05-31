@@ -36,13 +36,20 @@ async function getAppIcon(manifest, crxpath) {
     }
 
     const iconName = path.basename(iconPath, path.extname(iconPath));
-    const platformIconPath = path.join(iconDir, `${iconName}_${process.platform}.${process.platform === 'win32' ? 'ico' : 'png'}`);
+    const platformExt = process.platform === 'win32' ? 'ico' : 
+                       process.platform === 'darwin' ? 'icns' : 'png';
+    const platformIconPath = path.join(iconDir, `${iconName}_${process.platform}.${platformExt}`);
 
-    // Always convert for Windows, even if it's the default icon
+    // Handle platform-specific icon conversion
     if (process.platform === 'win32') {
       // Convert to ICO for Windows
       const buf = await pngToIco(iconPath);
       fs.writeFileSync(platformIconPath, buf);
+    } else if (process.platform === 'darwin') {
+      // For macOS, use the PNG directly since Electron can handle it
+      // In the future, you might want to add proper ICNS conversion here
+      fs.copyFileSync(iconPath, platformIconPath.replace('.icns', '.png'));
+      return platformIconPath.replace('.icns', '.png');
     } else {
       // For Linux, just copy the PNG if it doesn't exist
       if (!fs.existsSync(platformIconPath)) {
@@ -137,6 +144,8 @@ async function openCrxApp(crxId) {
           title: manifest.name || 'Chrome App',
           icon: appIcon,
           autoHideMenuBar: true,
+          titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default', // Use native macOS titlebar
+          trafficLightPosition: process.platform === 'darwin' ? { x: 10, y: 10 } : undefined,
           webPreferences: {
             contextIsolation: true,
             nodeIntegration: false,
@@ -145,6 +154,49 @@ async function openCrxApp(crxId) {
             enableRemoteModule: true, // Enable remote module if needed by the app
           }
         });
+
+        // Create macOS app menu if needed
+        if (process.platform === 'darwin') {
+          const template = [
+            {
+              label: app.name,
+              submenu: [
+                { role: 'about' },
+                { type: 'separator' },
+                { role: 'services' },
+                { type: 'separator' },
+                { role: 'hide' },
+                { role: 'hideOthers' },
+                { role: 'unhide' },
+                { type: 'separator' },
+                { role: 'quit' }
+              ]
+            },
+            {
+              label: 'Edit',
+              submenu: [
+                { role: 'undo' },
+                { role: 'redo' },
+                { type: 'separator' },
+                { role: 'cut' },
+                { role: 'copy' },
+                { role: 'paste' },
+                { role: 'selectAll' }
+              ]
+            },
+            {
+              label: 'Window',
+              submenu: [
+                { role: 'minimize' },
+                { role: 'zoom' },
+                { type: 'separator' },
+                { role: 'front' }
+              ]
+            }
+          ];
+          const menu = Menu.buildFromTemplate(template);
+          Menu.setApplicationMenu(menu);
+        }
 
         // Use proper file URL format for loading local files
         const fileUrl = url.format({
@@ -206,14 +258,17 @@ async function chooseAndExtractCrx() {
       console.log("ima go extract funny " + path.basename(result.filePaths[0]) + " now lol");
     
       const filename = path.basename(result.filePaths[0], '.crx');
-      const extractPath = path.join(app.getPath('userData'), `installedcrx`, `${filename}`);
+      // Use path.join for cross-platform compatibility
+      const extractPath = path.join(app.getPath('userData'), 'installedcrx', filename);
     
       if (!fs.existsSync(extractPath)) {
         fs.mkdirSync(extractPath, { recursive: true });
       }
     
       for (const [relativePath, zipEntry] of Object.entries(jszipcrx.files)) {
-        const outputPath = path.join(extractPath, relativePath);
+        // Normalize path separators for the current platform
+        const normalizedPath = relativePath.split('/').join(path.sep);
+        const outputPath = path.join(extractPath, normalizedPath);
     
         if (zipEntry.dir) {
           fs.mkdirSync(outputPath, { recursive: true });
@@ -234,7 +289,8 @@ async function chooseAndExtractCrx() {
       if (manifest.icons && typeof manifest.icons === 'object') {
         const iconPaths = Object.values(manifest.icons);
         if (iconPaths.length > 0) {
-          iconpathvery = iconPaths[0];
+          // Normalize icon path for the current platform
+          iconpathvery = iconPaths[0].split('/').join(path.sep);
         } else {
           iconpathvery = "noicon";
         }
