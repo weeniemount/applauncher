@@ -111,7 +111,7 @@ async function openCrxApp(crxId) {
         
         // Get the first HTML file
         const firstHtmlFile = cleanedHtmlPaths[0];
-        const htmlFilePath = path.join(crxpath, firstHtmlFile);
+        let htmlFilePath = path.join(crxpath, firstHtmlFile);
         
         console.log(`Attempting to load HTML file: ${htmlFilePath}`);
         
@@ -219,6 +219,8 @@ async function openCrxApp(crxId) {
 
         newWin.on('closed', () => {
           console.log('Window closed.');
+          // Clean up event listeners
+          newWin.webContents.removeAllListeners('did-fail-load');
           // Emit event to main process
           ipcMain.emit('crx-window-closed');
         });
@@ -322,14 +324,15 @@ async function sampleCrxInstall() {
     const crxdata = fs.readFileSync(crxpath);
     const jszipcrx = await JSZip.loadAsync(crxdata);
 
-    const extractPath = path.join(app.getPath('userData'), `installedcrx`, `PELIMFLKPJIICNAJDJCMEKPIOACMAHKH_1_2_0_0`);
+    const extractPath = path.join(app.getPath('userData'), 'installedcrx', 'PELIMFLKPJIICNAJDJCMEKPIOACMAHKH_1_2_0_0');
 
     if (!fs.existsSync(extractPath)) {
         fs.mkdirSync(extractPath, { recursive: true });
     }
 
     for (const [relativePath, zipEntry] of Object.entries(jszipcrx.files)) {
-      const outputPath = path.join(extractPath, relativePath);
+      const normalizedPath = relativePath.split('/').join(path.sep);
+      const outputPath = path.join(extractPath, normalizedPath);
 
       if (zipEntry.dir) {
           fs.mkdirSync(outputPath, { recursive: true });
@@ -350,7 +353,10 @@ async function sampleCrxInstall() {
     if (manifest.icons && typeof manifest.icons === 'object') {
         const iconPaths = Object.values(manifest.icons);
         if (iconPaths.length > 0) {
-            iconpathvery = iconPaths[0];
+            // Normalize icon path for the current platform
+            iconpathvery = iconPaths[0].split('/').join(path.sep);
+        } else {
+            iconpathvery = "noicon";
         }
     }
     
