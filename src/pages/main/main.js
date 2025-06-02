@@ -78,6 +78,8 @@ async function refreshapps(config) {
             let browserName = "Chrome";
             if (config.browserappiconam == "firefox") {
                 browserName = "Firefox";
+            } else if (config.browserappiconam == "librewolf") {
+                browserName = "LibreWolf";
             } else if (config.browserappiconam == "chromium") {
                 browserName = "Chromium";
             } else if (config.browserappiconam == "ie") {
@@ -113,6 +115,8 @@ async function refreshapps(config) {
                 } else {
                     appIcon.src = `../../defaultapps/browser/firefox_2011.png`;
                 }
+            } else if (config.browserappiconam == "librewolf") {
+                appIcon.src = `../../defaultapps/browser/librewolf.svg`;
             } else if (config.browserappiconam == "chromium") {
                 appIcon.src = `../../defaultapps/browser/chromium_${config.browsericonera}.svg`;
             } else if (config.browserappiconam == "ie") {
