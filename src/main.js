@@ -100,6 +100,10 @@ const globalWebPreferences = {
 }
 
 function windowAction(action, window) {
+  if (!window || window.isDestroyed()) {
+    return;
+  }
+  
   if (action === 'minimize') {
     window.minimize();
   } else if (action === 'maximize') {
@@ -191,7 +195,7 @@ const createWindow = () => {
   applauncher.loadFile('src/pages/main/index.html');
 
   ipcMain.on('window-action', (event, action, window) => {
-    if (window === 'launcher') {
+    if (window === 'launcher' && applauncher && !applauncher.isDestroyed()) {
       windowAction(action, applauncher);
     }
   });
@@ -427,14 +431,19 @@ ipcMain.on('open-settings', () => {
     ipcMain.on('window-action', (event, action, window) => {
       if (window === 'settings') {
         try {
-          windowAction(action, settings);
+          if (settings && !settings.isDestroyed()) {
+            windowAction(action, settings);
+          }
         } catch (error) {
-          console.error('i dont feel like fixing this. plus, it literally doesnt affect anything and just gives an error for no reason');
+          console.error('Error handling settings window action:', error);
         }
       }
     });
 
     settings.on('closed', () => {
+      if (settings && !settings.isDestroyed()) {
+        settings.removeAllListeners();
+      }
       settings = null;
     });
 
@@ -463,11 +472,15 @@ ipcMain.on('open-createanapp', () => {
 
     ipcMain.on('close-createanapp', () => {
       if (createanapp && !createanapp.isDestroyed()) {
+        createanapp.removeAllListeners();
         createanapp.close(); 
       }
     });
 
     createanapp.on('closed', () => {
+      if (createanapp && !createanapp.isDestroyed()) {
+        createanapp.removeAllListeners();
+      }
       createanapp = null;
     });
   }
@@ -493,11 +506,15 @@ ipcMain.on('open-about', () => {
 
     ipcMain.on('close-about', () => {
       if (about && !about.isDestroyed()) {
+        about.removeAllListeners();
         about.close(); 
       }
     });
 
     about.on('closed', () => {
+      if (about && !about.isDestroyed()) {
+        about.removeAllListeners();
+      }
       about = null;
     });
   }
@@ -524,13 +541,17 @@ function opendino() {
 
     dino.loadFile('src/pages/dino/index.html');
 
-    ipcMain.on('close-about', () => {
+    ipcMain.on('close-dino', () => {
       if (dino && !dino.isDestroyed()) {
+        dino.removeAllListeners();
         dino.close(); 
       }
     });
 
     dino.on('closed', () => {
+      if (dino && !dino.isDestroyed()) {
+        dino.removeAllListeners();
+      }
       dino = null;
       if (dinoId) {
         app.quit();
