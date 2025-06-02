@@ -219,8 +219,10 @@ async function openCrxApp(crxId) {
 
         newWin.on('closed', () => {
           console.log('Window closed.');
-          // Clean up event listeners
-          newWin.webContents.removeAllListeners('did-fail-load');
+          // Safely clean up event listeners
+          if (newWin && !newWin.isDestroyed() && newWin.webContents && !newWin.webContents.isDestroyed()) {
+            newWin.webContents.removeAllListeners('did-fail-load');
+          }
           // Emit event to main process
           ipcMain.emit('crx-window-closed');
         });
