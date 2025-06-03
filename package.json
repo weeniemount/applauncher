@@ -35,7 +35,8 @@
     "afterPack": "./scripts/removeUnneededFiles.js",
     "files": [
       "**/*",
-      "!**/*.map"
+      "!**/*.map",
+      "!src/build/**/*"
     ],
     "win": {
       "icon": "src/icons/applauncher.ico",
