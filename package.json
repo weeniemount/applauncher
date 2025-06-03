@@ -43,28 +43,7 @@
     },
     "mac": {
       "executableName": "App Launcher",
-      "icon": "src/icons/mac/launcher.icns",
-      "dmg": {
-        "background": "src/build/mac/macdmgbg.png",
-        "icon": "src/icons/mac/launcher.icns",
-        "iconSize": 128,
-        "contents": [
-          {
-            "x": 130,
-            "y": 220
-          },
-          {
-            "x": 410,
-            "y": 220,
-            "type": "link",
-            "path": "/Applications"
-          }
-        ],
-        "window": {
-          "width": 540,
-          "height": 380
-        }
-      }
+      "icon": "src/icons/mac/launcher.icns"
     },
     "linux": {
       "electronLanguages": ["en-US"],
@@ -82,6 +61,27 @@
         }
       ],
       "category": "Utility"
+    },
+    "dmg": {
+      "background": "src/build/mac/macdmgbg.png",
+      "icon": "src/icons/mac/launcher.icns",
+      "iconSize": 128,
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ],
+      "window": {
+        "width": 540,
+        "height": 380
+      }
     },
     "rpm": {
       "fpm": [
