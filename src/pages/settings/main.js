@@ -51,8 +51,15 @@ function handleNumberInput(element, configKey) {
 }
 
 async function titlebarfunc(config) {
-    if (config["chromeostitlebar"] === true) {
+    if (config["chromeostitlebar"] === true && config["titlebarstyle"] === "chromium") {
         document.getElementById("chrome-titlebar").style.display = "flex"
+        document.getElementById("settingsbox").style.marginTop = "36px"
+        document.getElementById("settingsbox").style.height = "calc(100vh - 37px)"
+        document.getElementById("settingsbox").style.borderLeft = "#373837 1px solid"
+        document.getElementById("settingsbox").style.borderRight = "#373837 1px solid"
+        document.getElementById("settingsbox").style.borderBottom = "#373837 1px solid"
+    } else if (config["chromeostitlebar"] === true && config["titlebarstyle"] === "chrome48") {
+        document.getElementById("chrome-titlebar2").style.display = "flex"
         document.getElementById("settingsbox").style.marginTop = "36px"
         document.getElementById("settingsbox").style.height = "calc(100vh - 37px)"
         document.getElementById("settingsbox").style.borderLeft = "#373837 1px solid"
@@ -83,6 +90,10 @@ window.addEventListener('load', initializePlatformSpecific);
 document.getElementById("close").onclick = () => window.electron.windowAction("close", "settings")
 document.getElementById("minimize").onclick = () => window.electron.windowAction("minimize", "settings")
 document.getElementById("maximize").onclick = () => window.electron.windowAction("maximize", "settings")
+
+document.getElementById("close2").onclick = () => window.electron.windowAction("close", "settings")
+document.getElementById("minimize2").onclick = () => window.electron.windowAction("minimize", "settings")
+document.getElementById("maximize2").onclick = () => window.electron.windowAction("maximize", "settings")
 
 async function setvalues() {
     const config = await window.electron.getConfig()
@@ -115,6 +126,8 @@ async function setvalues() {
     // Set number inputs
     document.getElementById("xoffset").value = config.startoffsetx
     document.getElementById("yoffset").value = config.startoffsety
+
+    document.getElementById(config.titlebarstyle).checked = true
 }
 
 // Initialize checkbox handlers
@@ -133,6 +146,7 @@ handleRadioChange('startpos', 'startpos')
 handleRadioChange('browsericon', 'browserappiconam')
 handleRadioChange('defaulticonera', 'appiconera')
 handleRadioChange('browsericonera', 'browsericonera')
+handleRadioChange('titlebarstyle', 'titlebarstyle')
 
 // Initialize number input handlers
 handleNumberInput(document.getElementById("xoffset"), 'startoffsetx')

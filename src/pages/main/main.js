@@ -20,8 +20,20 @@ async function applyconfig() {
 
 async function titlebar() {
     let winconfig = await window.electron.getConfig()
-    if (winconfig["chromeostitlebar"] === true && winconfig["titlebar"] === true) {
+    if (winconfig["chromeostitlebar"] === true && winconfig["titlebar"] === true && winconfig["titlebarstyle"] === "chromium") {
         document.getElementById("chrome-titlebar").style.display = "flex"
+        document.getElementById("applauncherbody").style.marginTop = "36px"
+        document.getElementById("appinfo").style.marginTop = "36px"
+
+        document.getElementById("applauncherbody").style.borderLeft = "#373837 1px solid"
+        document.getElementById("applauncherbody").style.borderRight = "#373837 1px solid"
+        document.getElementById("applauncherbody").style.borderBottom = "#373837 1px solid"
+
+        document.getElementById("searchicon").style.marginTop = "36px"
+        document.getElementById("searchbarurl").style.marginTop = "36px"
+        document.getElementById("hamburgermenu").style.marginTop = "36px"
+    } else if (winconfig["chromeostitlebar"] === true && winconfig["titlebar"] === true && winconfig["titlebarstyle"] === "chrome48") {
+        document.getElementById("chrome-titlebar2").style.display = "flex"
         document.getElementById("applauncherbody").style.marginTop = "36px"
         document.getElementById("appinfo").style.marginTop = "36px"
 
@@ -43,6 +55,15 @@ document.getElementById("close").onclick = function() {
 document.getElementById("minimize").onclick = function() {
     window.electron.windowAction("minimize", "launcher")
 }
+
+document.getElementById("close2").onclick = function() {
+    window.electron.windowAction("close", "launcher")
+}
+document.getElementById("minimize2").onclick = function() {
+    window.electron.windowAction("minimize", "launcher")
+}
+
+
 
 function pageswap(page) {
     selectedpage = page

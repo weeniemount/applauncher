@@ -268,6 +268,78 @@
 
 /* titlebar */
 
+/* titlebar 2 */
+
+#chrome-titlebar2 {
+    position: fixed;
+    background-color: #808281;
+    height: 36px;
+    width: 100vw;
+    z-index: 9999;
+    top: 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-image: url("titlebar2/repeat.png");
+    background-repeat: repeat; /* Ensures the image repeats infinitely */
+    background-size: auto; /* Keeps the original size of the image */
+    -webkit-app-region: drag; /* Allow dragging the window */
+}
+
+#titlebar-buttons2 {
+    display: flex;
+    margin-right: 0px; /* Add some padding from the right edge */
+    -webkit-app-region: no-drag; /* Prevents buttons from being draggable */
+    user-select: none;
+}
+
+#titlebarbutton2 {
+    width: 35px; /* Adjust button size if needed */
+    height: 36px;
+    cursor: pointer;
+}
+
+#titlebarbutton2:hover {
+    /* Combine all filter effects in one property */
+    filter: sepia(1) saturate(5) hue-rotate(90deg) brightness(0.7);
+}
+
+/* Add a background image for the minimize button */
+#minimize2 {
+    background-image: url('titlebar2/minimize.png');
+    border: none;
+    width: 35px;
+    height: 36px;
+}
+
+#minimize2:hover {
+    background-image: url('titlebar2/minimize-hover.png');
+}
+
+#maximize2 {
+    background-image: url('titlebar2/maximize.png');
+    border: none;
+    width: 35px;
+    height: 36px;
+}
+
+#maximize2:hover {
+    background-image: url('titlebar2/maximize-hover.png');
+}
+
+#close2 {
+    background-image: url('titlebar2/close.png');
+    border: none;
+    width: 36px;
+    height: 36px;
+}
+
+#close2:hover {
+    background-image: url('titlebar2/close-hover.png');
+}
+
+/* titlebar 2 */
+
 /* IMAGE PRELOAD */
 
 #imagepreload-bluebutton {
@@ -345,4 +417,36 @@
         url("radio/radio_hover.png"),
         url("radio/radio_inactive.png"),
         url("radio/radio_pressed.png");
+}
+
+#imagepreload-titlebar {
+    position: absolute;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+    overflow: hidden;
+    background-image: 
+        url("titlebar/repeat.png"),
+        url("titlebar/minimize.png"),
+        url("titlebar/minimize-hover.png"),
+        url("titlebar/maximize.png"),
+        url("titlebar/maximize-hover.png"),
+        url("titlebar/close.png"),
+        url("titlebar/close-hover.png");
+}
+
+#imagepreload-titlebar2 {
+    position: absolute;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+    overflow: hidden;
+    background-image: 
+        url("titlebar2/repeat.png"),
+        url("titlebar2/minimize.png"),
+        url("titlebar2/minimize-hover.png"),
+        url("titlebar2/maximize.png"),
+        url("titlebar2/maximize-hover.png"),
+        url("titlebar2/close.png"),
+        url("titlebar2/close-hover.png");
 }

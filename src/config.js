@@ -20,6 +20,7 @@ const defaultConfig = {
   showbrowserapp: true,
   browserappiconam: "chrome",
   chromeostitlebar: false,
+  titlebarstyle: "chromium",
   checkForUpdates: true,
   showShortcutAlerts: true,
   apps: [
