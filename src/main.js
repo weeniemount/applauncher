@@ -888,6 +888,41 @@ Categories=Utility;`;
   }
 });
 
+ipcMain.handle('backup-config', async () => {
+  const config = readConfig();
+  const { filePath, canceled } = await dialog.showSaveDialog({
+    title: 'Save Config Backup',
+    defaultPath: 'applauncher-config-backup.json',
+    filters: [{ name: 'JSON', extensions: ['json'] }]
+  });
+  if (canceled || !filePath) return { success: false };
+
+  try {
+    fs.writeFileSync(filePath, JSON.stringify(config, null, 2), 'utf-8');
+    return { success: true };
+  } catch (e) {
+    return { success: false, error: e.message };
+  }
+});
+
+ipcMain.handle('restore-config', async () => {
+  const { filePaths, canceled } = await dialog.showOpenDialog({
+    title: 'Select Config Backup',
+    filters: [{ name: 'JSON', extensions: ['json'] }],
+    properties: ['openFile']
+  });
+  if (canceled || !filePaths || !filePaths[0]) return { success: false };
+
+  try {
+    const text = fs.readFileSync(filePaths[0], 'utf-8');
+    const config = JSON.parse(text);
+    updateConfig(config);
+    return { success: true };
+  } catch (e) {
+    return { success: false, error: e.message };
+  }
+});
+
 app.whenReady().then(async () => {
   // Check for updates on startup if enabled
   try {

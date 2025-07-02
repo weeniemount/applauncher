@@ -54,4 +54,10 @@ contextBridge.exposeInMainWorld('electron', {
   onShortcutCreationError: (callback) => ipcRenderer.on('shortcut-creation-error', (event, message) => callback(message)),
   addSampleCrx: () => ipcRenderer.send('add-sample-crx'),
   dino: () => ipcRenderer.send('open-dino'),
+  backupConfig: async () => {
+    return await ipcRenderer.invoke('backup-config');
+  },
+  restoreConfig: async () => {
+    return await ipcRenderer.invoke('restore-config');
+  },
 });

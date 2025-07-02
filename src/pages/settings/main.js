@@ -247,6 +247,27 @@ document.getElementById("resetconfig").addEventListener('click', async () => {
     appstable()
 })
 
+document.getElementById("backupconfig").addEventListener('click', async () => {
+    const result = await window.electron.backupConfig();
+    if (result.success) {
+        alert("Backup saved successfully!");
+    } else if (result.error) {
+        alert("Backup failed: " + result.error);
+    }
+});
+
+document.getElementById("restoreconfig").addEventListener('click', async () => {
+    const result = await window.electron.restoreConfig();
+    if (result.success) {
+        window.electron.launcherRefreshConfig();
+        setvalues();
+        appstable();
+        alert("Config restored successfully!");
+    } else if (result.error) {
+        alert("Restore failed: " + result.error);
+    }
+});
+
 // Initialize
 setvalues()
 appstable()
