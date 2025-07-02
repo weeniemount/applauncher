@@ -165,28 +165,58 @@ resetapps.addEventListener('click', async () => {
 })
 
 async function appstable() {
-    const config = await window.electron.getConfig()
-    const tableBody = document.getElementById('apptable').querySelector('tbody')
-    tableBody.innerHTML = ''
+    const config = await window.electron.getConfig();
+    const tableBody = document.getElementById('apptable').querySelector('tbody');
+    tableBody.innerHTML = '';
 
     if (config?.apps?.length > 0) {
-        for (const app of config.apps) {
-            const newRow = tableBody.insertRow()
-            newRow.insertCell(0).textContent = app[0]
+        for (let i = 0; i < config.apps.length; i++) {
+            const app = config.apps[i];
+            const newRow = tableBody.insertRow();
+            newRow.insertCell(0).textContent = app[0];
             if (app[3] == "dino") {
-                newRow.insertCell(1).textContent = "chrome://dino"
+                newRow.insertCell(1).textContent = "chrome://dino";
             } else {
-                newRow.insertCell(1).textContent = app[4]
+                newRow.insertCell(1).textContent = app[4];
             }
-            
-            const iconCell = newRow.insertCell(2)
-            const iconHtml = await getAppIconHtml(app)
-            iconCell.innerHTML = iconHtml
-            
-            const removeCell = newRow.insertCell(3)
-            removeCell.innerHTML = `<a onclick='deleteApp("${app[0]}")'><image src='images/removeapp.png'></a>`
+
+            const iconCell = newRow.insertCell(2);
+            const iconHtml = await getAppIconHtml(app);
+            iconCell.innerHTML = iconHtml;
+
+            // Move arrows cell
+            const moveCell = newRow.insertCell(3);
+            moveCell.innerHTML = `
+                <button class="move-up" ${i === 0 ? "disabled" : ""} title="Move up">&#8593;</button>
+                <button class="move-down" ${i === config.apps.length - 1 ? "disabled" : ""} title="Move down">&#8595;</button>
+            `;
+
+            // Remove cell
+            const removeCell = newRow.insertCell(4);
+            removeCell.innerHTML = `<a onclick='deleteApp("${app[0]}")'><image src='images/removeapp.png'></a>`;
+
+            // Add event listeners for move buttons
+            moveCell.querySelector('.move-up').addEventListener('click', async () => {
+                await moveApp(i, i - 1);
+            });
+            moveCell.querySelector('.move-down').addEventListener('click', async () => {
+                await moveApp(i, i + 1);
+            });
         }
     }
+}
+
+// Move app in config and update table
+async function moveApp(fromIndex, toIndex) {
+    const config = await window.electron.getConfig();
+    if (toIndex < 0 || toIndex >= config.apps.length) return;
+    const apps = config.apps;
+    const [moved] = apps.splice(fromIndex, 1);
+    apps.splice(toIndex, 0, moved);
+    config.apps = apps;
+    await window.electron.updateConfig(config);
+    appstable();
+    window.electron.launcherRefreshConfig();
 }
 
 async function getAppIconHtml(app) {
