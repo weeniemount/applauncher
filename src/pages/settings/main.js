@@ -239,6 +239,14 @@ async function addoptionalapp(app) {
     }
 }
 
+document.getElementById("resetconfig").addEventListener('click', async () => {
+    const defaultConfig = await window.electron.getDefaultConfig()
+    await window.electron.updateConfig(defaultConfig)
+    window.electron.launcherRefreshConfig()
+    setvalues()
+    appstable()
+})
+
 // Initialize
 setvalues()
 appstable()
