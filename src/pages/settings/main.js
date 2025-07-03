@@ -187,8 +187,8 @@ async function appstable() {
             // Move arrows cell
             const moveCell = newRow.insertCell(3);
             moveCell.innerHTML = `
-                <button class="move-up" ${i === 0 ? "disabled" : ""} title="Move up">&#8593;</button>
-                <button class="move-down" ${i === config.apps.length - 1 ? "disabled" : ""} title="Move down">&#8595;</button>
+                <button class="move-up bluebutton" ${i === 0 ? "disabled" : ""} title="Move up">&#8593;</button>
+                <button class="move-down bluebutton" ${i === config.apps.length - 1 ? "disabled" : ""} title="Move down">&#8595;</button>
             `;
 
             // Remove cell
