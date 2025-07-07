@@ -379,7 +379,6 @@ ipcMain.on('open-settings', () => {
       autoHideMenuBar: true,
       name: "Settings",
       icon: settingsIconPath,
-      titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
       webPreferences: globalWebPreferences
     });
 
