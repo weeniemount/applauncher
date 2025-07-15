@@ -57,5 +57,5 @@ jobs:
         with:
           name: applauncher-macos-universal
           path: |
-            dist/mac/applauncher-*.dmg
-            dist/mac/applauncher-*.zip
+            dist/applauncher-*.dmg
+            dist/applauncher-*.zip
