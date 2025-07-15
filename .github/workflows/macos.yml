@@ -33,18 +33,22 @@ jobs:
         run: |
           VERSION=${{ steps.get_version.outputs.version }}
           cd dist/mac
+          # Handle DMG files
           for file in *.dmg; do
             if [[ -f "$file" ]]; then
-              # Extract the unique part of the filename (e.g., "arm64", "x64", etc.)
               base_name=$(echo "$file" | sed 's/\.dmg$//')
-              # If it's just "App Launcher.dmg", don't add extra identifier
               if [[ "$base_name" == "App Launcher" ]]; then
                 mv "$file" "applauncher-${VERSION}-macos-universal.dmg"
               else
-                # Extract any architecture/variant identifier
                 identifier=$(echo "$base_name" | sed 's/^App Launcher-\?//')
                 mv "$file" "applauncher-${VERSION}-macos-universal-${identifier}.dmg"
               fi
+            fi
+          done
+          # Handle ZIP files
+          for file in *.zip; do
+            if [[ -f "$file" ]]; then
+              mv "$file" "applauncher-${VERSION}-macos-unpacked-universal.zip"
             fi
           done
 
@@ -52,4 +56,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: applauncher-macos-universal
-          path: dist/mac/applauncher-*.dmg
+          path: |
+            dist/mac/applauncher-*.dmg
+            dist/mac/applauncher-*.zip
