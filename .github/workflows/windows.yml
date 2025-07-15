@@ -16,6 +16,14 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Download 7-Zip CLI
+        shell: pwsh
+        run: |
+          $url = "https://www.7-zip.org/a/7za920.zip"
+          Invoke-WebRequest -Uri $url -OutFile "7za.zip"
+          Expand-Archive "7za.zip" -DestinationPath "7za"
+          echo "${{ github.workspace }}\7za" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
       - name: Install dependencies
         run: npm install
 
@@ -29,6 +37,14 @@ jobs:
       - name: Build App Launcher (Windows x64)
         run: npm run build -- --win --x64
 
+      - name: Create x64 ZIP with 7-Zip
+        shell: pwsh
+        run: |
+          $VERSION = "${{ steps.get_version.outputs.version }}"
+          cd dist/win-unpacked
+          7za a -tzip -mx=9 "../applauncher-${VERSION}-windows-unpacked-x64.zip" *
+          cd ../..
+
       - name: Rename and clean x64 artifacts
         shell: pwsh
         run: |
@@ -36,10 +52,6 @@ jobs:
           # Handle EXE files
           Get-ChildItem -Path "dist" -Filter "*.exe" | ForEach-Object {
             Move-Item $_.FullName "dist/applauncher-${VERSION}-windows-x64.exe"
-          }
-          # Handle ZIP files
-          Get-ChildItem -Path "dist" -Filter "*.zip" | ForEach-Object {
-            Move-Item $_.FullName "dist/applauncher-${VERSION}-windows-unpacked-x64.zip"
           }
           Remove-Item -Path "dist/win-unpacked" -Recurse -Force -ErrorAction SilentlyContinue
 
@@ -58,6 +70,14 @@ jobs:
       - name: Build App Launcher (Windows x86)
         run: npm run build -- --win --ia32
 
+      - name: Create x86 ZIP with 7-Zip
+        shell: pwsh
+        run: |
+          $VERSION = "${{ steps.get_version.outputs.version }}"
+          cd dist/win-ia32-unpacked
+          7za a -tzip -mx=9 "../applauncher-${VERSION}-windows-unpacked-x86.zip" *
+          cd ../..
+
       - name: Rename and clean x86 artifacts
         shell: pwsh
         run: |
@@ -65,10 +85,6 @@ jobs:
           # Handle EXE files
           Get-ChildItem -Path "dist" -Filter "*.exe" | ForEach-Object {
             Move-Item $_.FullName "dist/applauncher-${VERSION}-windows-x86.exe"
-          }
-          # Handle ZIP files
-          Get-ChildItem -Path "dist" -Filter "*.zip" | ForEach-Object {
-            Move-Item $_.FullName "dist/applauncher-${VERSION}-windows-unpacked-x86.zip"
           }
           Remove-Item -Path "dist/win-unpacked" -Recurse -Force -ErrorAction SilentlyContinue
 

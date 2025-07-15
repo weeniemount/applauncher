@@ -27,6 +27,7 @@ jobs:
             xz-utils \
             p7zip-full \
             unzip \
+            zip \
             python3 \
             squashfs-tools \
             libcrypt-dev
@@ -54,6 +55,13 @@ jobs:
       - name: Build App Launcher (Linux x64)
         run: npm run dist -- --linux --x64
 
+      - name: Create x64 ZIP manually
+        run: |
+          VERSION=${{ steps.get_version.outputs.version }}
+          cd dist/linux-unpacked
+          zip -r ../applauncher-${VERSION}-linux-unpacked-x64.zip *
+          cd ../..
+
       - name: Rename x64 artifacts
         run: |
           VERSION=${{ steps.get_version.outputs.version }}
@@ -63,11 +71,6 @@ jobs:
               [ -e "$file" ] || continue
               mv "$file" "dist/applauncher-${VERSION}-linux-x64.${ext}"
             done
-          done
-          # Handle ZIP files
-          for file in dist/*.zip; do
-            [ -e "$file" ] || continue
-            mv "$file" "dist/applauncher-${VERSION}-linux-unpacked-x64.zip"
           done
 
       - name: Upload x64 artifacts
@@ -86,6 +89,13 @@ jobs:
       - name: Build App Launcher (Linux x86)
         run: npm run dist -- --linux --ia32
 
+      - name: Create x86 ZIP manually
+        run: |
+          VERSION=${{ steps.get_version.outputs.version }}
+          cd dist/linux-ia32-unpacked
+          zip -r ../applauncher-${VERSION}-linux-unpacked-x86.zip *
+          cd ../..
+
       - name: Rename x86 artifacts
         run: |
           VERSION=${{ steps.get_version.outputs.version }}
@@ -95,11 +105,6 @@ jobs:
               [ -e "$file" ] || continue
               mv "$file" "dist/applauncher-${VERSION}-linux-x86.${ext}"
             done
-          done
-          # Handle ZIP files
-          for file in dist/*.zip; do
-            [ -e "$file" ] || continue
-            mv "$file" "dist/applauncher-${VERSION}-linux-unpacked-x86.zip"
           done
 
       - name: Upload x86 artifacts
