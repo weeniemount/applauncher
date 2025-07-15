@@ -1,0 +1,198 @@
+name: Build App Launcher for All Platforms
+
+on:
+  workflow_dispatch:  # Manual trigger only
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    outputs:
+      run-id: ${{ steps.trigger.outputs.run_id }}
+    steps:
+      - name: Trigger Linux Build
+        id: trigger
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const result = await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.name,
+              workflow_id: 'linux.yml',
+              ref: context.ref
+            });
+            
+            // Get the run ID
+            const runs = await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.name,
+              workflow_id: 'linux.yml',
+              branch: context.ref,
+              per_page: 1
+            });
+            
+            core.setOutput('run_id', runs.data.workflow_runs[0].id);
+
+      - name: Wait for Build Completion
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const runId = ${{ steps.trigger.outputs.run_id }};
+            
+            while (true) {
+              const { data: run } = await github.rest.actions.getWorkflowRun({
+                owner: context.repo.owner,
+                repo: context.repo.name,
+                run_id: runId
+              });
+              
+              if (run.status === 'completed') {
+                if (run.conclusion === 'success') {
+                  break;
+                } else {
+                  core.setFailed(`Linux build failed with conclusion: ${run.conclusion}`);
+                  return;
+                }
+              }
+              
+              await new Promise(resolve => setTimeout(resolve, 10000));
+            }
+
+  build-macos:
+    runs-on: ubuntu-latest
+    outputs:
+      run-id: ${{ steps.trigger.outputs.run_id }}
+    steps:
+      - name: Trigger macOS Build
+        id: trigger
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const result = await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.name,
+              workflow_id: 'macos.yml',
+              ref: context.ref
+            });
+            
+            // Get the run ID
+            const runs = await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.name,
+              workflow_id: 'macos.yml',
+              branch: context.ref,
+              per_page: 1
+            });
+            
+            core.setOutput('run_id', runs.data.workflow_runs[0].id);
+
+      - name: Wait for Build Completion
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const runId = ${{ steps.trigger.outputs.run_id }};
+            
+            while (true) {
+              const { data: run } = await github.rest.actions.getWorkflowRun({
+                owner: context.repo.owner,
+                repo: context.repo.name,
+                run_id: runId
+              });
+              
+              if (run.status === 'completed') {
+                if (run.conclusion === 'success') {
+                  break;
+                } else {
+                  core.setFailed(`macOS build failed with conclusion: ${run.conclusion}`);
+                  return;
+                }
+              }
+              
+              await new Promise(resolve => setTimeout(resolve, 10000));
+            }
+
+  build-windows:
+    runs-on: ubuntu-latest
+    outputs:
+      run-id: ${{ steps.trigger.outputs.run_id }}
+    steps:
+      - name: Trigger Windows Build
+        id: trigger
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const result = await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.name,
+              workflow_id: 'windows.yml',
+              ref: context.ref
+            });
+            
+            // Get the run ID
+            const runs = await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.name,
+              workflow_id: 'windows.yml',
+              branch: context.ref,
+              per_page: 1
+            });
+            
+            core.setOutput('run_id', runs.data.workflow_runs[0].id);
+
+      - name: Wait for Build Completion
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const runId = ${{ steps.trigger.outputs.run_id }};
+            
+            while (true) {
+              const { data: run } = await github.rest.actions.getWorkflowRun({
+                owner: context.repo.owner,
+                repo: context.repo.name,
+                run_id: runId
+              });
+              
+              if (run.status === 'completed') {
+                if (run.conclusion === 'success') {
+                  break;
+                } else {
+                  core.setFailed(`Windows build failed with conclusion: ${run.conclusion}`);
+                  return;
+                }
+              }
+              
+              await new Promise(resolve => setTimeout(resolve, 10000));
+            }
+
+  collect-artifacts:
+    needs: [build-linux, build-macos, build-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Linux Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ needs.build-linux.outputs.run-id }}
+          path: dist/linux
+
+      - name: Download macOS Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ needs.build-macos.outputs.run-id }}
+          path: dist/macos
+
+      - name: Download Windows Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ needs.build-windows.outputs.run-id }}
+          path: dist/windows
+
+      - name: Upload All Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: applauncher-crossplatform
+          path: dist/ 
