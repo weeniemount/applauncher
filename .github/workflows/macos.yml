@@ -36,13 +36,7 @@ jobs:
           # Handle DMG files
           for file in *.dmg; do
             if [[ -f "$file" ]]; then
-              base_name=$(echo "$file" | sed 's/\.dmg$//')
-              if [[ "$base_name" == "App Launcher" ]]; then
-                mv "$file" "applauncher-${VERSION}-macos-universal.dmg"
-              else
-                identifier=$(echo "$base_name" | sed 's/^App Launcher-\?//')
-                mv "$file" "applauncher-${VERSION}-macos-universal-${identifier}.dmg"
-              fi
+              mv "$file" "applauncher-${VERSION}-macos-universal.dmg"
             fi
           done
           # Handle ZIP files
