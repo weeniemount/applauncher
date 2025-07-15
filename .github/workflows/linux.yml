@@ -45,14 +45,53 @@ jobs:
       - name: Install npm dependencies
         run: npm install
 
+      - name: Get version from package.json
+        id: get_version
+        run: echo "version=$(node -p \"require('./package.json').version\")" >> $GITHUB_OUTPUT
+
       - name: Build App Launcher (Linux x64)
         run: npm run dist -- --linux --x64
+
+      - name: Rename x64 artifacts
+        run: |
+          VERSION=${{ steps.get_version.outputs.version }}
+          for ext in deb rpm AppImage; do
+            for file in dist/*.${ext}; do
+              [ -e "$file" ] || continue
+              mv "$file" "dist/applauncher-${VERSION}-linux-x64.${ext}"
+            done
+          done
+
+      - name: Upload x64 artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: applauncher-linux-x64
+          path: |
+            dist/applauncher-*-linux-x64.deb
+            dist/applauncher-*-linux-x64.rpm
+            dist/applauncher-*-linux-x64.AppImage
+
+      - name: Clean dist folder before x86 build
+        run: rm -rf dist/*
 
       - name: Build App Launcher (Linux x86)
         run: npm run dist -- --linux --ia32
 
-      - name: Upload artifacts
+      - name: Rename x86 artifacts
+        run: |
+          VERSION=${{ steps.get_version.outputs.version }}
+          for ext in deb rpm AppImage; do
+            for file in dist/*.${ext}; do
+              [ -e "$file" ] || continue
+              mv "$file" "dist/applauncher-${VERSION}-linux-ia32.${ext}"
+            done
+          done
+
+      - name: Upload x86 artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: applauncher-linux
-          path: dist/
+          name: applauncher-linux-ia32
+          path: |
+            dist/applauncher-*-linux-ia32.deb
+            dist/applauncher-*-linux-ia32.rpm
+            dist/applauncher-*-linux-ia32.AppImage
