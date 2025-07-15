@@ -32,7 +32,7 @@ jobs:
       - name: Rename artifacts
         run: |
           VERSION=${{ steps.get_version.outputs.version }}
-          cd dist/mac
+          cd dist
           # Handle DMG files
           for file in *.dmg; do
             if [[ -f "$file" ]]; then
