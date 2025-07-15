@@ -14,28 +14,54 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # or your required Node.js version
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
 
+      - name: Get version from package.json
+        id: get_version
+        shell: pwsh
+        run: |
+          $VERSION = (node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $env:GITHUB_OUTPUT
+
       - name: Build App Launcher (Windows x64)
         run: npm run build -- --win --x64
 
-      - name: Rename x64 setup file (PowerShell)
+      - name: Rename and clean x64 artifacts
         shell: pwsh
         run: |
-          $files = Get-ChildItem -Path dist -Filter "App Launcher Setup *.exe"
-          foreach ($file in $files) {
-            $newName = $file.BaseName + "-x64" + $file.Extension
-            Rename-Item -Path $file.FullName -NewName $newName
+          $VERSION = "${{ steps.get_version.outputs.version }}"
+          Get-ChildItem -Path "dist" -Filter "*.exe" | ForEach-Object {
+            Move-Item $_.FullName "dist/applauncher-${VERSION}-windows-x64.exe"
           }
+          Remove-Item -Path "dist/win-unpacked" -Recurse -Force -ErrorAction SilentlyContinue
+
+      - name: Upload x64 artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: applauncher-windows-x64
+          path: dist/applauncher-*-windows-x64.exe
+
+      - name: Clean dist folder before x86 build
+        shell: pwsh
+        run: Remove-Item -Path "dist/*" -Recurse -Force
 
       - name: Build App Launcher (Windows x86)
         run: npm run build -- --win --ia32
 
-      - name: Upload artifact
+      - name: Rename and clean x86 artifacts
+        shell: pwsh
+        run: |
+          $VERSION = "${{ steps.get_version.outputs.version }}"
+          Get-ChildItem -Path "dist" -Filter "*.exe" | ForEach-Object {
+            Move-Item $_.FullName "dist/applauncher-${VERSION}-windows-x86.exe"
+          }
+          Remove-Item -Path "dist/win-unpacked" -Recurse -Force -ErrorAction SilentlyContinue
+
+      - name: Upload x86 artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: applauncher-windows
-          path: dist/
+          name: applauncher-windows-x86
+          path: dist/applauncher-*-windows-x86.exe

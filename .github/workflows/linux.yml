@@ -85,15 +85,15 @@ jobs:
           for ext in deb rpm AppImage; do
             for file in dist/*.${ext}; do
               [ -e "$file" ] || continue
-              mv "$file" "dist/applauncher-${VERSION}-linux-ia32.${ext}"
+              mv "$file" "dist/applauncher-${VERSION}-linux-x86.${ext}"
             done
           done
 
       - name: Upload x86 artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: applauncher-linux-ia32
+          name: applauncher-linux-x86
           path: |
-            dist/applauncher-*-linux-ia32.deb
-            dist/applauncher-*-linux-ia32.rpm
-            dist/applauncher-*-linux-ia32.AppImage
+            dist/applauncher-*-linux-x86.deb
+            dist/applauncher-*-linux-x86.rpm
+            dist/applauncher-*-linux-x86.AppImage
