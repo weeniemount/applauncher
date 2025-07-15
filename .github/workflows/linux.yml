@@ -57,11 +57,17 @@ jobs:
       - name: Rename x64 artifacts
         run: |
           VERSION=${{ steps.get_version.outputs.version }}
+          # Handle packages
           for ext in deb rpm AppImage; do
             for file in dist/*.${ext}; do
               [ -e "$file" ] || continue
               mv "$file" "dist/applauncher-${VERSION}-linux-x64.${ext}"
             done
+          done
+          # Handle ZIP files
+          for file in dist/*.zip; do
+            [ -e "$file" ] || continue
+            mv "$file" "dist/applauncher-${VERSION}-linux-unpacked-x64.zip"
           done
 
       - name: Upload x64 artifacts
@@ -72,6 +78,7 @@ jobs:
             dist/applauncher-*-linux-x64.deb
             dist/applauncher-*-linux-x64.rpm
             dist/applauncher-*-linux-x64.AppImage
+            dist/applauncher-*-linux-unpacked-x64.zip
 
       - name: Clean dist folder before x86 build
         run: rm -rf dist/*
@@ -82,11 +89,17 @@ jobs:
       - name: Rename x86 artifacts
         run: |
           VERSION=${{ steps.get_version.outputs.version }}
+          # Handle packages
           for ext in deb rpm AppImage; do
             for file in dist/*.${ext}; do
               [ -e "$file" ] || continue
               mv "$file" "dist/applauncher-${VERSION}-linux-x86.${ext}"
             done
+          done
+          # Handle ZIP files
+          for file in dist/*.zip; do
+            [ -e "$file" ] || continue
+            mv "$file" "dist/applauncher-${VERSION}-linux-unpacked-x86.zip"
           done
 
       - name: Upload x86 artifacts
@@ -97,3 +110,4 @@ jobs:
             dist/applauncher-*-linux-x86.deb
             dist/applauncher-*-linux-x86.rpm
             dist/applauncher-*-linux-x86.AppImage
+            dist/applauncher-*-linux-unpacked-x86.zip

@@ -33,8 +33,13 @@ jobs:
         shell: pwsh
         run: |
           $VERSION = "${{ steps.get_version.outputs.version }}"
+          # Handle EXE files
           Get-ChildItem -Path "dist" -Filter "*.exe" | ForEach-Object {
             Move-Item $_.FullName "dist/applauncher-${VERSION}-windows-x64.exe"
+          }
+          # Handle ZIP files
+          Get-ChildItem -Path "dist" -Filter "*.zip" | ForEach-Object {
+            Move-Item $_.FullName "dist/applauncher-${VERSION}-windows-unpacked-x64.zip"
           }
           Remove-Item -Path "dist/win-unpacked" -Recurse -Force -ErrorAction SilentlyContinue
 
@@ -42,7 +47,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: applauncher-windows-x64
-          path: dist/applauncher-*-windows-x64.exe
+          path: |
+            dist/applauncher-*-windows-x64.exe
+            dist/applauncher-*-windows-unpacked-x64.zip
 
       - name: Clean dist folder before x86 build
         shell: pwsh
@@ -55,8 +62,13 @@ jobs:
         shell: pwsh
         run: |
           $VERSION = "${{ steps.get_version.outputs.version }}"
+          # Handle EXE files
           Get-ChildItem -Path "dist" -Filter "*.exe" | ForEach-Object {
             Move-Item $_.FullName "dist/applauncher-${VERSION}-windows-x86.exe"
+          }
+          # Handle ZIP files
+          Get-ChildItem -Path "dist" -Filter "*.zip" | ForEach-Object {
+            Move-Item $_.FullName "dist/applauncher-${VERSION}-windows-unpacked-x86.zip"
           }
           Remove-Item -Path "dist/win-unpacked" -Recurse -Force -ErrorAction SilentlyContinue
 
@@ -64,4 +76,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: applauncher-windows-x86
-          path: dist/applauncher-*-windows-x86.exe
+          path: |
+            dist/applauncher-*-windows-x86.exe
+            dist/applauncher-*-windows-unpacked-x86.zip
