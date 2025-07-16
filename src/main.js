@@ -731,7 +731,35 @@ ipcMain.on('create-shortcut', async (event, appname) => {
 
     // Get icon path based on app type
     if (appData[1] === 'builtinimage') {
-      const sourcePath = path.join(__dirname, appData[2].replace('../../', ''));
+      let sourcePath;
+      if (appData[0] === "Web Store" || appData[0] === "Gmail" || appData[0] === "Google Search" || appData[0] === "YouTube") {
+        const config = readConfig();
+        if (config.appiconera === "2011") {
+          if (config.chromiumwebstoreicon && appData[0] === "Web Store") {
+            sourcePath = path.join(__dirname, appData[2].replace(".png", "_2011_chromium.png").replace('../../', ''));
+          } else {
+            sourcePath = path.join(__dirname, appData[2].replace(".png", "_2011.png").replace('../../', ''));
+          }
+        } else if (config.appiconera === "2013") {
+          if (appData[0] === "Web Store") {
+            if (config.chromiumwebstoreicon) {
+              sourcePath = path.join(__dirname, appData[2].replace(".png", "_2013_chromium.png").replace('../../', ''));
+            } else {
+              sourcePath = path.join(__dirname, appData[2].replace(".png", "_2013.png").replace('../../', ''));
+            }
+          } else {
+            sourcePath = path.join(__dirname, appData[2].replace('../../', ''));
+          }
+        } else if (config.appiconera === "2015") {
+          if (config.chromiumwebstoreicon && appData[0] === "Web Store") {
+            sourcePath = path.join(__dirname, appData[2].replace(".png", "_chromium.png").replace('../../', ''));
+          } else {
+            sourcePath = path.join(__dirname, appData[2].replace('../../', ''));
+          }
+        }
+      } else {
+        sourcePath = path.join(__dirname, appData[2].replace('../../', ''));
+      }
       console.log('Converting builtin image:', sourcePath);
       iconPath = await convertToIco(sourcePath, appname);
     } else if (appData[1] === 'localimage') {
