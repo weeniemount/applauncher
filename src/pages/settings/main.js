@@ -6,6 +6,7 @@ let resetapps = document.getElementById("resetapps")
 let showbrowserapp = document.getElementById("showbrowserapp")
 let checkforupdates = document.getElementById("checkforupdates")
 let showshortcutalerts = document.getElementById("showshortcutalerts")
+let closelauncherwhenoutoffocus = document.getElementById("closelauncherwhenoutoffocus")
 
 // Platform detection
 const isMac = navigator.platform.toLowerCase().includes('mac');
@@ -107,6 +108,7 @@ async function setvalues() {
     showbrowserapp.checked = config.showbrowserapp
     checkforupdates.checked = config.checkforupdates
     showshortcutalerts.checked = config.showshortcutalerts
+    closelauncherwhenoutoffocus.checked = config.closelauncherwhenoutoffocus
     document.getElementById("chromeostitlebarbox").checked = config.chromeostitlebar
     
     // Set radio values
@@ -139,6 +141,7 @@ handleCheckboxChange(showbrowserapp, 'showbrowserapp')
 handleCheckboxChange(checkforupdates, 'checkForUpdates')
 handleCheckboxChange(showshortcutalerts, 'showShortcutAlerts')
 handleCheckboxChange(document.getElementById("chromeostitlebarbox"), 'chromeostitlebar')
+handleCheckboxChange(closelauncherwhenoutoffocus, 'closelauncherwhenoutoffocus')
 
 // Initialize radio handlers
 handleRadioChange('appicon', 'appicon')

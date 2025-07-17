@@ -13,6 +13,7 @@ const https = require('https');
 
 // Store update information globally
 let cachedUpdateInfo = null;
+let cancloselauncher = true;
 
 // Function to check for updates
 async function checkForUpdates() {
@@ -204,6 +205,14 @@ const createWindow = () => {
     applauncher.close()
   });
 
+    
+  applauncher.on('blur', () => {
+    if (config.closelauncherwhenoutoffocus && cancloselauncher) {
+      applauncher.close();
+      app.quit();
+    }
+  });
+
   ipcMain.on('hamburger-options', async (event) => {
     // Use cached update info instead of checking every time
     const updateMenuItem = cachedUpdateInfo?.hasUpdate ? {
@@ -361,6 +370,7 @@ ipcMain.on('open-program', (event, program) => {
 let settings
 
 ipcMain.on('open-settings', () => {
+  cancloselauncher = false;
   const config = readConfig()
   if (settings && !settings.isDestroyed()) {
     settings.focus();
@@ -445,6 +455,7 @@ ipcMain.on('open-settings', () => {
         settings.removeAllListeners();
       }
       settings = null;
+      cancloselauncher = true;
     });
 
     settings.loadFile('src/pages/settings/index.html');
@@ -455,6 +466,7 @@ ipcMain.on('open-settings', () => {
 let createanapp;
 
 ipcMain.on('open-createanapp', () => {
+  cancloselauncher = false;
   if (createanapp && !createanapp.isDestroyed()) {
     createanapp.focus();
   } else {
@@ -474,6 +486,7 @@ ipcMain.on('open-createanapp', () => {
       if (createanapp && !createanapp.isDestroyed()) {
         createanapp.removeAllListeners();
         createanapp.close(); 
+        cancloselauncher = true;
       }
     });
 
@@ -482,6 +495,7 @@ ipcMain.on('open-createanapp', () => {
         createanapp.removeAllListeners();
       }
       createanapp = null;
+      cancloselauncher = true;
     });
   }
 });
@@ -489,6 +503,7 @@ ipcMain.on('open-createanapp', () => {
 let about;
 
 ipcMain.on('open-about', () => {
+  cancloselauncher = false;
   if (about && !about.isDestroyed()) {
     about.focus();
   } else {
@@ -509,6 +524,7 @@ ipcMain.on('open-about', () => {
         about.removeAllListeners();
         about.close(); 
       }
+      cancloselauncher = true;
     });
 
     about.on('closed', () => {
@@ -516,6 +532,7 @@ ipcMain.on('open-about', () => {
         about.removeAllListeners();
       }
       about = null;
+      cancloselauncher = true;
     });
   }
 });
@@ -523,6 +540,7 @@ ipcMain.on('open-about', () => {
 let dino;
 
 function opendino() {
+  cancloselauncher = false;
   if (dino && !dino.isDestroyed()) {
     dino.focus();
   } else {
@@ -556,6 +574,7 @@ function opendino() {
       if (dinoId) {
         app.quit();
       }
+      cancloselauncher = true;
     });
   }
 }
