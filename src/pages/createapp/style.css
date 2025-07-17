@@ -48,3 +48,12 @@ p {
 input[type="radio"] {
     font-family: Arial, Helvetica, sans-serif;
 }
+
+#linkicondiv {
+    margin: 5px 0;
+}
+
+#linkicondiv label {
+    margin-left: 2px;
+    line-height: 18px;
+}
