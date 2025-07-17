@@ -105,8 +105,8 @@ async function setvalues() {
     darkmode.checked = config.darkmode
     chromiumwebstoreicon.checked = config.chromiumwebstoreicon
     showbrowserapp.checked = config.showbrowserapp
-    checkforupdates.checked = config.checkForUpdates
-    showshortcutalerts.checked = config.showShortcutAlerts
+    checkforupdates.checked = config.checkforupdates
+    showshortcutalerts.checked = config.showshortcutalerts
     document.getElementById("chromeostitlebarbox").checked = config.chromeostitlebar
     
     // Set radio values
