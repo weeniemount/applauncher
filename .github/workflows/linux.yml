@@ -117,3 +117,37 @@ jobs:
             dist/applauncher-*-linux-x86.rpm
             dist/applauncher-*-linux-x86.AppImage
             dist/applauncher-*-linux-unpacked-x86.zip
+
+      - name: Clean dist folder before arm64 build
+        run: rm -rf dist/*
+
+      - name: Build App Launcher (Linux arm64)
+        run: npm run dist -- --linux --arm64
+
+      - name: Create ARM64 ZIP manually
+        run: |
+          VERSION=${{ steps.get_version.outputs.version }}
+          cd dist/linux-arm64-unpacked
+          zip -r ../applauncher-${VERSION}-linux-unpacked-arm64.zip *
+          cd ../..
+
+      - name: Rename ARM64 artifacts
+        run: |
+          VERSION=${{ steps.get_version.outputs.version }}
+          # Handle packages
+          for ext in deb rpm AppImage; do
+            for file in dist/*.${ext}; do
+              [ -e "$file" ] || continue
+              mv "$file" "dist/applauncher-${VERSION}-linux-arm64.${ext}"
+            done
+          done
+
+      - name: Upload ARM64 artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: applauncher-linux-arm64
+          path: |
+            dist/applauncher-*-linux-arm64.deb
+            dist/applauncher-*-linux-arm64.rpm
+            dist/applauncher-*-linux-arm64.AppImage
+            dist/applauncher-*-linux-unpacked-arm64.zip
