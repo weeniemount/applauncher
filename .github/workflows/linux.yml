@@ -118,10 +118,10 @@ jobs:
             dist/applauncher-*-linux-x86.AppImage
             dist/applauncher-*-linux-unpacked-x86.zip
 
-      - name: Clean dist folder before arm64 build
+      - name: Clean dist folder before ARM64 build
         run: rm -rf dist/*
 
-      - name: Build App Launcher (Linux arm64)
+      - name: Build App Launcher (Linux ARM64)
         run: npm run dist -- --linux --arm64
 
       - name: Create ARM64 ZIP manually
