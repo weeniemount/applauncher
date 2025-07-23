@@ -61,7 +61,13 @@
           "to": "usr/share/metainfo/com.weenie.applauncher.appdata.xml"
         }
       ],
-      "category": "Utility"
+      "category": "Utility",
+      "desktop": {
+        "Name": "App Launcher",
+        "Comment": "Chrome 48's App Launcher recreation",
+        "Categories": "Utility;",
+        "Icon": "app-launcher"
+      }
     },
     "rpm": {
       "fpm": [
