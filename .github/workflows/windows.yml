@@ -96,3 +96,36 @@ jobs:
           path: |
             dist/applauncher-*-windows-x86.exe
             dist/applauncher-*-windows-unpacked-x86.zip
+
+      - name: Clean dist folder before ARM64 build
+        shell: pwsh
+        run: Remove-Item -Path "dist/*" -Recurse -Force
+
+      - name: Build App Launcher (Windows ARM64)
+        run: npm run build -- --win --arm64
+
+      - name: Create ARM64 ZIP with 7-Zip
+        shell: pwsh
+        run: |
+          $VERSION = "${{ steps.get_version.outputs.version }}"
+          cd dist/win-arm64-unpacked
+          7za a -tzip -mx=9 "../applauncher-${VERSION}-windows-unpacked-arm64.zip" *
+          cd ../..
+
+      - name: Rename and clean ARM64 artifacts
+        shell: pwsh
+        run: |
+          $VERSION = "${{ steps.get_version.outputs.version }}"
+          # Handle EXE files
+          Get-ChildItem -Path "dist" -Filter "*.exe" | ForEach-Object {
+            Move-Item $_.FullName "dist/applauncher-${VERSION}-windows-arm64.exe"
+          }
+          Remove-Item -Path "dist/win-unpacked" -Recurse -Force -ErrorAction SilentlyContinue
+
+      - name: Upload ARM64 artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: applauncher-windows-arm64
+          path: |
+            dist/applauncher-*-windows-arm64.exe
+            dist/applauncher-*-windows-unpacked-arm64.zip

@@ -548,7 +548,7 @@ function opendino() {
       width: 640,
       height: 480,
       frame: false,
-      name: "dino",
+      name: "Dino",
       resizable: false,
       icon: process.platform === 'linux'
         ? path.join(__dirname, 'defaultapps/dino.png')

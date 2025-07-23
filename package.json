@@ -40,11 +40,7 @@
     ],
     "win": {
       "icon": "src/icons/applauncher.ico",
-      "executableName": "app-launcher",
-      "target": [
-        "nsis",
-        "zip"
-      ]
+      "executableName": "App Launcher"
     },
     "mac": {
       "executableName": "App Launcher",
@@ -52,13 +48,12 @@
     },
     "linux": {
       "electronLanguages": ["en-US"],
-      "executableName": "app-launcher",
+      "executableName": "App Launcher",
       "icon": "src/icons/linux",
       "target": [
         "deb",
         "AppImage",
-        "rpm",
-        "zip"
+        "rpm"
       ],
       "extraFiles": [
         {
