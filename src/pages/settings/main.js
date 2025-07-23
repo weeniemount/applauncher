@@ -155,6 +155,21 @@ handleRadioChange('titlebarstyle', 'titlebarstyle')
 handleNumberInput(document.getElementById("xoffset"), 'startoffsetx')
 handleNumberInput(document.getElementById("yoffset"), 'startoffsety')
 
+// Save current position handler
+document.getElementById("savecurrentpos").addEventListener('click', async () => {
+    const currentPosition = await window.electron.getCurrentPosition();
+    await updateConfigAndRefresh(config => {
+        config.startpos = 'exactposition';
+        config.startoffsetx = currentPosition.x;
+        config.startoffsety = currentPosition.y;
+    });
+    // Update radio button selection
+    document.getElementById('exactposition').checked = true;
+    // Update offset inputs
+    document.getElementById('xoffset').value = currentPosition.x;
+    document.getElementById('yoffset').value = currentPosition.y;
+});
+
 // Reset apps handler
 resetapps.addEventListener('click', async () => {
     const [config, defaultconfig] = await Promise.all([

@@ -60,4 +60,7 @@ contextBridge.exposeInMainWorld('electron', {
   restoreConfig: async () => {
     return await ipcRenderer.invoke('restore-config');
   },
+  getCurrentPosition: async () => {
+    return await ipcRenderer.invoke('get-current-position');
+  }
 });

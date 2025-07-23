@@ -184,6 +184,8 @@ const createWindow = () => {
     applauncher.setPosition(0 + config.startoffsetx, height - 500 - config.startoffsety + 40)
   } else if (config.startpos == "rightbottom") {
     applauncher.setPosition(width - 400 - config.startoffsetx, height - 500 - config.startoffsety + 40)
+  } else if (config.startpos == "exactposition") {
+    applauncher.setPosition(config.startoffsetx, config.startoffsety)
   } else {
     applauncher.center()
   }
@@ -1009,4 +1011,14 @@ app.on('before-quit', (event) => {
 // Add a handler for when CRX windows are closed
 ipcMain.on('crx-window-closed', () => {
   isLaunchingCrx = false;
+});
+
+// Add getCurrentPosition handler
+ipcMain.handle('get-current-position', async (event) => {
+  const window = BrowserWindow.fromWebContents(event.sender);
+  if (window) {
+    const position = window.getPosition();
+    return { x: position[0], y: position[1] };
+  }
+  return { x: 0, y: 0 };
 });
