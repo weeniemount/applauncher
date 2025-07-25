@@ -48,7 +48,7 @@
     },
     "linux": {
       "electronLanguages": ["en-US"],
-      "executableName": "App Launcher",
+      "executableName": "app-launcher",
       "icon": "src/icons/linux",
       "target": [
         "deb",
